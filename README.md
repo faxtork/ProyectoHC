@@ -8,12 +8,19 @@ Proyecto Horario de clases
       1.- Ir a la carpeta script database, e importar la base de datos (potsgresql)
       
       2.- Ir a la carpeta ProyectoHC -> applicaction -> config y modificar los parametros del archivo database.php
+      
                 dentro del if parte local 
+                
             $db['default']['hostname'] = 'localhost';
+            
             $db['default']['username'] = 'usernamePostgres';
+            
             $db['default']['password'] = 'passPostgres';
+            
             $db['default']['database'] = 'dbPostgres';
+            
             $db['default']['dbdriver'] = 'postgre';
+            
       3.- Una vez hecho eso puedes entrar con la siguiente direccion 
 
             localhost/Proyecto_HC/ 
