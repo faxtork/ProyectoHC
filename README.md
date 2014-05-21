@@ -36,6 +36,6 @@ Proyecto Horario de clases
               ***los parametros del servidor ya estan listos***
       
       3.- Una vez hecho eso puedes entrar con la siguiente direccion 
-            localhost/Proyecto_HC/
+            server/Proyecto_HC/
             
               >>>> EL ARCHIVO DATABASE.PHP DETECTA SI SE ESTA LOCALMENTE O REMOTAMENTE, SOLO MODIFICAR LA PARTE LOCAL<<<<
