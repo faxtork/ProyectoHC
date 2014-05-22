@@ -1,25 +1,16 @@
 
-
-
 <div class="well">
-    <div class="">
-      <div class="span4"></div>
-      <div class="span5"><h2>Ingreso Docentes</h2><br>
-      <h5>Solo los profesores pueden acceder.Entrar con USUARIO y PASSWORD de dirdoc!.</h5>
+      <div class="row-fluid">
+          <div class="span12">
+            <h2>Ingreso Docentes</h2>
+            <h5>Solo los profesores pueden acceder.Entrar con USUARIO y PASSWORD de dirdoc!.</h5>
+          </div>
       </div>
-      <div class="span3"></div><br>
-        
-        
-      
+      <br>
          <?php
-         
          if(isset($mensajeAlerta)){
              echo "<h4>".$mensajeAlerta."</h4>";
          } 
-         else{
-             
-         }
-         
           $atributos_Rut = array(
           'name' => 'rut',
           'id'=>'rut',
@@ -36,27 +27,23 @@
         $form=array('name'=>'form1');
         
     ?>   
-        <div class="row" ><br>
-      <div class="span5"></div>
-      <div class="span4" >
-        <?php  echo form_open('login/index',$form); ?>
-            <table style="text-align:center;" border="0">
-          <tr>
-            <td><?php echo form_label('Rut', 'labelRut');; ?></td>
-            <td><?php  echo form_input($atributos_Rut);  ?></td>
-          </tr>
-          <tr>
-            <td><?php echo form_label('Clave', 'password'); ?></td>
-            <td><?php echo form_input($atributos_Clave); ?></td>
-          </tr>
-          <tr>
-            <td colspan="2"><?php echo form_submit($atributos_Btn, 'Enviar'); ?></td>
-          </tr>
-        </table>
-        <?php echo form_close(); ?>
+    <div class="row-fluid">
+      <div class="span4"></div>
+      <div class="span4">
+       <?php 
+            echo form_open('login/index',$form);
+              echo form_label('Rut', 'labelRut')."&nbsp&nbsp&nbsp";
+              echo form_input($atributos_Rut)."<br>";
+              echo form_label('Clave', 'password');
+              echo form_input($atributos_Clave)."<br>";
+              echo "&nbsp&nbsp&nbsp&nbsp&nbsp".form_submit($atributos_Btn, 'Enviar');
+            echo form_close();
+        ?>      
       </div>
-      <div class="span3"></div>
-</div>
-
+      <div class="span4"></div>
+      <br>
     </div>
+
+
+  
 </div>
