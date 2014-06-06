@@ -34,6 +34,7 @@
       $query=$this->db
             ->select('pk,sala')
             ->from('salas')
+            ->order_by('sala','asc')
             ->get();
         return $query->result();  
      }
@@ -41,6 +42,7 @@
       $query=$this->db
             ->select('pk,periodo,inicio,termino')
             ->from('periodos')
+            ->order_by('pk','asc')
             ->get();
         return $query->result();  
      }

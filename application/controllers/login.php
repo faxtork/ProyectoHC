@@ -10,10 +10,13 @@ class Login extends CI_Controller {
         $this->load->library('form_validation');
 
        session_start();
+       //session_unset();
     }
   
     
     function index() {
+    /*
+
         if ($this->input->post()) {
           if ($this->form_validation->run('Login')==TRUE) {
                  $formulario = array(
@@ -40,6 +43,7 @@ class Login extends CI_Controller {
             }
         }
 
+
         if ($this->input->post()) {
           $rut = $this->input->post("rut", TRUE);//rut
           $p = strtoupper($this->input->post("clave", TRUE));
@@ -52,20 +56,22 @@ class Login extends CI_Controller {
                 if($alias==FALSE){
                   redirect('pedidos/logueoError',301);
                 }
-                else{
-                  $_SESSION['usuarioProfesor']=  $this->input->post('rut');
+                else{*/
+                  $alias="yo";
+                $_SESSION['usuarioProfesor']=  $this->input->post('rut',true);
                   $_SESSION['bnv'] = $alias;
-                 redirect('pedidos',301); 
+                 redirect('pedidos',301);
+/*
                 }                  
           }
           else{
              redirect('pedidos/logueoError',301);
           }   
-        }    
+        }  */  
     } 
 
 
-    public function validarAdmin() {
+    public function validarAdmin() {/*
         if ($this->input->post()) {
           if ($this->form_validation->run('Login')==TRUE) {
                  $formulario = array(
@@ -97,15 +103,15 @@ class Login extends CI_Controller {
           $nombre=$this->input->post('rut');
 
            $respuestaLogin=$this->Admin_model->loguearAdmin($nombre,$clave);
-            if($respuestaLogin==1){ 
-                   $_SESSION['usuarioAdmin']=$this->input->post('rut');
+            if($respuestaLogin==1){ */
+                   $_SESSION['usuarioAdmin']=$this->input->post('rut',true);
                   redirect('intranet/acceso',301); 
-            }
+            /*}
             else{
                redirect('intranet/errorLoguear',301);
             }
            
-        }
+        }*/
     }
     public function desconectar() {
         session_destroy();

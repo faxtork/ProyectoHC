@@ -16,6 +16,7 @@
         <script src="<?php echo base_url()?>public/js/jquery.js" type="text/javascript"></script>
         <script type="text/javascript" src="<?php echo base_url() ?>public/js/funciones.js"></script>
         <script type="text/javascript" src="<?php echo base_url() ?>public/js/bootstrap-responsive.js"></script>
+        <script type="text/javascript" src="<?php echo base_url() ?>public/bootstrap/js/bootstrap-dropdown.js"></script>
       
     </style>
     </head>

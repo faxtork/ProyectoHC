@@ -285,7 +285,7 @@ table {
   }
   .table-bordered th,
   .table-bordered td {
-    border: 1px solid #ddd !important;
+    border: 2px solid #ddd !important;
   }
 }
 
@@ -2024,7 +2024,7 @@ th {
 }
 
 .table-bordered {
-  border: 1px solid #0d747c;
+  border: 2px solid #aaa;
 }
 
 .table-bordered > thead > tr > th,
@@ -2033,7 +2033,7 @@ th {
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
-  border: 1px solid #0d747c;
+  border: 2px solid #aaa;
 }
 
 .table-bordered > thead > tr > th,

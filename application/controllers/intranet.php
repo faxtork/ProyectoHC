@@ -70,14 +70,18 @@ class Intranet extends CI_Controller {
                 $this->load->view('general/cierre_footer');
 
             }else{
-                $academico=$this->docente_model->getAcademico();
-                $asignatura=$this->admin_model->getAsignatura();
+                $academico=$this->docente_model->getAcademico(); //extrae de la DB los academicos
+                $asignatura=$this->admin_model->getAsignatura();//extrae de la DB las asignaturas
+                $salas=$this->admin_model->getSala();
                 $this->load->view('general/headers');
                 $this->load->view('general/menu_principal');
                 $this->load->view('general/abre_bodypagina');   
                 $periodos=$this->Admin_model->getPeriodo();
                 $this->load->view('intranet/header_menu');
-                $this->load->view('intranet/academico_menu',compact('academico','asignatura','periodos'));
+           //     $this->load->view('intranet/academico_menu',compact('academico','asignatura','periodos'));
+
+                $this->load->view('intranet/enlace',compact('periodos','salas','academico','asignatura'));
+
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
             }
