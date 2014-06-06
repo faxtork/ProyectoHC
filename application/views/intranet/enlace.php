@@ -57,7 +57,24 @@ $( window ).resize(function() {
    $('.mygrid-wrapper-div').height(content_height);
 });
 </script>
+<?php 
 
+$rango=false;
+$bienvenido=0;
+	if (@$_GET['per']==NULL) {
+		$bienvenido=1; 
+	}else{
+		    foreach ($periodos as $peri) {
+	      	if($peri->periodo==$_GET['per'])
+	      	{
+	      		$rango=true; 
+	      		break;
+	      	}
+	    }
+		
+	} 
+
+ ?>
 <div class="well">
 	<div class="row-fluid">
 		<div class="span12">
@@ -70,107 +87,70 @@ $( window ).resize(function() {
 						$termino = substr(strrev($peri->termino),3,$maximo);
 						$inicio=strrev($inicio);
 						$termino=strrev($termino);
-						echo "<li><a class='active' href='".site_url('intranet/academico')."'>".$peri->periodo."<br /> (".$inicio." - ".$termino.")"."</a></li>
+						echo "<li><a class='active' type='submit' href='".site_url('intranet/academico/?per='.$peri->periodo.'')."'>".$peri->periodo."<br /> (".$inicio." - ".$termino.")"."</a></li>
 								";
 					}
 				 ?>
 				
 			</ul>
-			<ul class="nav nav-tabs" id="center">
-			 <!-- <li class="active"><a href="#">Periodo 1</a></li>
-			  <li><a href="#">Periodo 2</a></li>
-			  <li><a href="#">Periodo 3</a></li>
-			  <li><a href="#">Periodo 4</a></li>
-			  <li><a href="#">Periodo 5</a></li>
-			  <li><a href="#">Periodo 6</a></li>
-			  <li><a href="#">Periodo 7</a></li>
-			  <li><a href="#">Periodo 8</a></li>
-			  <li><a href="#">Periodo 9</a></li>-->
-
-			  	<?php 
-/*
-				    foreach ($periodos as $peri){ 
-				    		echo "<form action=".$_SERVER['PHP_SELF']." method='GET'>
-				    			<li class='active'><button class='btn' type='submit'>".$peri->periodo."- (".$peri->inicio." - ".$peri->termino.")"."</button></li>
-								<input name='pkpk' type='hidden' value = '".$peri->pk."'/>
-			
-							</form>";
-
-				 }*/
-				 ?>
-			</ul>
 		</div>
 	</div>
 	<br>
 	<div class="row-fluid">
-		<!--<div class="span2">
-			<ul class="nav nav-pills nav-stacked">
-
-           Periodo:<?=form_dropdown('periodo',$atributosPeriodo,'',$js );?>
-
-				<?php 
-
-				    foreach ($periodos as $peri){ 
-				    		echo "<form action=".$_SERVER['PHP_SELF']." method='GET'>
-				    			<li class='active'><button class='btn' type='submit'>".$peri->periodo."- (".$peri->inicio." - ".$peri->termino.")"."</button></li>
-								<input name='pkpk' type='hidden' value = '".$peri->pk."'/>
-								<br/>
-							</form>";
-				    		//echo "<li class=''><a href='".base_url()."index.php/intranet/academico/'>".$peri->periodo."- (".$peri->inicio." - ".$peri->termino.")"."</a></li>";				 	}
-				 		//echo "<input name='id_cliente' type='hidden' value = '".$peri->pk."'/>";
-				 }
-				 ?>
-			</ul>		
-		</div>-->
 		<div class="span12">
 			<!--<h1>Periodo: <?php echo $numeroPer[1]; ?></h1> 	-->	
-		<?php 
-			//echo "esto se replica en todo, pero cuando llene el form,</br > preguntara al link si es periodo 1 o periodo 2 y lo guardara<br />";
+				<?php 
+			if ($rango==true) {
+				echo "estas dentro del rango";
+				?>
+					<div class="table-responsive mygrid-wrapper-div">
+						<table class="table table-hover-striped" style="text-align:left;" border="0">
+							<thead >
+								<tr >
+									<th id="center">Sala</th>
+									<th id="center">Profesor</th>
+									<th id="center">Asignatura</th>
+									<th id="center">S</th>
+									<th id="center">C</th>
+									<th id="center">Ent.</th>
+									<th id="center">Sal.</th>
+									<th id="center">Firma</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+							//<td>".form_dropdown('sala',$atributosSalas,'style="width:300px"')."</td>
 
-		 ?>
-		<!--<input type="text" value="" id="myvalue" disabled="">-->
-		<div class="table-responsive mygrid-wrapper-div">
-			<table class="table table-hover-striped" style="text-align:left;" border="0">
-				<thead >
-					<tr >
-						<th id="center">Sala</th>
-						<th id="center">Profesor</th>
-						<th id="center">Asignatura</th>
-						<th id="center">S</th>
-						<th id="center">C</th>
-						<th id="center">Ent.</th>
-						<th id="center">Sal.</th>
-						<th id="center">Firma</th>
-					</tr>
-				</thead>
-				<tbody>
+			                    foreach ($salas as $aula) {
+			                    	echo "<tr style='text-align:center;'>
+										<td>".$aula->sala."</td>
+										<td>".form_dropdown('docente'.$aula->pk.'',$atributosDocente)."</td>
+										<td>".form_dropdown('asignatura'.$aula->pk.'',$atributosAsignatura)."</td>
+										<td> - </td>
+										<td> - </td>
+										<td> - </td>
+										<td> - </td>
+										<td><input type='checkbox' name='firma".$aula->pk."'></td>
+			                   			";
+			               }
+
+			                ?>    
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
 				<?php
-				//<td>".form_dropdown('sala',$atributosSalas,'style="width:300px"')."</td>
-
-                    foreach ($salas as $aula) {
-                    	echo "<tr style='text-align:center;'>
-							<td>".$aula->sala."</td>
-							<td>".form_dropdown('docente'.$aula->pk.'',$atributosDocente)."</td>
-							<td>".form_dropdown('asignatura'.$aula->pk.'',$atributosAsignatura)."</td>
-							<td> - </td>
-							<td> - </td>
-							<td> - </td>
-							<td> - </td>
-							<td><input type='checkbox' name='firma".$aula->pk."'></td>
-                   			";
-               }
-
-                ?>    
-
-
-
-
-
-
-					</tr>
-				</tbody>
-			</table>
-		</div>			
+			}elseif ($bienvenido==1) {
+					echo "<h1>Bienvenido </h1><h4>al sistema de asignacion semestral</h4>
+						Elija un periodo para comenzar a agregar datos";
+			}else{
+				echo '  <script type="text/javascript">
+  						window.location="'.site_url('intranet/academico/').'";</script>';
+				}
+				 ?>
+		<!--<input type="text" value="" id="myvalue" disabled="">-->
+			
 
 		</div>
 	</div>	

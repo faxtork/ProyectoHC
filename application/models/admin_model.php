@@ -122,7 +122,7 @@
                    'sala_fk' => $sala,
                    'periodo_fk' => $periodo,
                    'curso_fk' => $curso->pk,
-                   'adm_fk' =>1,);
+                   'adm_fk' =>1,);//arreglar ese 1 del admin
                 $this->db->insert('reservas', $data);
                 $nuevafecha = strtotime ( '+7 day' , strtotime ( $nuevafecha ) ) ;
                 $nuevafecha = date ( 'Y-m-d' , $nuevafecha );

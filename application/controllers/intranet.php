@@ -78,7 +78,7 @@ class Intranet extends CI_Controller {
                 $this->load->view('general/abre_bodypagina');   
                 $periodos=$this->Admin_model->getPeriodo();
                 $this->load->view('intranet/header_menu');
-           //     $this->load->view('intranet/academico_menu',compact('academico','asignatura','periodos'));
+                $this->load->view('intranet/academico_menu',compact('academico','asignatura','periodos'));
 
                 $this->load->view('intranet/enlace',compact('periodos','salas','academico','asignatura'));
 
@@ -287,7 +287,7 @@ class Intranet extends CI_Controller {
             $sala=$this->input->post('sala');
         if($pkDocente==null || $pkAsignatura==null || $fechaInicio==null || $fechaTermino==null || $periodo==null || $sala==null)
         {
-            redirect('intranet/academico');
+            redirect('intranet/academico');//arreglar esta wa para que le diga que no ingreso datos o tra wa
         }
         else{
 
