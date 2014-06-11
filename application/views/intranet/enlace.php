@@ -58,7 +58,6 @@ $( window ).resize(function() {
 });
 </script>
 <?php 
-
 $rango=false;
 $bienvenido=0;
 	if (@$_GET['per']==NULL) {
@@ -70,10 +69,8 @@ $bienvenido=0;
 	      		$rango=true; 
 	      		break;
 	      	}
-	    }
-		
+	    }	
 	} 
-
  ?>
 <div class="well">
 	<div class="row-fluid">
@@ -98,10 +95,8 @@ $bienvenido=0;
 	<br>
 	<div class="row-fluid">
 		<div class="span12">
-			<!--<h1>Periodo: <?php echo $numeroPer[1]; ?></h1> 	-->	
 				<?php 
 			if ($rango==true) {
-				echo "estas dentro del rango";
 				?>
 					<div class="table-responsive mygrid-wrapper-div">
 						<table class="table table-hover-striped" style="text-align:left;" border="0">
@@ -119,27 +114,23 @@ $bienvenido=0;
 							</thead>
 							<tbody>
 							<?php
-							//<td>".form_dropdown('sala',$atributosSalas,'style="width:300px"')."</td>
-
 			                    foreach ($salas as $aula) {
 			                    	echo "<tr style='text-align:center;'>
 										<td>".$aula->sala."</td>
 										<td>".form_dropdown('docente'.$aula->pk.'',$atributosDocente)."</td>
 										<td>".form_dropdown('asignatura'.$aula->pk.'',$atributosAsignatura)."</td>
-										<td> - </td>
-										<td> - </td>
+										<td><input type='text' name='s".$aula->pk."' size='4' maxlength='5'></td>
+										<td><input type='text' name='c".$aula->pk."' size='6' maxlength='7'></td>
 										<td> - </td>
 										<td> - </td>
 										<td><input type='checkbox' name='firma".$aula->pk."'></td>
 			                   			";
 			               }
-
 			                ?>    
 								</tr>
 							</tbody>
 						</table>
 					</div>
-
 				<?php
 			}elseif ($bienvenido==1) {
 					echo "<h1>Bienvenido </h1><h4>al sistema de asignacion semestral</h4>
@@ -149,9 +140,6 @@ $bienvenido=0;
   						window.location="'.site_url('intranet/academico/').'";</script>';
 				}
 				 ?>
-		<!--<input type="text" value="" id="myvalue" disabled="">-->
-			
-
 		</div>
 	</div>	
 </div>

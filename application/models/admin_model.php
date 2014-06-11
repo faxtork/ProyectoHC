@@ -111,7 +111,7 @@
                 return $query->row();
      }
 
-        public function AsignarPorTiempo($pkDocente,$pkAsignatura,$fechaInicio,$fechaTermino,$periodo,$sala,$curso){
+        public function AsignarPorTiempo($fechaInicio,$fechaTermino,$periodo_fk,$sala_fk,$maxPkCursos,$adm_fk){
             date_default_timezone_set("America/Santiago");
             $nuevafecha = strtotime ( '+0 day' , strtotime ( $fechaInicio ) ) ;
             $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
@@ -119,10 +119,10 @@
             if ($nuevafecha<=$fechaTermino) {
                 $data = array(
                    'fecha' => "$nuevafecha",
-                   'sala_fk' => $sala,
-                   'periodo_fk' => $periodo,
-                   'curso_fk' => $curso->pk,
-                   'adm_fk' =>1,);//arreglar ese 1 del admin
+                   'sala_fk' => $sala_fk,
+                   'periodo_fk' => $periodo_fk,
+                   'curso_fk' => $maxPkCursos->maxpk,
+                   'adm_fk' =>$adm_fk->pk,);
                 $this->db->insert('reservas', $data);
                 $nuevafecha = strtotime ( '+7 day' , strtotime ( $nuevafecha ) ) ;
                 $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
@@ -201,9 +201,40 @@
          return $query->result();
      }
 
-
-    
-    
+    public function getFacultad(){
+        $query=$this->db
+            ->select('pk,facultad')
+            ->from('facultades')
+            ->order_by('pk','asc')
+            ->get();
+        return $query->result();
+         }
+    public function salas($facultadPk){
+            $query=$this->db
+                 ->query("SELECT pk,sala FROM salas WHERE facultad_fk=$facultadPk;");
+         return $query->result();
+    } 
+    public function depa($facultadPk){
+            $query=$this->db
+                 ->query("SELECT pk,departamento FROM departamentos WHERE facultad_fk=$facultadPk order by pk asc;");
+         return $query->result();
+    }
+    public function asig($facultadPk){
+            $query=$this->db
+                 ->query("SELECT a.pk, a.codigo,a.nombre FROM asignaturas a,departamentos d, facultades f WHERE $facultadPk=d.facultad_fk AND d.pk=a.departamento_fk group by a.pk;");
+                  //  ->query("SELECT pk,codigo FROM asignaturas order by pk asc");
+         return $query->result();
+    }         
+    public function pkAdmin($nombreAdm){
+            $query=$this->db
+                ->query("SELECT pk FROM administrador WHERE nombre='$nombreAdm';");
+            return $query->row();    
+    }
+    public function maxPkCurso(){
+            $query=$this->db
+                ->query("SELECT max(pk) as maxPk FROM cursos;");//laultima pk ingresada
+            return $query->row(); 
+    }
    }
 ?>
 

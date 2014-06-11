@@ -69,12 +69,11 @@ $active_record = TRUE;
 	}
 	else{
 	//echo "servidor";
-	$db['default']['hostname'] = '127.0.0.1';
+	$db['default']['hostname'] = 'localhost';
 	$db['default']['username'] = 'sesparza';
 	$db['default']['password'] = 'x7o5q8';
-	$db['default']['database'] = 'sesparzadb';
+	$db['default']['database'] = 'HC_P';
 	$db['default']['dbdriver'] = 'postgre';
-	$db['default']['port'] = '5432';
 	$db['default']['dbprefix'] = '';
 	$db['default']['pconnect'] = TRUE;
 	$db['default']['db_debug'] = TRUE;

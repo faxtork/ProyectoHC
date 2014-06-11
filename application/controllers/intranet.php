@@ -78,17 +78,60 @@ class Intranet extends CI_Controller {
                 $this->load->view('general/abre_bodypagina');   
                 $periodos=$this->Admin_model->getPeriodo();
                 $this->load->view('intranet/header_menu');
-                $this->load->view('intranet/academico_menu',compact('academico','asignatura','periodos'));
+        //       $this->load->view('intranet/academico_menu',compact('academico','asignatura','periodos'));
 
-                $this->load->view('intranet/enlace',compact('periodos','salas','academico','asignatura'));
-
+             //   $this->load->view('intranet/enlace',compact('periodos','salas','academico','asignatura'));
+                    $facultades=$this->admin_model->getFacultad();
+                    $this->load->view('intranet/asignacion',compact('facultades','salas','academico','periodos'));
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
             }
 
 
     }
-    
+    public function llena_salas(){
+         $options = "";
+        if($this->input->post('facultad'))
+        {
+            $facultadPk = $this->input->post('facultad');
+            $salas = $this->admin_model->salas($facultadPk);
+            foreach($salas as $fila)
+            {
+          
+                echo'<option value='.$fila->pk.'>'.$fila->sala.'</option>';
+           
+            }
+
+        }
+    }
+    public function llena_depa(){
+         $options = "";
+        if($this->input->post('facultad'))
+        {
+            $facultadPk = $this->input->post('facultad');
+            $depa = $this->admin_model->depa($facultadPk);
+            foreach($depa as $fila)
+            {
+          
+                echo'<option value='.$fila->pk.'>'.$fila->departamento.'</option>';
+           
+            }
+        }
+    }
+    public function llena_asig(){
+         $options = "";
+        if($this->input->post('facultad'))
+        {
+            $facultadPk = $this->input->post('facultad');
+            $asig = $this->admin_model->asig($facultadPk);
+            foreach($asig as $fila)
+            {
+          
+                echo'<option value='.$fila->pk.'>'.$fila->codigo.' '.$fila->nombre.'</option>';
+           
+            }
+        }
+    }   
     public function setAcademico(){
             $datos=array(
                 'nombres'=>$this->input->post('nombre'),
@@ -279,13 +322,53 @@ class Intranet extends CI_Controller {
     }
     
     public function llenarReservaSemestre() {
-            $pkDocente=$this->input->post('docente');              
-            $pkAsignatura=$this->input->post('asignatura');        
+        //pk admin
+            $nombreAdm=$_SESSION['usuarioAdmin'];
+            $adm_fk=$this->admin_model->pkAdmin($nombreAdm);
+
+        //fin pk
+        //datos para la tabla cursos
+            $anio=$this->input->post('ano'); 
+            $semestre=$this->input->post('semestre');  
+            $asignatura_fk=$this->input->post('asig');
+            $seccion=$this->input->post('seccion');
+            $docente_fk=$this->input->post('docente'); 
+        //fin datos para tabla cursos
+        //datos tabla reservas    
+            $periodo_fk=$this->input->post('periodo');  
+            $sala_fk=$this->input->post('salas');
+            $depa=$this->input->post('depa'); //mmm hay que ver ver
+            $facultad=$this->input->post('facultad');//mmmmmmmmmhay que ver ver  
+        //fin datos tabla reservas
+            $dia=$this->input->post('dia');//mmmmmmmmmmmmmmmmmmmmm hay que ver
+      
             $fechaInicio=$this->input->post('datepickerInicio');   
-            $fechaTermino=$this->input->post('datepickerTermino'); 
-            $periodo=$this->input->post('periodo');
-            $sala=$this->input->post('sala');
-        if($pkDocente==null || $pkAsignatura==null || $fechaInicio==null || $fechaTermino==null || $periodo==null || $sala==null)
+            $fechaTermino=$this->input->post('datepickerTermino');
+
+        //crear la tabla curso
+                     $datos=array(
+                        'semestre'=>$semestre,
+                        'anio'=>$anio,
+                        'asignatura_fk'=>$asignatura_fk,
+                        'docente_fk'=>$docente_fk,
+                        'seccion'=>$seccion
+                        );
+                    $estado=$this->admin_model->asocia($datos);
+                                if($estado==TRUE){
+                                echo '<script>alert("Asociacion realizada con Exito"); </script>';
+                                 //redirect('intranet/academico', 'refresh');
+                                 }  
+        //fin crear tabla curso 
+        //crear tabla reservas
+            $maxPkCursos=$this->admin_model->maxPkCurso();
+            $listo=$this->Admin_model->AsignarPorTiempo($fechaInicio,$fechaTermino,$periodo_fk,$sala_fk,$maxPkCursos,$adm_fk); 
+                   
+        //fin crear tabla reservas   
+             if($listo==TRUE){
+                    echo '<script>alert("Exito al guardar las salas"); </script>';
+                    redirect('intranet/academico', 'refresh');
+            } 
+      /*  if($pkDocente==null || $pkAsignatura==null || $fechaInicio==null || $fechaTermino==null || $periodo==null || $sala==null)
         {
             redirect('intranet/academico');//arreglar esta wa para que le diga que no ingreso datos o tra wa
         }
@@ -298,7 +381,7 @@ class Intranet extends CI_Controller {
                     redirect('intranet/academico', 'refresh');
             } 
         }
-        
+        */
     }
     
     

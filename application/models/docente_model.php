@@ -21,6 +21,7 @@
         $query=$this->db
                 ->select('*')
                 ->from('profesor')
+
                 ->get();
         return $query->result();
     }
@@ -28,6 +29,7 @@
         $query=$this->db
                 ->select('pk,nombres,apellidos')
                 ->from('docentes')
+                ->order_by('pk','asc')
                 ->get();
         return $query->result();
     }
