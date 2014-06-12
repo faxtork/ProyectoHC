@@ -368,11 +368,11 @@ ALTER SEQUENCE periodos_pk_seq OWNED BY periodos.pk;
 
 CREATE TABLE reservas (
     pk bigint NOT NULL,
-    fecha date DEFAULT now() NOT NULL,
+    fecha date NOT NULL,
     sala_fk integer NOT NULL,
     periodo_fk integer NOT NULL,
     curso_fk bigint NOT NULL,
-    adm_fk bigint NOT NULL
+    adm_fk bigint
 );
 
 
@@ -559,6 +559,7 @@ SELECT pg_catalog.setval('asignaturas_pk_seq', 1, false);
 --
 
 COPY asistencia (pk, firma, fecha, docente_fk) FROM stdin;
+1	1	2014-06-04	1
 \.
 
 
@@ -567,6 +568,7 @@ COPY asistencia (pk, firma, fecha, docente_fk) FROM stdin;
 --
 
 COPY bitacora (pk, ip, fecha, administrador_fk) FROM stdin;
+1	192.168.0.1	2014-06-04	1
 \.
 
 
@@ -582,7 +584,7 @@ SELECT pg_catalog.setval('bitacora_pk_seq', 1, false);
 --
 
 COPY cursos (pk, semestre, anio, asignatura_fk, docente_fk, seccion) FROM stdin;
-1	2	2013	82	12	1
+12	1	2014	82	12	1
 \.
 
 
@@ -590,7 +592,7 @@ COPY cursos (pk, semestre, anio, asignatura_fk, docente_fk, seccion) FROM stdin;
 -- Name: cursos_pk_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('cursos_pk_seq', 1, true);
+SELECT pg_catalog.setval('cursos_pk_seq', 16, true);
 
 
 --
@@ -599,7 +601,17 @@ SELECT pg_catalog.setval('cursos_pk_seq', 1, true);
 
 COPY departamentos (pk, facultad_fk, departamento, descripcion) FROM stdin;
 2	1	Industria	
-1	1	Informatica	
+1	1	Informática y Computación	
+7	1	Electricidad	
+8	1	Mecánica	
+9	2	Gestión Organizacional	
+10	2	Economía, Recursos Naturales y Comercio Inter.	
+11	2	Contabilidad y Gestión Financiera	
+12	2	Gestión de la Información	
+13	2	Estadística y Econometría	
+14	4	Prevención de Riesgos y Medio Ambiente	
+15	4	Ciencias de la Construcción	
+16	4	Planificación y Ordenamiento Territorial	
 \.
 
 
@@ -607,7 +619,7 @@ COPY departamentos (pk, facultad_fk, departamento, descripcion) FROM stdin;
 -- Name: departamentos_pk_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('departamentos_pk_seq', 6, true);
+SELECT pg_catalog.setval('departamentos_pk_seq', 16, true);
 
 
 --
@@ -647,8 +659,10 @@ SELECT pg_catalog.setval('docentes_pk_seq', 1, false);
 --
 
 COPY escuelas (pk, departamento_fk, escuela, descripcion) FROM stdin;
-1	1	Informatica	Carreras ingenieria en informatica y civil en computacion
 2	2	Industria y Civil industrial	
+1	1	Informática	Carreras ingenieria en informatica y civil en computacion
+3	7	Electrónica	
+4	8	Mecánica	
 \.
 
 
@@ -656,7 +670,7 @@ COPY escuelas (pk, departamento_fk, escuela, descripcion) FROM stdin;
 -- Name: escuelas_pk_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('escuelas_pk_seq', 1, false);
+SELECT pg_catalog.setval('escuelas_pk_seq', 4, true);
 
 
 --
@@ -664,8 +678,9 @@ SELECT pg_catalog.setval('escuelas_pk_seq', 1, false);
 --
 
 COPY facultades (pk, facultad, descripcion) FROM stdin;
-1	Ingenieria	Macul
-2	FAE	nose
+1	Ingenieria	La Facultad de Ingeniería está ubicada en el Campus Macul, en Av. José Pedro Alessandri 1242, Ñuñoa, Santiago.
+4	Central	La Facultad de Ciencias de la Construcción y Ordenamiento Territorial está ubicada en el Campus Área Central en la calle Dieciocho 390 Santiago Centro, Metro Toesca.
+2	Adm. y Economía	La Facultad de Administración y Economía está ubicada en el Campus Providencia en Dr. Hernán Alessandri 722, Providencia, Metro Salvador.
 \.
 
 
@@ -673,7 +688,7 @@ COPY facultades (pk, facultad, descripcion) FROM stdin;
 -- Name: facultades_pk_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('facultades_pk_seq', 3, true);
+SELECT pg_catalog.setval('facultades_pk_seq', 4, true);
 
 
 --
@@ -705,7 +720,10 @@ SELECT pg_catalog.setval('periodos_pk_seq', 1, false);
 --
 
 COPY reservas (pk, fecha, sala_fk, periodo_fk, curso_fk, adm_fk) FROM stdin;
-1	2013-12-20	15	6	1	1
+23	2014-06-09	1	1	12	1
+24	2014-06-16	1	1	12	1
+25	2014-06-23	1	1	12	1
+26	2014-06-30	1	1	12	1
 \.
 
 
@@ -713,7 +731,7 @@ COPY reservas (pk, fecha, sala_fk, periodo_fk, curso_fk, adm_fk) FROM stdin;
 -- Name: reservas_pk_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('reservas_pk_seq', 1, true);
+SELECT pg_catalog.setval('reservas_pk_seq', 38, true);
 
 
 --
@@ -919,20 +937,6 @@ ALTER TABLE ONLY salas
 --
 
 CREATE UNIQUE INDEX asignaturas_codigo_nombre_key ON asignaturas USING btree (codigo, nombre);
-
-
---
--- Name: cursos_semestre_anio_asignatura_fk_docente_fk_key; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE UNIQUE INDEX cursos_semestre_anio_asignatura_fk_docente_fk_key ON cursos USING btree (semestre, anio, asignatura_fk, docente_fk);
-
-
---
--- Name: reservas_fecha_sala_fk_periodo_fk_key; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE UNIQUE INDEX reservas_fecha_sala_fk_periodo_fk_key ON reservas USING btree (fecha, sala_fk, periodo_fk);
 
 
 --
