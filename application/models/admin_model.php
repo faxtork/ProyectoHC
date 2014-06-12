@@ -165,7 +165,7 @@
      public function getReserva() {
          
          $query=$this->db
-                ->query("SELECT r.pk,r.fecha,s.sala,s.pk AS pksala,d.nombres AS nombredocente,d.apellidos AS apellidodocente,d.pk AS pkdocente,a.nombre AS asignatura,a.pk AS pkasignatura,c.seccion,p.periodo,p.pk AS pkperiodo 
+                ->query("SELECT c.seccion,a.codigo,r.pk,r.fecha,s.sala,s.pk AS pksala,d.nombres AS nombredocente,d.apellidos AS apellidodocente,d.pk AS pkdocente,a.nombre AS asignatura,a.pk AS pkasignatura,c.seccion,p.periodo,p.pk AS pkperiodo 
                     FROM reservas as r,salas as s,docentes as d,cursos as c,asignaturas as a,periodos as p WHERE 
                     r.adm_fk is not NULL and
                     s.pk=r.sala_fk and 
@@ -173,7 +173,7 @@
                     p.pk=r.periodo_fk and 
                     d.pk=c.docente_fk and 
                     a.pk=c.asignatura_fk 
-                    ORDER BY pk DESC");
+                    ORDER BY pk asc");
         return $query->result();
      }
      
@@ -234,6 +234,16 @@
             $query=$this->db
                 ->query("SELECT max(pk) as maxPk FROM cursos;");//laultima pk ingresada
             return $query->row(); 
+    }
+    public function fechaReservas(){
+            $query=$this->db
+                ->query("SELECT fecha,periodo_fk,sala_fk FROM reservas;");
+            return $query->result();
+    }
+    public function getSalaExcp($pk){
+            $query=$this->db
+                ->query("SELECT pk,sala FROM salas where pk!=$pk;");
+            return $query->result();
     }
    }
 ?>

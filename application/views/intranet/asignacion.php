@@ -101,8 +101,77 @@ maxDate: "+7M, 6D",
 	                    }, function(data) {
 	                        $("#asig").html(data);
 	                    });	
-	                
+	                	
 
+
+
+                });
+            });
+
+
+        });
+
+</script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#dia").change(function() {
+                $("#dia option:selected").each(function() { 
+                  	dia=$('#dia').val();
+
+
+                  	            $("#periodo").change(function() {
+					                $("#periodo option:selected").each(function() { 
+					                  	perio=$('#periodo').val();
+					                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
+						                        perio : perio , dia : dia
+						                    }, function(data) {
+						                        $("#salas").html(data);
+						                    });		
+					                });
+					            });
+
+
+/*
+							                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
+								                        dia : dia 
+								                    }, function(data) {
+								                        $("#comp").html(data);
+								                    });*/
+
+
+
+                });
+            });
+
+
+        });
+
+</script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+
+                  	            $("#periodo").change(function() {
+					                $("#periodo option:selected").each(function() { 
+					                  	perio=$('#periodo').val();
+
+					                  		            $("#dia").change(function() {
+											                $("#dia option:selected").each(function() { 
+											                  	dia=$('#dia').val();
+
+
+
+
+
+
+					                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
+						                        perio : perio , dia : dia
+						                    }, function(data) {
+						                        $("#salas").html(data);
+						                    });		
+					                });
+					            });
 
                 });
             });
@@ -119,10 +188,32 @@ maxDate: "+7M, 6D",
 <?php 
 $attributes = array('class' => 'form-horizontal', 'role' => 'form');
  ?>
+
+<?php 
+$fecha = "2014-06-09"; //5 agosto de 2004 por ejemplo 
+
+$fechats = strtotime($fecha); //a timestamp
+
+//el parametro w en la funcion date indica que queremos el dia de la semana
+//lo devuelve en numero 0 domingo, 1 lunes,....
+switch (date('w', $fechats)){
+    case 0: echo "Domingo"; break;
+    case 1: echo "Lunes"; break;
+    case 2: echo "Martes"; break;
+    case 3: echo "Miercoles"; break;
+    case 4: echo "Jueves"; break;
+    case 5: echo "Viernes"; break;
+    case 6: echo "Sabado"; break;
+} 
+ ?>
+
 <div class="well">
 	<div class="row-fluid">
 		<div class="span12">
 			<h1>Semestre Academico</h1>
+			<!--<input type="text" id="comp">-->
+			<select name="comp" class="form-control" id="comp"><option value="">Selecione una salaa</option></select>
+
 		</div>
 	</div><?= form_open('intranet/llenarReservaSemestre',$attributes);?> 
 	<div class="row-fluid">

@@ -383,8 +383,71 @@ class Intranet extends CI_Controller {
         }
         */
     }
-    
-    
+    public function comprobarDoc(){
+        $dia=$this->input->post('dia');
+        $periodo=$this->input->post('perio');
+        if($dia!=null && $periodo!=null){
+          //  echo $dia."-".$periodo;
+            //consultar por el periodo el dia  y si considen no traer las SALA que se encuentra ocupada y el PROFE
+             $queDia=$this->admin_model->fechaReservas();
+                 date_default_timezone_set("America/Santiago");
+             foreach ($queDia as $key) {
+                        $fechats = strtotime($key->fecha); //a timestamp
+
+                        //el parametro w en la funcion date indica que queremos el dia de la semana
+                        //lo devuelve en numero 0 domingo, 1 lunes,....
+                        switch (date('w', $fechats)){
+                            case 0: $bool=0; break;// echo "Domingo"; break;
+                            case 1: $bool=1; break;// echo "Lunes"; break;
+                            case 2: $bool=2; break;// echo "Martes"; break;
+                            case 3: $bool=3; break;// echo "Miercoles"; break;
+                            case 4: $bool=4; break;// echo "Jueves"; break;
+                            case 5: $bool=5; break;// echo "Viernes"; break;
+                            case 6: $bool=6; break;// echo "Sabado"; break;
+                        }
+                        $queDia2[]=$bool;
+                        $quePeriodo[]=$key->periodo_fk;
+                        $salaCancelar[]=$key->sala_fk;
+
+             }
+             
+             $queDia2=array_unique($queDia2);//para quitar los duplicado del array
+             $quePeriodo=array_unique($quePeriodo);//para quitar los duplicado del array
+             $salaCancelar=array_unique($salaCancelar);//para quitar los duplicado del array
+             $loob=0;
+             for ($i=0; $i <count($queDia2) ; $i++) { 
+                 if($dia==$queDia2[$i] && $periodo==$quePeriodo[$i]){
+                   // echo "yes";
+                    $loob=1;
+                 }
+                 else echo "no";
+             }
+             if($loob==1){
+                //echo $salaCancelar[0];
+                
+                $panalSalas=$this->admin_model->getSalaExcp($salaCancelar[0]);//extrae todas las salas no ocupadas en un periodo
+
+
+                    foreach($panalSalas as $fila)
+                    {         
+                        //echo $fila->sala;
+                        echo'<option value='.$fila->pk.'>'.$fila->sala.'</option>';          
+                    }
+             }else{//loob =0
+                $salas=$this->admin_model->getSala();
+                    foreach($salas as $fila)
+                    {         
+                        //echo $fila->sala;
+                        echo'<option value='.$fila->pk.'>'.$fila->sala.'</option>';          
+                    }
+             }
+        }
+               /*
+       // var_dump($queDia);
+                foreach ($queDia as $sala) {
+           echo '<option value="">'.$sala->fecha.'</option>';*/
+        
+    }
      public function aprobarPedido($pk=NULL,$fecha=NULL,$sala=NULL,$pksala=NULL,$nombredocente=NULL,
             $apellidodocente=NULL,$pkdocente=NULL,$asignatura=NULL,$pkasignatura=NULL,$periodo=NULL) {
          
