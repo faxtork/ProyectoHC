@@ -211,8 +211,8 @@ switch (date('w', $fechats)){
 	<div class="row-fluid">
 		<div class="span12">
 			<h1>Semestre Academico</h1>
-			<!--<input type="text" id="comp">-->
-			<select name="comp" class="form-control" id="comp"><option value="">Selecione una salaa</option></select>
+			<!--<input type="text" id="comp">
+			<select name="comp" class="form-control" id="comp"><option value="">Selecione una salaa</option></select>-->
 
 		</div>
 	</div><?= form_open('intranet/llenarReservaSemestre',$attributes);?> 
@@ -338,13 +338,3 @@ switch (date('w', $fechats)){
 	</div><?= form_close();?>
 </div>
 
-    
-<script type="text/javascript">
-$('#dia').change(function(){
-    var selectedOption = $(this).find('option:selected');
-    var selectedLabel = $(selectedOption).text();
-    var selectedValue = $(selectedOption).val();
-    $('#iSelected').text(selectedValue);
-}).change();
-</script>
-<span id="iSelected">Hola</span>

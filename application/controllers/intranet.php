@@ -418,27 +418,30 @@ class Intranet extends CI_Controller {
              for ($i=0; $i <count($queDia2) ; $i++) { 
                  if($dia==$queDia2[$i] && $periodo==$quePeriodo[$i]){
                    // echo "yes";
-                    $loob=1;
+                    echo $loob=1;
                  }
                  else echo "no";
              }
              if($loob==1){
                 //echo $salaCancelar[0];
                 
-                $panalSalas=$this->admin_model->getSalaExcp($salaCancelar[0]);//extrae todas las salas no ocupadas en un periodo
 
+                for ($i=0; $i <count($salaCancelar) ; $i++) { 
+                    $panalSalas=$this->admin_model->getSalaExcp($salaCancelar[$i]);//extrae todas las salas no ocupadas en un periodo
 
                     foreach($panalSalas as $fila)
                     {         
                         //echo $fila->sala;
                         echo'<option value='.$fila->pk.'>'.$fila->sala.'</option>';          
                     }
+                }
+
              }else{//loob =0
                 $salas=$this->admin_model->getSala();
                     foreach($salas as $fila)
                     {         
-                        //echo $fila->sala;
-                        echo'<option value='.$fila->pk.'>'.$fila->sala.'</option>';          
+                        echo $fila->sala;
+                       echo'<option value='.$fila->pk.'>'.$fila->sala.'</option>';          
                     }
              }
         }
@@ -657,6 +660,194 @@ class Intranet extends CI_Controller {
     public function desconectar() {
         session_destroy();
         redirect('welcome');
+    }
+    public function config(){
+        if(!isset($_SESSION['usuarioAdmin']))
+            {
+                $this->load->view('general/headers');
+                $this->load->view('general/menu_principal');
+                $this->load->view('general/abre_bodypagina');
+                $this->load->view('intranet/nosesion');
+                $this->load->view('general/cierre_bodypagina');
+                $this->load->view('general/cierre_footer');
+
+            }else{
+                $this->load->view('general/headers');
+                $this->load->view('general/menu_principal');
+                $this->load->view('general/abre_bodypagina');   
+                $this->load->view('intranet/header_menu');
+                $this->load->view('intranet/data');
+                $this->load->view('general/cierre_bodypagina');
+                $this->load->view('general/cierre_footer');
+            }
+    }
+    public function editFacultades(){
+    if(!isset($_SESSION['usuarioAdmin']))
+        {
+            $this->load->view('general/headers');
+            $this->load->view('general/menu_principal');
+            $this->load->view('general/abre_bodypagina');
+            $this->load->view('intranet/nosesion');
+            $this->load->view('general/cierre_bodypagina');
+            $this->load->view('general/cierre_footer');
+
+        }else{
+            $this->load->view('general/headers');
+            $this->load->view('general/menu_principal');
+            $this->load->view('general/abre_bodypagina');   
+            $this->load->view('intranet/header_menu');
+            $facultades=$this->admin_model->getFacultad();
+            $this->load->view('intranet/editFacultades',compact("facultades"));
+            $this->load->view('general/cierre_bodypagina');
+            $this->load->view('general/cierre_footer');
+        }
+    }
+    public function modificarFacultad(){
+
+        $btnEditar=$this->input->post('editarModificacion');
+        $btnEliminar=$this->input->post('eliminarModificacion');
+        $accion=$this->input->post('accion');//array
+        $btnAgregar=$this->input->post('agregarModificacion');
+        
+   
+        if($btnAgregar=='Agregar'){
+            if(!isset($_SESSION['usuarioAdmin']))
+                {
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');
+                    $this->load->view('intranet/nosesion');
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+
+                }else{
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');   
+                    $this->load->view('intranet/header_menu');
+                    $this->load->view('intranet/agregarFacultades');
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+                }
+        }else{
+        if ($btnEditar=='Editar' && $accion!=null) {
+               if(!isset($_SESSION['usuarioAdmin']))
+                {
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');
+                    $this->load->view('intranet/nosesion');
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+
+                }else{
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');   
+                    $this->load->view('intranet/header_menu');
+                    
+                    $facultadesPk=$this->admin_model->getFacultadPk($accion);
+                   // var_dump($facultadesPk);
+                    $this->load->view('intranet/editEditFacultades',compact("facultadesPk"));
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+                }
+            }
+
+        elseif ($btnEliminar=='Eliminar' && $accion!=null) {
+            # code...
+        //entra a eliminar
+           $estado=$this->admin_model->eliminarFacultad($accion);
+          // var_dump($estado);
+           $true=0;
+              for ($i=0; $i <count($estado) ; $i++) { 
+                if($estado[$i]==true)
+                    $true++;
+            }
+            if($true==count($estado))
+                $bool=true;
+            else $bool=false;
+            if($bool==true){
+                echo '<script>alert("Registro Eliminado exitosamente"); </script>';
+                redirect('intranet/editFacultades', 'refresh');
+            }else{
+                echo '<script>alert("Algunos elementos no fueron eliminados"); </script>';
+                redirect('intranet/editFacultades', 'refresh');
+            } 
+        }else redirect('intranet/editFacultades');
+    }
+    }
+    public function updateFacultad(){
+        $btn=$this->input->post('editarModificacion'); //el boton
+        $pk=$this->input->post('pk');//el pk a cambiar los datos
+        $newFacultad=$this->input->post('newFacultad');//array
+        $newDescripcion=$this->input->post('newDescripcion');//array
+        if($btn==null)redirect('intranet/config');
+        else{
+            $estado=$this->admin_model->updateFacultades($pk,$newFacultad,$newDescripcion);
+             
+              $true=0;
+              for ($i=0; $i <count($estado) ; $i++) { 
+                if($estado[$i]==true)
+                    $true++;
+            }
+            if($true==count($estado))
+                $bool=true;
+            else $bool=false;
+            if($bool==true){
+                echo '<script>alert("Registro Actualizado exitosamente"); </script>';
+                redirect('intranet/editFacultades', 'refresh');
+            }else{
+                echo '<script>alert("Algunos elementos no fueron actualizados"); </script>';
+                redirect('intranet/editFacultades', 'refresh');
+            } 
+        }
+    }
+    public function agregarFacultad(){
+        $addFacultad=$this->input->post('addFacultad');
+        $addDesc=$this->input->post('addDesc');
+        $btnEnviar=$this->input->post('enviarModificacion');
+        if($btnEnviar=='Enviar')
+        {
+            $estado=$this->admin_model->addFacultades($addFacultad,$addDesc);
+                          $true=0;
+                      for ($i=0; $i <count($estado) ; $i++) { 
+                        if($estado[$i]==true)
+                            $true++;
+                    }
+                    if($true==count($estado))
+                        $bool=true;
+                    else $bool=false;
+                    if($bool==true){
+                        echo '<script>alert("Registro Agregado exitosamente"); </script>';
+                        redirect('intranet/editFacultades', 'refresh');
+                    }else{
+                        echo '<script>alert("Algunos elementos no fueron agregados"); </script>';
+                        redirect('intranet/editFacultades', 'refresh');
+                    }
+        }
+        else redirect('intranet/editFacultades');
+    }
+    public function editSalas(){
+        if(!isset($_SESSION['usuarioAdmin']))
+        {
+            $this->load->view('general/headers');
+            $this->load->view('general/menu_principal');
+            $this->load->view('general/abre_bodypagina');
+            $this->load->view('intranet/nosesion');
+            $this->load->view('general/cierre_bodypagina');
+            $this->load->view('general/cierre_footer');
+
+        }else{
+            $this->load->view('general/headers');
+            $this->load->view('general/menu_principal');
+            $this->load->view('general/abre_bodypagina');   
+            $this->load->view('intranet/header_menu');
+            $salas=$this->admin_model->getSala();
+            $this->load->view('intranet/editSalas',compact("salas"));
+            $this->load->view('general/cierre_bodypagina');
+            $this->load->view('general/cierre_footer');
+        }
     }
     
 }

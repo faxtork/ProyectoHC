@@ -203,7 +203,7 @@
 
     public function getFacultad(){
         $query=$this->db
-            ->select('pk,facultad')
+            ->select('pk,facultad,descripcion')
             ->from('facultades')
             ->order_by('pk','asc')
             ->get();
@@ -244,6 +244,35 @@
             $query=$this->db
                 ->query("SELECT pk,sala FROM salas where pk!=$pk;");
             return $query->result();
+    }
+    public function eliminarFacultad($accion){
+        for ($i=0; $i <count($accion) ; $i++) { 
+            $query[]=$this->db->query("DELETE FROM facultades WHERE pk=".$accion[$i]."");
+            
+        }
+        return $query;
+    }
+    public function getFacultadPk($pk){
+        for ($i=0; $i <count($pk) ; $i++) { 
+             $query[$i]=$this->db->query("SELECT pk,facultad,descripcion FROM facultades where pk=".$pk[$i]."");
+            $query[$i]=$query[$i]->result();
+        }
+        
+             return $query;   
+    }
+    public function updateFacultades($pk,$newFacultad,$newDescripcion){
+        for ($i=0; $i <count($pk) ; $i++) { 
+            $query[]=$this->db->query("UPDATE facultades SET facultad='".$newFacultad[$i]."', descripcion='".$newDescripcion[$i]."' WHERE pk='".$pk[$i]."'");
+            
+        }
+        return $query; 
+    }
+    public function addFacultades($addFacultad,$addDesc){
+        for ($i=0; $i <count($addDesc) ; $i++) { 
+            $query[]=$this->db->query("INSERT INTO facultades VALUES(DEFAULT,'".$addFacultad[$i]."','".$addDesc[$i]."')");
+            
+        }
+        return $query;
     }
    }
 ?>

@@ -16,15 +16,20 @@
           'id'=>'rut',
             'value' => set_value('usuario'),
             'placeholder'=>'Ej: 12.345.678-9',
-            'onblur'=>'return Rut(form1.rut.value)'
+            'onblur'=>'return Rut(form1.rut.value)',
+            'class'=>'form-control'
         );
         $atributos_Clave=  array(
             'name'=>'clave'
             ,'type'=>'password',
-            'placeholder'=>'************'
+            'placeholder'=>'************',
+            'class'=>'form-control'
+        );
+          $attributes_label1 = array(
+            'class' => 'col-lg-3 control-label',
         );
         $atributos_Btn=  array('class'=>'btn btn-primary btn-lg'); 
-        $form=array('name'=>'form1');
+        $form=array('name'=>'form1','class' => 'form-horizontal', 'role' => 'form');
         
     ?>   
     <div class="row-fluid">
@@ -32,11 +37,19 @@
       <div class="span4">
        <?php 
             echo form_open('login/index',$form);
-              echo form_label('Rut', 'labelRut')."&nbsp&nbsp&nbsp";
-              echo form_input($atributos_Rut)."<br>";
-              echo form_label('Clave', 'password');
-              echo form_input($atributos_Clave)."<br>";
-              echo "&nbsp&nbsp&nbsp&nbsp&nbsp".form_submit($atributos_Btn, 'Enviar');
+              echo '<div class="form-group">';
+                  echo form_label('Rut', 'labelRut',$attributes_label1);
+                  echo'<div class="col-lg-9">';
+                      echo form_input($atributos_Rut);
+                  echo '</div>
+              </div>';
+              echo '<div class="form-group">';
+                  echo form_label('Clave', 'password',$attributes_label1);
+                  echo'<div class="col-lg-9">';
+                      echo form_input($atributos_Clave);
+                  echo '</div>
+              </div>';     
+              echo "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp".form_submit($atributos_Btn, 'Enviar');
             echo form_close();
         ?>      
       </div>
