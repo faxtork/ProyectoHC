@@ -67,12 +67,14 @@ $active_record = TRUE;
 	$db['default']['autoinit'] = TRUE;
 	$db['default']['stricton'] = FALSE;
 	}
-	else{
+	else
+	{
 	//echo "servidor";
 	$db['default']['hostname'] = 'localhost';
 	$db['default']['username'] = 'sesparza';
 	$db['default']['password'] = 'x7o5q8';
-	$db['default']['database'] = 'HC_P';
+	$db['default']['database'] = 'sesparzadb';
+	$db['default']['port'] = 5432;
 	$db['default']['dbdriver'] = 'postgre';
 	$db['default']['dbprefix'] = '';
 	$db['default']['pconnect'] = TRUE;
