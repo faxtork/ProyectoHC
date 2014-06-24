@@ -335,6 +335,22 @@ class Intranet extends CI_Controller {
             $docente_fk=$this->input->post('docente'); 
         //fin datos para tabla cursos
         //datos tabla reservas    
+            $repite=$this->input->post('repite'); //depende de repite la accion 1,2,3
+            if($repite==1){
+                $periodo_fk=$this->input->post('periodo');
+                $fechaInicio=$this->input->post('datepickerInicio');
+                $fechaTermino=$this->input->post('datepickerInicio'); //solo en esta vez son iguales
+            }
+            if($repite==2){//quiere decir lun, mier, vier
+
+                $fechaInicio=$this->input->post('datepickerInicio');   
+                $fechaTermino=$this->input->post('datepickerTermino');
+            }
+            if($repite==3){//quiere decir martes, jueves
+                
+                $fechaInicio=$this->input->post('datepickerInicio');   
+                $fechaTermino=$this->input->post('datepickerTermino');
+            }
             $periodo_fk=$this->input->post('periodo');  
             $sala_fk=$this->input->post('salas');
             $depa=$this->input->post('depa'); //mmm hay que ver ver

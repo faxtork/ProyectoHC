@@ -69,6 +69,7 @@ maxDate: "+7M, 6D",
 	}
 });
 });
+
 </script>
 <?php 
 	    $atributosFacultad=array( "" => "Selec. Facultad", );
@@ -129,17 +130,6 @@ maxDate: "+7M, 6D",
 						                    });		
 					                });
 					            });
-
-
-/*
-							                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
-								                        dia : dia 
-								                    }, function(data) {
-								                        $("#comp").html(data);
-								                    });*/
-
-
-
                 });
             });
 
@@ -160,11 +150,6 @@ maxDate: "+7M, 6D",
 											                $("#dia option:selected").each(function() { 
 											                  	dia=$('#dia').val();
 
-
-
-
-
-
 					                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
 						                        perio : perio , dia : dia
 						                    }, function(data) {
@@ -180,17 +165,17 @@ maxDate: "+7M, 6D",
         });
 
 </script>
-<style>
-	#c{
-		text-align:right;
-	}
-</style>
 <?php 
 $attributes = array('class' => 'form-horizontal', 'role' => 'form');
+	foreach ($periodos as $peri){ 
+						$maximo = strlen($peri->inicio);
+						$inicio = substr(strrev($peri->inicio),3,$maximo);
+						$termino = substr(strrev($peri->termino),3,$maximo);
+						$inicio=strrev($inicio);
+						$termino=strrev($termino);
+    $atributosPeriodo[$peri->pk] = $peri->pk.'  -  '.$inicio.' - '.$termino;
+    }
  ?>
-
-
-
 <div class="well">
 	<div class="row-fluid">
 		<div class="span12">
@@ -208,10 +193,13 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					</div>
 				</div>
 				<div class="form-group">
-				    <label  class="col-sm-3 control-label" id="c">Año</label>
+				    <label  class="col-sm-3 control-label">Año</label>
 				    <div class="col-sm-9">
-				      <p class="form-control-static" ><?php echo $año; ?></p>
-				      <input type="hidden" id="ano" name="ano" value="<?php echo $año; ?>">
+					   	<select name="ano" class="form-control" id="ano">
+					   		<option value="<?php echo $año-1; ?>"><?php echo $año-1; ?></option>
+					   		<option selected value="<?php echo $año; ?>"><?php echo $año; ?></option>
+					   		<option value="<?php echo $año+1; ?>"><?php echo $año+1; ?></option>
+					   	</select>
 				    </div>
 				</div>
 				<div class="form-group">
@@ -275,15 +263,24 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 		<div class="span7">
 			<div class="row-fluid">
 				<div class="span12">
-					<h4>Reservas</h4><br><br>
+					<h4>Reservas</h4>
 				</div>
 			</div>
-		
+					<div class="form-group">
+					    <label  class="col-sm-2 control-label" id="">Se Repite</label>
+					    <div class="col-sm-10">
+				     		<select name="repite" class="form-control" id="repite">
+				     			<option value="1">Un día</option>
+				     			<option value="2">Lunes, Miércoles, Viernes</option>
+				     			<option value="3">Martes, Jueves</option>
+				     		</select>
+				     	</div>
+					</div>
+				<div id="contenido1">	
 					<div class="form-group">
 					    <label  class="col-sm-2 control-label" id="c">Periodo</label>
 					    <div class="col-sm-4"><!--algo php para las fechas del la semana-->
 				     		<select name="dia" class="form-control" id="dia">
-				     			<option value="">Todos los:</option>
 				     			<option value="1">Lunes</option>
 				     			<option value="2">Martes</option>
 				     			<option value="3">Miercoles</option>
@@ -294,18 +291,62 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					    </div>
 					    <label  class="col-sm-2 control-label" id="c">Al</label> 
 					 	<div class="col-sm-4">
-					      	<select name="periodo" class="form-control" id="periodo" >
-							<option value="-1">Selececione un periodo</option>
+					      <!--	<select name="periodo" class="form-control" id="periodo" >-->
 								<?php 
-								    foreach ($periodos as $peri) {
-								 		echo'<option value='.$peri->pk.'>'.$peri->pk.'- '.$peri->inicio.' - '.$peri->termino.'</option>';
-								    }
+								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
 								?>
-							</select>
+							<!--</select>-->
 					    </div>
 					</div>
-					<div id="gr"></div>
-
+					<div class="form-group">
+					    <label  class="col-sm-2 control-label" id="c">Desde</label>
+					    <div class="col-sm-4"> 
+				     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio" class="form-control"  id="datepicker">
+					    </div>
+					  	<div id="hasta" style="display:none;"><label  class="col-sm-2 control-label" id="c">Hasta</label>
+					    <div class="col-sm-4">
+				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2">
+					    </div></div>
+					</div>
+				</div>
+				<div id="contenido2" style="display:none;">
+					<div class="form-group">
+					    <label class="col-sm-2 control-label">Para el</label>
+					    <div class="col-sm-4">
+					    	<p class="form-control-static" >Lunes</p>
+					    </div>					
+					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
+					 	<div class="col-sm-4">
+								<?php 
+								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								?>
+					    </div>
+					</div>
+					<div class="form-group">
+					   	<label class="col-sm-2 control-label">Para el</label>
+					    <div class="col-sm-4">
+					    	<p class="form-control-static" >Miércoles</p>
+					    </div>
+					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
+					 	<div class="col-sm-4">
+								<?php 
+								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								?>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <label class="col-sm-2 control-label">Para el</label>
+					    <div class="col-sm-4">
+					    	<p class="form-control-static" >Viernes</p>
+					    </div>	
+					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
+					 	<div class="col-sm-4">
+								<?php 
+								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								?>
+					    </div>
+				    
+					</div>
 					<div class="form-group">
 					    <label  class="col-sm-2 control-label" id="c">Desde</label>
 					    <div class="col-sm-4">
@@ -316,79 +357,81 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2">
 					    </div>
 					</div>
+				</div>
+				<div id="contenido3" style="display:none;">
+						<div class="form-group">
+					    <label class="col-sm-2 control-label">Para el</label>
+					    <div class="col-sm-4">
+					    	<p class="form-control-static" >Martes</p>
+					    </div>						
+					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
+					 	<div class="col-sm-4">
+								<?php 
+								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								?>
+					    </div>
+
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Para el</label>
+					    <div class="col-sm-4">
+					    	<p class="form-control-static" >Jueves</p>
+					    </div>
+					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
+					 	<div class="col-sm-4">
+								<?php 
+								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								?>
+					    </div>
+
+					</div>
+					<div class="form-group">
+					    <label  class="col-sm-2 control-label" id="c">Desde</label>
+					    <div class="col-sm-4">
+				     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio" class="form-control"  id="datepicker">
+					    </div>
+					  	<label  class="col-sm-2 control-label" id="c">Hasta</label>
+					    <div class="col-sm-4">
+				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2">
+					    </div>
+					</div>
+				</div>
+				</div>
 					<?= form_submit("btnEnviar", "Enviar","class='btn btn-primary'");  ?>
-					     
-	<a name="agregarModificacion" type="submit" id="generar" class="btn btn-success" onclick="agregarHijo()"><i class="icon-plus"></i></a>
-	<a name="agregarModificacion" type="submit" class="btn btn-success" onclick="quitarHijo()"><i class="icon-minus"></i></a>
-			
+					     		
 		</div>
 		<?php  echo form_close(); ?>
 	</div>  
-</div>
-					          
-
+</div>	          
 <script>
-	var gr=1;
-	var subgr=0;
-function agregarHijo() 
-{
- 
-  subgr++;
-  if(gr<=2){
- gr++;
-  	var nuevoDiv =document.createElement('div');
-    var nuevoLabel = document.createElement('label');
-    var nuevoDiv2 = document.createElement('div');
-    var nuevohijo = document.createElement('input');
-    var nuevoLabel2 = document.createElement('label');
-    var nuevoDiv3 = document.createElement('div');
-    var nuevohijo2 = document.createElement('textarea');
-    var select = document.createElement('select');
-    var select2 = document.createElement('select');
+  
 
-      nuevoDiv.type='div';
-      nuevoDiv.setAttribute('class','form-group');
-      nuevoDiv.setAttribute('id','gr'+gr);
-      document.getElementById('gr').appendChild(nuevoDiv);
 
-      nuevoLabel.type='label';
- 	  nuevoLabel.innerHTML='Periodo';
- 	  nuevoLabel.setAttribute('class','col-sm-2 control-label');
-      document.getElementById('gr'+gr).appendChild(nuevoLabel);
+    $(document).ready(function() {
+            $("#repite").change(function() {
+                $("#repite option:selected").each(function() { 
+                  	var posicion=document.getElementById('repite').value; //posicion
+					//alert(posicion);
+					if(posicion==1){
+						  
+						   $('#contenido1').show(); 
+						   $('#contenido2').hide(); 
+						   $('#contenido3').hide();
+						   $('#hasta').hide(); 
+						 
+					}
+					if(posicion==2){
+						 $('#contenido2').show(); 
+						 $('#contenido1').hide();
+						 $('#contenido3').hide();
+					}
+					if(posicion==3){
+						 $('#contenido3').show(); 
+						 $('#contenido1').hide();
+						 $('#contenido2').hide();  
+					}
+                  });
+                });
+            });
 
-      nuevoDiv2.type='div';
-      nuevoDiv2.setAttribute('class','col-sm-4');subgr++;
-      nuevoDiv2.setAttribute('id','subgr'+subgr); subgr--;
-      document.getElementById('gr'+gr).appendChild(nuevoDiv2);
-
-      select.type='select';
-      select.setAttribute('name','dia');
-      select.setAttribute('class','form-control');
-      select.setAttribute('id','dia');subgr++;
-      document.getElementById('subgr'+subgr).appendChild(select);subgr--;
-
-      nuevoLabel2.type='label';
- 	  nuevoLabel2.innerHTML='Al';
- 	  nuevoLabel2.setAttribute('class','col-sm-2 control-label');
-      document.getElementById('gr'+gr).appendChild(nuevoLabel2);
-
-      nuevoDiv3.type='div';
-      nuevoDiv3.setAttribute('class','col-sm-4');subgr++;subgr++;
-      nuevoDiv3.setAttribute('id','subgr'+subgr);subgr--;subgr--;
-      document.getElementById('gr'+gr).appendChild(nuevoDiv3);
-
-      select2.setAttribute('name','periodo');
-      select2.setAttribute('class','form-control');
-      select2.setAttribute('id','periodo');subgr++;subgr++;
-      document.getElementById('subgr'+subgr).appendChild(select2);
-
-     }
-}
-function quitarHijo(){
-		if(gr<=3){
-			var o = document.getElementById('gr'+gr);
-			o.parentNode.removeChild(o); 
-			gr--;
-		}
-}
 </script>
