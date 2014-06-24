@@ -14,7 +14,6 @@
 			</ul>
 		</div>
 		<div class="span9"><br>	
-				<div clas="mygrid-wrapper-div">
 						<?php 
 						$attributes = array('class' => 'form-horizontal', 'role' => 'form');
 						 ?> 					
@@ -30,21 +29,17 @@
 				 							<textarea class="form-control" name="addDesc[]" id="addDesc[]"></textarea>	
 										</div>
 									</div>
-									<div  id="gr">
-										
+									<div  id="gr">							
 									</div>
-										
-								
-										
-					    	
-				</div>
-			<div class="row-fluid">
+			<div class="row-fluid"> 
 				<div class="span12">
 					<?php 
 					echo '<input type="submit" name="enviarModificacion" value="Enviar" class="btn btn-primary">';
 					echo form_close();
 					 ?>
-					<input type="submit" name="agregarModificacion" value="Agregar" class="btn btn-success" onclick="agregarHijo()">
+					<a type="submit" name="agregarModificacion" value="Agregar" class="btn btn-success" onclick="agregarHijo()"><i class="icon-plus"></i></a>
+					<a name="agregarModificacion" type="submit" class="btn btn-success" onclick="quitarHijo()"><i class="icon-minus"></i></a>
+
 				</div>
 			</div>					
 		</div>
@@ -54,56 +49,66 @@
 
 
 
-	var cantidad = 0;
-	var gr=1;
-function agregarHijo() 
+
+var gr=1;
+var subgr=0;
+function agregarHijo()
 {
-  cantidad++;
-  gr++;
-  	var nuevoDiv =document.createElement('div');
-    var nuevoLabel = document.createElement('label');
-    var nuevoDiv2 = document.createElement('div');
-    var nuevohijo = document.createElement('input');
-    var nuevoLabel2 = document.createElement('label');
-    var nuevoDiv3 = document.createElement('div');
-    var nuevohijo2 = document.createElement('textarea');
+subgr++;
 
-      nuevoDiv.type='div';
-      nuevoDiv.setAttribute('class','form-group');
-      nuevoDiv.setAttribute('id','gr'+gr);
-      document.getElementById('gr').appendChild(nuevoDiv);
+ if(gr<=2){
+ 	gr++;
+		var nuevoDiv =document.createElement('div');
+		var nuevoLabel = document.createElement('label');
+		var nuevoDiv2 = document.createElement('div');
+		var nuevohijo = document.createElement('input');
+		var nuevoLabel2 = document.createElement('label');
+		var nuevoDiv3 = document.createElement('div');
+		var nuevohijo2 = document.createElement('textarea');
 
-      nuevoLabel.type='label';
- 	  nuevoLabel.innerHTML='Facultad';
- 	  nuevoLabel.setAttribute('class','col-sm-2 control-label');
-      document.getElementById('gr'+gr).appendChild(nuevoLabel);
+		nuevoDiv.type='div';
+		nuevoDiv.setAttribute('class','form-group');
+		nuevoDiv.setAttribute('id','gr'+gr);
+		document.getElementById('gr').appendChild(nuevoDiv);
 
-      nuevoDiv2.type='div';
-      nuevoDiv2.setAttribute('class','col-sm-4');gr++;
-      nuevoDiv2.setAttribute('id','gr'+gr); gr--;
-      document.getElementById('gr'+gr).appendChild(nuevoDiv2);
+		nuevoLabel.type='label';
+		nuevoLabel.innerHTML='Facultad';
+		nuevoLabel.setAttribute('class','col-sm-2 control-label');
+		document.getElementById('gr'+gr).appendChild(nuevoLabel);
 
-      nuevohijo.type = 'text';
-	  nuevohijo.setAttribute('class', 'form-control');
-	  nuevohijo.name = 'addFacultad[]';
-	  nuevohijo.id = 'addFacultad[]';gr++;
-	  document.getElementById('gr'+gr).appendChild(nuevohijo);gr--;
+		nuevoDiv2.type='div';
+		nuevoDiv2.setAttribute('class','col-sm-4');subgr++;
+		nuevoDiv2.setAttribute('id','subgr'+subgr); subgr--;
+		document.getElementById('gr'+gr).appendChild(nuevoDiv2);
 
-	  nuevoLabel2.type='label';
- 	  nuevoLabel2.innerHTML='Desc.';
- 	  nuevoLabel2.setAttribute('class','col-sm-1 control-label');
-      document.getElementById('gr'+gr).appendChild(nuevoLabel2);
+		nuevohijo.type = 'text';
+		nuevohijo.setAttribute('class', 'form-control');
+		nuevohijo.name = 'addFacultad[]';
+		nuevohijo.id = 'addFacultad[]';subgr++;
+		document.getElementById('subgr'+subgr).appendChild(nuevohijo);subgr--;
 
-      nuevoDiv3.type='div';
-      nuevoDiv3.setAttribute('class','col-sm-5');gr++;gr++;
-      nuevoDiv3.setAttribute('id','gr'+gr);gr--;gr--;
-      document.getElementById('gr'+gr).appendChild(nuevoDiv3);
+		nuevoLabel2.type='label';
+		nuevoLabel2.innerHTML='Desc.';
+		nuevoLabel2.setAttribute('class','col-sm-1 control-label');
+		document.getElementById('gr'+gr).appendChild(nuevoLabel2);
 
-      nuevohijo2.type = 'textarea';
-	  nuevohijo2.setAttribute('class', 'form-control');
-	  nuevohijo2.name = 'addDesc[]';
-	  nuevohijo2.id = 'addDesc[]';gr++;gr++;
-	  document.getElementById('gr'+gr).appendChild(nuevohijo2);
+		nuevoDiv3.type='div';
+		nuevoDiv3.setAttribute('class','col-sm-5');subgr++;subgr++;
+		nuevoDiv3.setAttribute('id','subgr'+subgr);subgr--;subgr--;
+		document.getElementById('gr'+gr).appendChild(nuevoDiv3);
 
+		nuevohijo2.type = 'textarea';
+		nuevohijo2.setAttribute('class', 'form-control');
+		nuevohijo2.name = 'addDesc[]';
+		nuevohijo2.id = 'addDesc[]';subgr++;subgr++;
+		document.getElementById('subgr'+subgr).appendChild(nuevohijo2);
+	}	
+}
+function quitarHijo(){
+		if(gr<=3){
+			var o = document.getElementById('gr'+gr);
+			o.parentNode.removeChild(o); 
+			gr--;
+		}
 }
 </script>

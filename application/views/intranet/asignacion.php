@@ -189,23 +189,7 @@ maxDate: "+7M, 6D",
 $attributes = array('class' => 'form-horizontal', 'role' => 'form');
  ?>
 
-<?php 
-$fecha = "2014-06-09"; //5 agosto de 2004 por ejemplo 
 
-$fechats = strtotime($fecha); //a timestamp
-
-//el parametro w en la funcion date indica que queremos el dia de la semana
-//lo devuelve en numero 0 domingo, 1 lunes,....
-switch (date('w', $fechats)){
-    case 0: echo "Domingo"; break;
-    case 1: echo "Lunes"; break;
-    case 2: echo "Martes"; break;
-    case 3: echo "Miercoles"; break;
-    case 4: echo "Jueves"; break;
-    case 5: echo "Viernes"; break;
-    case 6: echo "Sabado"; break;
-} 
- ?>
 
 <div class="well">
 	<div class="row-fluid">
@@ -215,8 +199,8 @@ switch (date('w', $fechats)){
 			<select name="comp" class="form-control" id="comp"><option value="">Selecione una salaa</option></select>-->
 
 		</div>
-	</div><?= form_open('intranet/llenarReservaSemestre',$attributes);?> 
-	<div class="row-fluid">
+	</div>
+	<div class="row-fluid"><?= form_open('intranet/llenarReservaSemestre',$attributes);?> 
 		<div class="span5">
 				<div class="row-fluid">
 					<div class="span12">
@@ -287,7 +271,6 @@ switch (date('w', $fechats)){
 						</select>
 				    </div>
 				</div>  
-			</form>
 		</div>
 		<div class="span7">
 			<div class="row-fluid">
@@ -321,6 +304,8 @@ switch (date('w', $fechats)){
 							</select>
 					    </div>
 					</div>
+					<div id="gr"></div>
+
 					<div class="form-group">
 					    <label  class="col-sm-2 control-label" id="c">Desde</label>
 					    <div class="col-sm-4">
@@ -331,10 +316,79 @@ switch (date('w', $fechats)){
 				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2">
 					    </div>
 					</div>
-					            <div class="span7"><?= form_submit("btnEnviar", "Enviar","class='btn btn-primary btn-lg'"); ?></div> <div class="span3"></div>
-
-				
+					<?= form_submit("btnEnviar", "Enviar","class='btn btn-primary'");  ?>
+					     
+	<a name="agregarModificacion" type="submit" id="generar" class="btn btn-success" onclick="agregarHijo()"><i class="icon-plus"></i></a>
+	<a name="agregarModificacion" type="submit" class="btn btn-success" onclick="quitarHijo()"><i class="icon-minus"></i></a>
+			
 		</div>
-	</div><?= form_close();?>
+		<?php  echo form_close(); ?>
+	</div>  
 </div>
+					          
 
+<script>
+	var gr=1;
+	var subgr=0;
+function agregarHijo() 
+{
+ 
+  subgr++;
+  if(gr<=2){
+ gr++;
+  	var nuevoDiv =document.createElement('div');
+    var nuevoLabel = document.createElement('label');
+    var nuevoDiv2 = document.createElement('div');
+    var nuevohijo = document.createElement('input');
+    var nuevoLabel2 = document.createElement('label');
+    var nuevoDiv3 = document.createElement('div');
+    var nuevohijo2 = document.createElement('textarea');
+    var select = document.createElement('select');
+    var select2 = document.createElement('select');
+
+      nuevoDiv.type='div';
+      nuevoDiv.setAttribute('class','form-group');
+      nuevoDiv.setAttribute('id','gr'+gr);
+      document.getElementById('gr').appendChild(nuevoDiv);
+
+      nuevoLabel.type='label';
+ 	  nuevoLabel.innerHTML='Periodo';
+ 	  nuevoLabel.setAttribute('class','col-sm-2 control-label');
+      document.getElementById('gr'+gr).appendChild(nuevoLabel);
+
+      nuevoDiv2.type='div';
+      nuevoDiv2.setAttribute('class','col-sm-4');subgr++;
+      nuevoDiv2.setAttribute('id','subgr'+subgr); subgr--;
+      document.getElementById('gr'+gr).appendChild(nuevoDiv2);
+
+      select.type='select';
+      select.setAttribute('name','dia');
+      select.setAttribute('class','form-control');
+      select.setAttribute('id','dia');subgr++;
+      document.getElementById('subgr'+subgr).appendChild(select);subgr--;
+
+      nuevoLabel2.type='label';
+ 	  nuevoLabel2.innerHTML='Al';
+ 	  nuevoLabel2.setAttribute('class','col-sm-2 control-label');
+      document.getElementById('gr'+gr).appendChild(nuevoLabel2);
+
+      nuevoDiv3.type='div';
+      nuevoDiv3.setAttribute('class','col-sm-4');subgr++;subgr++;
+      nuevoDiv3.setAttribute('id','subgr'+subgr);subgr--;subgr--;
+      document.getElementById('gr'+gr).appendChild(nuevoDiv3);
+
+      select2.setAttribute('name','periodo');
+      select2.setAttribute('class','form-control');
+      select2.setAttribute('id','periodo');subgr++;subgr++;
+      document.getElementById('subgr'+subgr).appendChild(select2);
+
+     }
+}
+function quitarHijo(){
+		if(gr<=3){
+			var o = document.getElementById('gr'+gr);
+			o.parentNode.removeChild(o); 
+			gr--;
+		}
+}
+</script>
