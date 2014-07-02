@@ -8,15 +8,11 @@
 
    // echo "Universidad Tecnologica Metropolitana del Estado de Chile.";echo "<br/>";
      // echo "Son las $time, $fecha";
-
-
 ?>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 <script src="jquery.ui.datepicker-es.js"></script>
-
-
 <script>
 $(function () {
  $.datepicker.regional['es'] = {
@@ -36,7 +32,96 @@ $(function () {
         showMonthAfterYear: false,
         yearSuffix: '',
     };
-
+function noExcursion(date){
+//var date = new Date();
+var day = date.getDay();
+// aqui indicamos el numero correspondiente a los dias que ha de bloquearse (el 0 es Domingo, 1 Lunes, etc...) en el ejemplo bloqueo todos menos los lunes y jueves.
+//return [(day != 0 && day != 1 && day != 2 && day != 3 && day != 5 && day != 6), ''];
+return[(day!=0),'']
+};
+$.datepicker.setDefaults($.datepicker.regional["es"]);
+$("#datepicker").datepicker({
+beforeShowDay: noExcursion,
+minDate: "-5D",
+maxDate: "+7M, 6D",
+	onClose: function (selectedDate) {
+	$("#datepicker2").datepicker("option", "minDate", selectedDate);
+	}
+});
+$('#datepicker2').datepicker({
+beforeShowDay: noExcursion,
+minDate: "-5D",
+maxDate: "+7M, 6D",
+	onClose: function (selectedDate) {
+	$("#datepicker").datepicker("option", "maxDate", selectedDate);
+	}
+});
+});
+</script>
+<script>
+$(function () {
+ $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'yy-mm-dd',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+    };
+function noExcursion(date){
+//var date = new Date();
+var day = date.getDay();
+// aqui indicamos el numero correspondiente a los dias que ha de bloquearse (el 0 es Domingo, 1 Lunes, etc...) en el ejemplo bloqueo todos menos los lunes y jueves.
+//return [(day != 0 && day != 1 && day != 2 && day != 3 && day != 5 && day != 6), ''];
+return[(day!=0),'']
+};
+$.datepicker.setDefaults($.datepicker.regional["es"]);
+$("#datepickergr2").datepicker({
+beforeShowDay: noExcursion,
+minDate: "-5D",
+maxDate: "+7M, 6D",
+	onClose: function (selectedDate) {
+	$("#datepicker2gr2").datepicker("option", "minDate", selectedDate);
+	}
+});
+$('#datepicker2gr2').datepicker({
+beforeShowDay: noExcursion,
+minDate: "-5D",
+maxDate: "+7M, 6D",
+	onClose: function (selectedDate) {
+	$("#datepickegr2r").datepicker("option", "maxDate", selectedDate);
+	}
+});
+});
+</script>
+<script>
+$(function () {
+ $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'yy-mm-dd',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+    };
 function noExcursion(date){
 //var date = new Date();
 var day = date.getDay();
@@ -45,41 +130,31 @@ var day = date.getDay();
 return[(day!=0),'']
 };
 
-
 $.datepicker.setDefaults($.datepicker.regional["es"]);
-$("#datepicker").datepicker({
-
-
+$("#datepickergr3").datepicker({
 beforeShowDay: noExcursion,
-
 minDate: "-5D",
 maxDate: "+7M, 6D",
 	onClose: function (selectedDate) {
-	$("#datepicker2").datepicker("option", "minDate", selectedDate);
+	$("#datepicker2gr3").datepicker("option", "minDate", selectedDate);
 	}
 });
-$('#datepicker2').datepicker({
-
+$('#datepicker2gr3').datepicker({
 beforeShowDay: noExcursion,
-
 minDate: "-5D",
 maxDate: "+7M, 6D",
 	onClose: function (selectedDate) {
-	$("#datepicker").datepicker("option", "maxDate", selectedDate);
+	$("#datepickergr3").datepicker("option", "maxDate", selectedDate);
 	}
 });
 });
-
 </script>
 <?php 
 	    $atributosFacultad=array( "" => "Selec. Facultad", );
     foreach ($facultades as $facu) {
       $atributosFacultad[$facu->pk]=$facu->facultad;
-
     }
-
  ?>
-
     <script type="text/javascript">
         $(document).ready(function() {
             $("#facultad").change(function() {
@@ -102,24 +177,15 @@ maxDate: "+7M, 6D",
 	                    }, function(data) {
 	                        $("#asig").html(data);
 	                    });	
-	                	
-
-
-
                 });
             });
-
-
         });
-
 </script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#dia").change(function() {
                 $("#dia option:selected").each(function() { 
                   	dia=$('#dia').val();
-
-
                   	            $("#periodo").change(function() {
 					                $("#periodo option:selected").each(function() { 
 					                  	perio=$('#periodo').val();
@@ -132,24 +198,17 @@ maxDate: "+7M, 6D",
 					            });
                 });
             });
-
-
         });
 
 </script>
     <script type="text/javascript">
         $(document).ready(function() {
-
-
-
                   	            $("#periodo").change(function() {
 					                $("#periodo option:selected").each(function() { 
 					                  	perio=$('#periodo').val();
-
 					                  		            $("#dia").change(function() {
 											                $("#dia option:selected").each(function() { 
 											                  	dia=$('#dia').val();
-
 					                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
 						                        perio : perio , dia : dia
 						                    }, function(data) {
@@ -157,11 +216,8 @@ maxDate: "+7M, 6D",
 						                    });		
 					                });
 					            });
-
                 });
             });
-
-
         });
 
 </script>
@@ -177,19 +233,11 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
     }
  ?>
 <div class="well">
-	<div class="row-fluid">
-		<div class="span12">
-			<h1>Semestre Academico</h1>
-			<!--<input type="text" id="comp">
-			<select name="comp" class="form-control" id="comp"><option value="">Selecione una salaa</option></select>-->
-
-		</div>
-	</div>
 	<div class="row-fluid"><?= form_open('intranet/llenarReservaSemestre',$attributes);?> 
 		<div class="span5">
 				<div class="row-fluid">
 					<div class="span12">
-						<h4>Datos para Curso</h4>
+						<h4>Creación de Curso</h4>
 					</div>
 				</div>
 				<div class="form-group">
@@ -198,7 +246,6 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					   	<select name="ano" class="form-control" id="ano">
 					   		<option value="<?php echo $año-1; ?>"><?php echo $año-1; ?></option>
 					   		<option selected value="<?php echo $año; ?>"><?php echo $año; ?></option>
-					   		<option value="<?php echo $año+1; ?>"><?php echo $año+1; ?></option>
 					   	</select>
 				    </div>
 				</div>
@@ -263,7 +310,7 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 		<div class="span7">
 			<div class="row-fluid">
 				<div class="span12">
-					<h4>Reservas</h4>
+					<h4>Asignacion de Horario</h4>
 				</div>
 			</div>
 					<div class="form-group">
@@ -318,7 +365,7 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
 					 	<div class="col-sm-4">
 								<?php 
-								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								echo form_dropdown('periodo1',$atributosPeriodo,'','class="form-control" id="periodo"')
 								?>
 					    </div>
 					</div>
@@ -330,7 +377,7 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
 					 	<div class="col-sm-4">
 								<?php 
-								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								echo form_dropdown('periodo2',$atributosPeriodo,'','class="form-control" id="periodo"')
 								?>
 					    </div>
 					</div>
@@ -342,7 +389,7 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
 					 	<div class="col-sm-4">
 								<?php 
-								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								echo form_dropdown('periodo3',$atributosPeriodo,'','class="form-control" id="periodo"')
 								?>
 					    </div>
 				    
@@ -350,11 +397,11 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					<div class="form-group">
 					    <label  class="col-sm-2 control-label" id="c">Desde</label>
 					    <div class="col-sm-4">
-				     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio" class="form-control"  id="datepicker">
+				     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio2" class="form-control"  id="datepickergr2">
 					    </div>
 					  	<label  class="col-sm-2 control-label" id="c">Hasta</label>
 					    <div class="col-sm-4">
-				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2">
+				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino2" class="form-control" type="text" id="datepicker2gr2">
 					    </div>
 					</div>
 				</div>
@@ -367,7 +414,7 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
 					 	<div class="col-sm-4">
 								<?php 
-								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
+								echo form_dropdown('periodo4',$atributosPeriodo,'','class="form-control" id="periodo"')
 								?>
 					    </div>
 
@@ -380,19 +427,19 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 					    <label  class="col-sm-2 control-label" id="c">Periodo</label> 
 					 	<div class="col-sm-4">
 								<?php 
-								echo form_dropdown('periodo',$atributosPeriodo,'','class="form-control" id="periodo"')
-								?>
+								echo form_dropdown('periodo5',$atributosPeriodo,'','class="form-control" id="periodo"')
+								?>  
 					    </div>
 
 					</div>
 					<div class="form-group">
 					    <label  class="col-sm-2 control-label" id="c">Desde</label>
 					    <div class="col-sm-4">
-				     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio" class="form-control"  id="datepicker">
+				     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio3" class="form-control"  id="datepickergr3">
 					    </div>
 					  	<label  class="col-sm-2 control-label" id="c">Hasta</label>
 					    <div class="col-sm-4">
-				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2">
+				     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino3" class="form-control" type="text" id="datepicker2gr3">
 					    </div>
 					</div>
 				</div>
@@ -409,26 +456,26 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 
     $(document).ready(function() {
             $("#repite").change(function() {
-                $("#repite option:selected").each(function() { 
+                $("#repite option:selected").each(function() {
                   	var posicion=document.getElementById('repite').value; //posicion
 					//alert(posicion);
 					if(posicion==1){
-						  
-						   $('#contenido1').show(); 
-						   $('#contenido2').hide(); 
+
+						   $('#contenido1').show();
+						   $('#contenido2').hide();
 						   $('#contenido3').hide();
-						   $('#hasta').hide(); 
-						 
+						   $('#hasta').hide();
+
 					}
 					if(posicion==2){
-						 $('#contenido2').show(); 
+						 $('#contenido2').show();
 						 $('#contenido1').hide();
 						 $('#contenido3').hide();
 					}
 					if(posicion==3){
-						 $('#contenido3').show(); 
+						 $('#contenido3').show();
 						 $('#contenido1').hide();
-						 $('#contenido2').hide();  
+						 $('#contenido2').hide();
 					}
                   });
                 });

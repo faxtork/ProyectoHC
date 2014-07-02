@@ -130,7 +130,74 @@
             }
             return true;
         }
-        
+        public function AsignarPorTiempo2($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$periodo_fk3,$sala_fk,$maxPkCursos,$adm_fk){
+            date_default_timezone_set("America/Santiago");
+            $fechaIni=strtotime($fechaInicio);
+            $fechaFin=strtotime($fechaTermino);
+
+            for($i=$fechaIni; $i<=$fechaFin; $i+=86400){//recorre cada dia del inicio hasta el fin
+                    $fecha=date("Y-m-d", $i);
+                    $dia=date("w", strtotime($fecha));//saca el dia en cada recorrido
+                    if($dia==1){//lunes
+                                    $data = array(
+                                       'fecha' => "$fecha",
+                                       'sala_fk' => $sala_fk,
+                                       'periodo_fk' => $periodo_fk1,
+                                       'curso_fk' => $maxPkCursos->maxpk,
+                                       'adm_fk' =>$adm_fk->pk,);
+                                    $this->db->insert('reservas', $data); 
+                    }
+                        if($dia==3){//miercoles
+                                    $data2 = array(
+                                       'fecha' => "$fecha",
+                                       'sala_fk' => $sala_fk,
+                                       'periodo_fk' => $periodo_fk2,
+                                       'curso_fk' => $maxPkCursos->maxpk,
+                                       'adm_fk' =>$adm_fk->pk,);
+                                    $this->db->insert('reservas', $data2);
+                    }
+                        if($dia==5){//viernes
+                                    $data3 = array(
+                                       'fecha' => "$fecha",
+                                       'sala_fk' => $sala_fk,
+                                       'periodo_fk' => $periodo_fk3,
+                                       'curso_fk' => $maxPkCursos->maxpk,
+                                       'adm_fk' =>$adm_fk->pk,);
+                                    $this->db->insert('reservas', $data3);
+                    }
+                }
+            return true;
+        }
+        public function AsignarPorTiempo3($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$sala_fk,$maxPkCursos,$adm_fk){
+            date_default_timezone_set("America/Santiago");
+            $fechaIni=strtotime($fechaInicio);
+            $fechaFin=strtotime($fechaTermino);
+
+            for($i=$fechaIni; $i<=$fechaFin; $i+=86400){//recorre cada dia del inicio hasta el fin
+                    $fecha=date("Y-m-d", $i);
+                    $dia=date("w", strtotime($fecha));//saca el dia en cada recorrido
+                    if($dia==2){//martes
+                                    $data = array(
+                                       'fecha' => "$fecha",
+                                       'sala_fk' => $sala_fk,
+                                       'periodo_fk' => $periodo_fk1,
+                                       'curso_fk' => $maxPkCursos->maxpk,
+                                       'adm_fk' =>$adm_fk->pk,);
+                                    $this->db->insert('reservas', $data); 
+                    }
+                        if($dia==4){//jueves
+                                    $data2 = array(
+                                       'fecha' => "$fecha",
+                                       'sala_fk' => $sala_fk,
+                                       'periodo_fk' => $periodo_fk2,
+                                       'curso_fk' => $maxPkCursos->maxpk,
+                                       'adm_fk' =>$adm_fk->pk,);
+                                    $this->db->insert('reservas', $data2);
+                    }
+
+                }
+            return true;
+        }         
         public function getTodosPedidos() {
          
          $query=$this->db

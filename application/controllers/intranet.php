@@ -334,34 +334,7 @@ class Intranet extends CI_Controller {
             $seccion=$this->input->post('seccion');
             $docente_fk=$this->input->post('docente'); 
         //fin datos para tabla cursos
-        //datos tabla reservas    
-            $repite=$this->input->post('repite'); //depende de repite la accion 1,2,3
-            if($repite==1){
-                $periodo_fk=$this->input->post('periodo');
-                $fechaInicio=$this->input->post('datepickerInicio');
-                $fechaTermino=$this->input->post('datepickerInicio'); //solo en esta vez son iguales
-            }
-            if($repite==2){//quiere decir lun, mier, vier
-
-                $fechaInicio=$this->input->post('datepickerInicio');   
-                $fechaTermino=$this->input->post('datepickerTermino');
-            }
-            if($repite==3){//quiere decir martes, jueves
-                
-                $fechaInicio=$this->input->post('datepickerInicio');   
-                $fechaTermino=$this->input->post('datepickerTermino');
-            }
-            $periodo_fk=$this->input->post('periodo');  
-            $sala_fk=$this->input->post('salas');
-            $depa=$this->input->post('depa'); //mmm hay que ver ver
-            $facultad=$this->input->post('facultad');//mmmmmmmmmhay que ver ver  
-        //fin datos tabla reservas
-            $dia=$this->input->post('dia');//mmmmmmmmmmmmmmmmmmmmm hay que ver
-      
-            $fechaInicio=$this->input->post('datepickerInicio');   
-            $fechaTermino=$this->input->post('datepickerTermino');
-
-        //crear la tabla curso
+                    //crear la tabla curso
                      $datos=array(
                         'semestre'=>$semestre,
                         'anio'=>$anio,
@@ -375,29 +348,48 @@ class Intranet extends CI_Controller {
                                  //redirect('intranet/academico', 'refresh');
                                  }  
         //fin crear tabla curso 
-        //crear tabla reservas
-            $maxPkCursos=$this->admin_model->maxPkCurso();
+            $maxPkCursos=$this->admin_model->maxPkCurso();//max pk de la tabla curso
+            $sala_fk=$this->input->post('salas');                     
+        //datos tabla reservas    
+            $repite=$this->input->post('repite'); //depende de repite la accion 1,2,3
+            if($repite==1){
+                $periodo_fk=$this->input->post('periodo');
+                $fechaInicio=$this->input->post('datepickerInicio');
+                $fechaTermino=$this->input->post('datepickerInicio'); //solo en esta vez son iguales
+
             $listo=$this->Admin_model->AsignarPorTiempo($fechaInicio,$fechaTermino,$periodo_fk,$sala_fk,$maxPkCursos,$adm_fk); 
-                   
+
+            }
+            if($repite==2){//quiere decir lun, mier, vier
+                $periodo_fk1=$this->input->post('periodo1');
+                $periodo_fk2=$this->input->post('periodo2');
+                $periodo_fk3=$this->input->post('periodo3');
+                $fechaInicio=$this->input->post('datepickerInicio2');   
+                $fechaTermino=$this->input->post('datepickerTermino2');
+            $listo=$this->Admin_model->AsignarPorTiempo2($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$periodo_fk3,$sala_fk,$maxPkCursos,$adm_fk); 
+            }
+            if($repite==3){//quiere decir martes, jueves
+                $periodo_fk1=$this->input->post('periodo4');
+                $periodo_fk2=$this->input->post('periodo5');
+                $fechaInicio=$this->input->post('datepickerInicio3');   
+                $fechaTermino=$this->input->post('datepickerTermino3');
+            $listo=$this->Admin_model->AsignarPorTiempo3($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$sala_fk,$maxPkCursos,$adm_fk); 
+
+            }
+            
+            $depa=$this->input->post('depa'); //mmm hay que ver ver
+            $facultad=$this->input->post('facultad');//mmmmmmmmmhay que ver ver  
+        //fin datos tabla reservas
+            $dia=$this->input->post('dia');//mmmmmmmmmmmmmmmmmmmmm hay que ver
+      
+
+
+        //crear tabla reservas
         //fin crear tabla reservas   
              if($listo==TRUE){
                     echo '<script>alert("Exito al guardar las salas"); </script>';
                     redirect('intranet/academico', 'refresh');
             } 
-      /*  if($pkDocente==null || $pkAsignatura==null || $fechaInicio==null || $fechaTermino==null || $periodo==null || $sala==null)
-        {
-            redirect('intranet/academico');//arreglar esta wa para que le diga que no ingreso datos o tra wa
-        }
-        else{
-
-            $curso=$this->Docente_model->getCurso($pkDocente,$pkAsignatura);
-            $listo=$this->Admin_model->AsignarPorTiempo($pkDocente,$pkAsignatura,$fechaInicio,$fechaTermino,$periodo,$sala,$curso); 
-            if($listo==TRUE){
-                    echo '<script>alert("Exito al guardar las salas"); </script>';
-                    redirect('intranet/academico', 'refresh');
-            } 
-        }
-        */
     }
     public function comprobarDoc(){
         $dia=$this->input->post('dia');
@@ -865,5 +857,26 @@ class Intranet extends CI_Controller {
             $this->load->view('general/cierre_footer');
         }
     }
-    
+    public function editPeriodos(){
+    if(!isset($_SESSION['usuarioAdmin']))
+    {
+        $this->load->view('general/headers');
+        $this->load->view('general/menu_principal');
+        $this->load->view('general/abre_bodypagina');
+        $this->load->view('intranet/nosesion');
+        $this->load->view('general/cierre_bodypagina');
+        $this->load->view('general/cierre_footer');
+
+    }else{
+         $periodos=$this->Admin_model->getPeriodo();
+        $this->load->view('general/headers');
+        $this->load->view('general/menu_principal');
+        $this->load->view('general/abre_bodypagina');   
+        $this->load->view('intranet/header_menu');
+        $this->load->view('intranet/editperiodo',compact('periodos'));
+        $this->load->view('general/cierre_bodypagina');
+        $this->load->view('general/cierre_footer');
+    }
+    }
+
 }
