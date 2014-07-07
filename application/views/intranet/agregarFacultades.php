@@ -1,19 +1,7 @@
 
-<div class="well">
-	<div class="row-fluid"><div class="span3"></div><div class="span9"><h3>Agregar Facultades de la UTEM</h3></div></div>
-	<div class="row-fluid">
-		<div class="span3">
-			<ul class="nav nav-pills nav-stacked">
-				<li class="active"><a href="<?= site_url('intranet/editFacultades');?>">Facultades</a></li>
-				<li><a href="<?= site_url('intranet/editSalas');?>">Salas</a></li>
-				<li><a href="<?= site_url('intranet/editDepartamentos');?>">Departamentos</a></li>
-				<li><a href="<?= site_url('intranet/editEscuelas');?>">Escuelas</a></li>
-				<li><a href="<?= site_url('intranet/editAsignaturas');?>">Asignaturas</a></li>
-				<li><a href="<?= site_url('intranet/editDocnetes');?>">Docentes</a></li>
-				<li><a href="<?= site_url('intranet/editPeriodos');?>">Periodos</a></li>
-			</ul>
-		</div>
-		<div class="span9"><br>	
+		<div class="span9"><div class="well">
+			<div class="row-fluid"><div class="span12"><h3>Agregar Facultades de la UTEM</h3></div></div>
+
 						<?php 
 						$attributes = array('class' => 'form-horizontal', 'role' => 'form');
 						 ?> 					
@@ -34,22 +22,17 @@
 			<div class="row-fluid"> 
 				<div class="span12">
 					<?php 
-					echo '<input type="submit" name="enviarModificacion" value="Enviar" class="btn btn-primary">';
+				echo '<button type="submit" name="enviarModificacion" value="Enviar" class="btn btn-primary">Enviar <span class="icon-ok icon-white"></span></button>';
 					echo form_close();
 					 ?>
-					<a type="submit" name="agregarModificacion" value="Agregar" class="btn btn-success" onclick="agregarHijo()"><i class="icon-plus"></i></a>
-					<a name="agregarModificacion" type="submit" class="btn btn-success" onclick="quitarHijo()"><i class="icon-minus"></i></a>
+					<a type="submit" name="agregarModificacion" value="Agregar" class="btn btn-success" onclick="agregarHijo()"><i class="icon-chevron-down"></i></a>
+					<a name="agregarModificacion" type="submit" class="btn btn-success" onclick="quitarHijo()"><i class="icon-chevron-up"></i></a>
 
 				</div>
 			</div>					
 		</div>
-	</div>
 </div>
 <script>
-
-
-
-
 var gr=1;
 var subgr=0;
 function agregarHijo()

@@ -1,3 +1,2 @@
 
-
-</div>
+	</div><!-- cierre el container-->

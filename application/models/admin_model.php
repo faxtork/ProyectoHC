@@ -110,27 +110,7 @@
                 ->get ();
                 return $query->row();
      }
-
-        public function AsignarPorTiempo($fechaInicio,$fechaTermino,$periodo_fk,$sala_fk,$maxPkCursos,$adm_fk){
-            date_default_timezone_set("America/Santiago");
-            $nuevafecha = strtotime ( '+0 day' , strtotime ( $fechaInicio ) ) ;
-            $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-            a:
-            if ($nuevafecha<=$fechaTermino) {
-                $data = array(
-                   'fecha' => "$nuevafecha",
-                   'sala_fk' => $sala_fk,
-                   'periodo_fk' => $periodo_fk,
-                   'curso_fk' => $maxPkCursos->maxpk,
-                   'adm_fk' =>$adm_fk->pk,);
-                $this->db->insert('reservas', $data);
-                $nuevafecha = strtotime ( '+7 day' , strtotime ( $nuevafecha ) ) ;
-                $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-                goto a;
-            }
-            return true;
-        }
-        public function AsignarPorTiempo2($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$periodo_fk3,$sala_fk,$maxPkCursos,$adm_fk){
+        public function AsignarPorTiempo($fechaInicio,$fechaTermino,$periodo_fk,$diaElegido,$sala_fk,$maxPkCursos,$adm_fk){
             date_default_timezone_set("America/Santiago");
             $fechaIni=strtotime($fechaInicio);
             $fechaFin=strtotime($fechaTermino);
@@ -138,66 +118,20 @@
             for($i=$fechaIni; $i<=$fechaFin; $i+=86400){//recorre cada dia del inicio hasta el fin
                     $fecha=date("Y-m-d", $i);
                     $dia=date("w", strtotime($fecha));//saca el dia en cada recorrido
-                    if($dia==1){//lunes
+                    for ($j=0; $j <count($diaElegido) ; $j++) { 
+                        if($dia==$diaElegido[$j]){
                                     $data = array(
                                        'fecha' => "$fecha",
                                        'sala_fk' => $sala_fk,
-                                       'periodo_fk' => $periodo_fk1,
+                                       'periodo_fk' => $periodo_fk[$j],
                                        'curso_fk' => $maxPkCursos->maxpk,
                                        'adm_fk' =>$adm_fk->pk,);
                                     $this->db->insert('reservas', $data); 
-                    }
-                        if($dia==3){//miercoles
-                                    $data2 = array(
-                                       'fecha' => "$fecha",
-                                       'sala_fk' => $sala_fk,
-                                       'periodo_fk' => $periodo_fk2,
-                                       'curso_fk' => $maxPkCursos->maxpk,
-                                       'adm_fk' =>$adm_fk->pk,);
-                                    $this->db->insert('reservas', $data2);
-                    }
-                        if($dia==5){//viernes
-                                    $data3 = array(
-                                       'fecha' => "$fecha",
-                                       'sala_fk' => $sala_fk,
-                                       'periodo_fk' => $periodo_fk3,
-                                       'curso_fk' => $maxPkCursos->maxpk,
-                                       'adm_fk' =>$adm_fk->pk,);
-                                    $this->db->insert('reservas', $data3);
+                        }
                     }
                 }
             return true;
-        }
-        public function AsignarPorTiempo3($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$sala_fk,$maxPkCursos,$adm_fk){
-            date_default_timezone_set("America/Santiago");
-            $fechaIni=strtotime($fechaInicio);
-            $fechaFin=strtotime($fechaTermino);
-
-            for($i=$fechaIni; $i<=$fechaFin; $i+=86400){//recorre cada dia del inicio hasta el fin
-                    $fecha=date("Y-m-d", $i);
-                    $dia=date("w", strtotime($fecha));//saca el dia en cada recorrido
-                    if($dia==2){//martes
-                                    $data = array(
-                                       'fecha' => "$fecha",
-                                       'sala_fk' => $sala_fk,
-                                       'periodo_fk' => $periodo_fk1,
-                                       'curso_fk' => $maxPkCursos->maxpk,
-                                       'adm_fk' =>$adm_fk->pk,);
-                                    $this->db->insert('reservas', $data); 
-                    }
-                        if($dia==4){//jueves
-                                    $data2 = array(
-                                       'fecha' => "$fecha",
-                                       'sala_fk' => $sala_fk,
-                                       'periodo_fk' => $periodo_fk2,
-                                       'curso_fk' => $maxPkCursos->maxpk,
-                                       'adm_fk' =>$adm_fk->pk,);
-                                    $this->db->insert('reservas', $data2);
-                    }
-
-                }
-            return true;
-        }         
+        }        
         public function getTodosPedidos() {
          
          $query=$this->db
@@ -278,7 +212,7 @@
          }
     public function salas($facultadPk){
             $query=$this->db
-                 ->query("SELECT pk,sala FROM salas WHERE facultad_fk=$facultadPk;");
+                 ->query("SELECT pk,sala,estado,descripcion FROM salas WHERE facultad_fk=$facultadPk;");
          return $query->result();
     } 
     public function depa($facultadPk){
@@ -341,6 +275,24 @@
         }
         return $query;
     }
+        public function addPeriodo($newInicio,$newTermino,$pkUpdate){
+            for ($i=0; $i <count($pkUpdate) ; $i++) { 
+            $query[]=$this->db->query("UPDATE periodos SET inicio='".$newInicio[$i]."',termino='".$newTermino[$i]."' WHERE pk='".$pkUpdate[$i]."'");
+                
+            }
+            return $query;
+        }
+        public function getCantFacu(){
+             $query=$this->db->query("SELECT count(pk) as cantFacu FROM  facultades");
+              return $query->row();    
+        }
+        public function getSalaPorFk(){ 
+           for ($i=1; $i <=4 ; $i++) { 
+                $query[$i]=$this->db->query("SELECT sala FROM salas WHERE facultad_fk='".$i."'");
+                $query[$i]=$query[$i]->result();
+           }
+           return $query;
+        }
    }
 ?>
 

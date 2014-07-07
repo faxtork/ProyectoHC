@@ -1,19 +1,7 @@
 
-<div class="well">
-	<div class="row-fluid"><div class="span3"></div><div class="span9"><h3>Modificacion de Facultades de la UTEM</h3></div></div>
-	<div class="row-fluid">
-		<div class="span3">
-			<ul class="nav nav-pills nav-stacked">
-				<li class="active"><a href="<?= site_url('intranet/editFacultades');?>">Facultades</a></li>
-				<li><a href="<?= site_url('intranet/editSalas');?>">Salas</a></li>
-				<li><a href="<?= site_url('intranet/editDepartamentos');?>">Departamentos</a></li>
-				<li><a href="<?= site_url('intranet/editEscuelas');?>">Escuelas</a></li>
-				<li><a href="<?= site_url('intranet/editAsignaturas');?>">Asignaturas</a></li>
-				<li><a href="<?= site_url('intranet/editDocnetes');?>">Docentes</a></li>
-				<li><a href="<?= site_url('intranet/editPeriodos');?>">Periodos</a></li>
-			</ul>
-		</div>
-		<div class="span9"><br>	
+		<div class="span9"><div class="well">
+			<div class="row-fluid"><div class="span12"><h3>Modificacion de Facultades de la UTEM</h3></div></div>
+
 				<div clas="mygrid-wrapper-div">
 						<?php 
 						$attributes = array('class' => 'form-horizontal', 'role' => 'form');
@@ -41,12 +29,11 @@
 			<div class="row-fluid">
 				<div class="span12">
 					<?php 
-					echo '<input type="submit" name="editarModificacion" value="Enviar" class="btn btn-primary">';
+					echo '<button type="submit" name="editarModificacion" value="Enviar" class="btn btn-primary">Enviar <span class="icon-ok icon-white"></span></button>';
 					echo form_close();
 					 ?>
 					
 				</div>
 			</div>					
 		</div>
-	</div>
 </div>

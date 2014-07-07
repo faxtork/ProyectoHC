@@ -22,13 +22,24 @@
         <li><a class="btn btn-primary" href="<?= site_url('pedidos');?>">Pedidos</a></li>
         <li><a class="btn btn-primary" href="<?= site_url('intranet');?>">Intranet</a></li>
         <li><a class="btn btn-primary" href="<?= site_url('contacto');?>">Contacto</a></li>
-        <?php
+        <li><a class="btn btn-primary" href="<?= site_url('estadistica');?>">Estadistica</a></li>
+      </ul>
+              <?php
         if (isset($_SESSION['usuarioAdmin']) || isset($_SESSION['usuarioProfesor'])) {
          
-          echo '<li><a href="'.site_url("login/desconectar").'" class="btn btn-success">Desconectar</a></li>';
+          //echo '<li><a href="'.site_url("login/desconectar").'" class="btn btn-success">Desconectar</a></li>';
+           echo'   <ul class="nav navbar-nav navbar-right">
+                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle btn btn-success" data-toggle="dropdown" >
+                         <span class="icon-user icon-white"></span> Session <b class="caret"></b>
+                        </a>
+                       <ul class="dropdown-menu">
+                        <li><a href="'.site_url("login/desconectar").'"><span class="icon-off"></span> Desconectar</a></li>
+                       </ul>
+                     </li>
+                    </ul>';
         }
         ?>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

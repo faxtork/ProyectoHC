@@ -2,6 +2,25 @@
 
 class Json extends CI_Controller {
 	public function verifyUser()	{
+		    if (isset($_SERVER['HTTP_ORIGIN'])) {  
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
+        header('Access-Control-Allow-Credentials: true');  
+        header('Access-Control-Max-Age: 86400');   
+    }  
+      
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {  
+      
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))  
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");  
+      
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))  
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");  
+    }  
+
+
+		
+
+		
 				function funphp($horaInicial,$minutoAnadir){
 				//$horaInicial="08:00";
 			//return $horaInicial;
@@ -12,30 +31,33 @@ class Json extends CI_Controller {
 				$nuevaHora=date("H:i",$segundos_horaInicial+$segundos_minutoAnadir);
 			 	 return $nuevaHora;
 				}
-		$json = $_GET['ini'];
+		$ini = $_GET['ini'];
+		//$fin = $_GET['fin'];
 		$desfase=$_GET['desf'];
-		$decodeIni=json_decode($json);
+
+		//$json=$this->input->post('ini');
+		//$desfase=$this->input->post('desf');
+
+		$decodeIni=json_decode($ini);
+		$mitad=count($decodeIni)/2;
+		$finUno=count($decodeIni)-$mitad;
+		//$decodeFin=json_decode($fin);
 		//var_dump($decodeIni);
 		//var_dump($desfase);
-		for ($i="uno0",$j=0; $i <"uno".count($decodeIni); $i++,$j++) {
-			$respuestaDesfase[$i]=funphp($decodeIni[$j],$desfase); 
+		for ($i="uno0",$j=0; $i <"uno".$finUno; $i++,$j++) {
+			$respuestaDesfaseIni[$i]=funphp($decodeIni[$j],$desfase); 
 		}
-		$respuestaDesfase['largo']=count($respuestaDesfase);
-		//var_dump($respuestaDesfase);
-		//echo "<br />";
-		//var_dump($respuestaDesfase);
-		//$desfase=$_POST['desf'];
-		//$uno = $_POST['u'];
-		//$dos = $_POST['d'];
-
-		//$uno =funphp($uno,$desfase);
-		//$dos =funphp($dos,$desfase);
-
-		//$a = array('un' => $uno,'dos'=>$dos );
-
-		//$x=json_encode($a);
-		$x=json_encode($respuestaDesfase);
-		echo $x;
+		for ($i="dos0",$j=$mitad; $i <"dos".$finUno; $i++,$j++) {
+			$respuestaDesfaseFin[$i]=funphp($decodeIni[$j],$desfase); 
+		}
+		//var_dump($respuestaDesfaseIni);echo "<br /><br /><br />";
+		//var_dump($respuestaDesfaseFin);
+		$merge= array_merge($respuestaDesfaseIni, $respuestaDesfaseFin);
+//var_dump($merge);
+		//$respuestaDesfase['largo']=count($respuestaDesfase);
+		echo json_encode($merge);
+		//echo json_encode($respuestaDesfaseIni);
+		//echo json_encode($respuestaDesfaseFin);
 
 	}
 }

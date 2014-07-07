@@ -10,7 +10,6 @@
 					foreach ($academico as $profesor){ 
 						$atributos[$profesor->pk] = $profesor->nombres." ".$profesor->apellidos; 
 					}
-
 						
 						
 				echo form_open('consulta/res_academico/','role="form"');
@@ -19,7 +18,8 @@
 				
 				echo form_dropdown('docente', $atributos,'','class="form-control"');
 				echo "<br/>";
-				echo form_submit($atributos_Btn, 'Enviar');
+				//echo form_submit($atributos_Btn, 'Enviar');
+				 echo '<button class="btn btn-primary btn-lg" type="submit"  value="Enviar" name="btnEnviar">Enviar <span class="icon-ok icon-white"></span></button>';
 		        echo form_close();
 			?>
 	</div>

@@ -1,10 +1,1 @@
-
-
-
-    
-    <div class="container">
-  
-    
-    
-    
-    
+    <div class="container"><!-- abre el container-->

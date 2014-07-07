@@ -97,9 +97,34 @@ class Intranet extends CI_Controller {
             $salas = $this->admin_model->salas($facultadPk);
             foreach($salas as $fila)
             {
-          
                 echo'<option value='.$fila->pk.'>'.$fila->sala.'</option>';
-           
+            }
+
+        }
+    }
+        public function llena_salas2(){
+         $options = "";
+        if($this->input->post('facultad'))
+        {
+            $facultadPk = $this->input->post('facultad');
+            $salas = $this->admin_model->salas($facultadPk);
+            foreach($salas as $fila)
+            {
+                
+                            echo'   <div class="form-group">
+                                        <label  class="col-sm-2 control-label" id="c">Sala</label>
+                                        <div class="col-sm-4">
+                                            <div class="input-group">  
+                                                <span class="input-group-addon"><input type="checkbox" name="accion[]" id="'.$fila->pk.'" value="'.$fila->pk.'"></span>
+                                                    <input class="form-control" readonly="readonly" type="text" value="'.$fila->sala.'">
+                                               
+                                            </div>
+                                        </div>  
+                                        <label  class="col-sm-1 control-label" id="c">Desc.</label> 
+                                        <div class="col-sm-5">
+                                            <textarea readonly="readonly" class="form-control" name="addDesc[]" id="'.$fila->pk.'">'.$fila->descripcion.'</textarea>  <br />
+                                        </div>
+                                    </div>';
             }
 
         }
@@ -334,7 +359,7 @@ class Intranet extends CI_Controller {
             $seccion=$this->input->post('seccion');
             $docente_fk=$this->input->post('docente'); 
         //fin datos para tabla cursos
-                    //crear la tabla curso
+        //crear la tabla curso
                      $datos=array(
                         'semestre'=>$semestre,
                         'anio'=>$anio,
@@ -351,41 +376,19 @@ class Intranet extends CI_Controller {
             $maxPkCursos=$this->admin_model->maxPkCurso();//max pk de la tabla curso
             $sala_fk=$this->input->post('salas');                     
         //datos tabla reservas    
-            $repite=$this->input->post('repite'); //depende de repite la accion 1,2,3
-            if($repite==1){
-                $periodo_fk=$this->input->post('periodo');
-                $fechaInicio=$this->input->post('datepickerInicio');
-                $fechaTermino=$this->input->post('datepickerInicio'); //solo en esta vez son iguales
-
-            $listo=$this->Admin_model->AsignarPorTiempo($fechaInicio,$fechaTermino,$periodo_fk,$sala_fk,$maxPkCursos,$adm_fk); 
-
+            $cantidadPer=$this->input->post('cantidadPer'); //cantidad de periodos agregados
+            for ($i=1; $i <= $cantidadPer; $i++) { 
+                    $diaElegido[]=$this->input->post('dia'.$i);//los dias que eligio
+                    $periodo_fk[]=$this->input->post('periodo'.$i); //los periodos que eligio
             }
-            if($repite==2){//quiere decir lun, mier, vier
-                $periodo_fk1=$this->input->post('periodo1');
-                $periodo_fk2=$this->input->post('periodo2');
-                $periodo_fk3=$this->input->post('periodo3');
-                $fechaInicio=$this->input->post('datepickerInicio2');   
-                $fechaTermino=$this->input->post('datepickerTermino2');
-            $listo=$this->Admin_model->AsignarPorTiempo2($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$periodo_fk3,$sala_fk,$maxPkCursos,$adm_fk); 
-            }
-            if($repite==3){//quiere decir martes, jueves
-                $periodo_fk1=$this->input->post('periodo4');
-                $periodo_fk2=$this->input->post('periodo5');
-                $fechaInicio=$this->input->post('datepickerInicio3');   
-                $fechaTermino=$this->input->post('datepickerTermino3');
-            $listo=$this->Admin_model->AsignarPorTiempo3($fechaInicio,$fechaTermino,$periodo_fk1,$periodo_fk2,$sala_fk,$maxPkCursos,$adm_fk); 
+            $fechaInicio=$this->input->post('datepickerInicio');
+            $fechaTermino=$this->input->post('datepickerTermino');
+        $listo=$this->Admin_model->AsignarPorTiempo($fechaInicio,$fechaTermino,$periodo_fk,$diaElegido,$sala_fk,$maxPkCursos,$adm_fk); 
 
-            }
-            
             $depa=$this->input->post('depa'); //mmm hay que ver ver
             $facultad=$this->input->post('facultad');//mmmmmmmmmhay que ver ver  
         //fin datos tabla reservas
-            $dia=$this->input->post('dia');//mmmmmmmmmmmmmmmmmmmmm hay que ver
-      
 
-
-        //crear tabla reservas
-        //fin crear tabla reservas   
              if($listo==TRUE){
                     echo '<script>alert("Exito al guardar las salas"); </script>';
                     redirect('intranet/academico', 'refresh');
@@ -680,11 +683,14 @@ class Intranet extends CI_Controller {
                 $this->load->view('general/cierre_footer');
 
             }else{
+                 $facultades=$this->admin_model->getFacultad();
                 $this->load->view('general/headers');
                 $this->load->view('general/menu_principal');
                 $this->load->view('general/abre_bodypagina');   
                 $this->load->view('intranet/header_menu');
-                $this->load->view('intranet/data');
+                     $this->load->view('intranet/data');
+                            $this->load->view('intranet/info');
+                     $this->load->view('intranet/cierreData');
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
             }
@@ -705,7 +711,9 @@ class Intranet extends CI_Controller {
             $this->load->view('general/abre_bodypagina');   
             $this->load->view('intranet/header_menu');
             $facultades=$this->admin_model->getFacultad();
-            $this->load->view('intranet/editFacultades',compact("facultades"));
+                 $this->load->view('intranet/data');    
+                     $this->load->view('intranet/editFacultades',compact('facultades'));
+                 $this->load->view('intranet/cierreData');    
             $this->load->view('general/cierre_bodypagina');
             $this->load->view('general/cierre_footer');
         }
@@ -729,11 +737,14 @@ class Intranet extends CI_Controller {
                     $this->load->view('general/cierre_footer');
 
                 }else{
+                    $facultades=$this->admin_model->getFacultad();
                     $this->load->view('general/headers');
                     $this->load->view('general/menu_principal');
                     $this->load->view('general/abre_bodypagina');   
                     $this->load->view('intranet/header_menu');
-                    $this->load->view('intranet/agregarFacultades');
+                         $this->load->view('intranet/data');    
+                             $this->load->view('intranet/agregarFacultades');
+                          $this->load->view('intranet/cierreData');       
                     $this->load->view('general/cierre_bodypagina');
                     $this->load->view('general/cierre_footer');
                 }
@@ -753,10 +764,12 @@ class Intranet extends CI_Controller {
                     $this->load->view('general/menu_principal');
                     $this->load->view('general/abre_bodypagina');   
                     $this->load->view('intranet/header_menu');
-                    
+                    $facultades=$this->admin_model->getFacultad();
                     $facultadesPk=$this->admin_model->getFacultadPk($accion);
                    // var_dump($facultadesPk);
-                    $this->load->view('intranet/editEditFacultades',compact("facultadesPk"));
+                        $this->load->view('intranet/data');    
+                              $this->load->view('intranet/editEditFacultades',compact("facultadesPk"));
+                          $this->load->view('intranet/cierreData');         
                     $this->load->view('general/cierre_bodypagina');
                     $this->load->view('general/cierre_footer');
                 }
@@ -851,8 +864,12 @@ class Intranet extends CI_Controller {
             $this->load->view('general/menu_principal');
             $this->load->view('general/abre_bodypagina');   
             $this->load->view('intranet/header_menu');
-            $salas=$this->admin_model->getSala();
-            $this->load->view('intranet/editSalas',compact("salas"));
+            $salas=$this->admin_model->getSalaPorFk();
+            $cantidadFacultad=$this->admin_model->getCantFacu();
+            $facultades=$this->admin_model->getFacultad();
+                $this->load->view('intranet/data');
+                     $this->load->view('intranet/editSalas',compact("salas","cantidadFacultad","facultades"));
+                 $this->load->view('intranet/cierreData');          
             $this->load->view('general/cierre_bodypagina');
             $this->load->view('general/cierre_footer');
         }
@@ -869,14 +886,44 @@ class Intranet extends CI_Controller {
 
     }else{
          $periodos=$this->Admin_model->getPeriodo();
+         $facultades=$this->admin_model->getFacultad();
         $this->load->view('general/headers');
         $this->load->view('general/menu_principal');
         $this->load->view('general/abre_bodypagina');   
         $this->load->view('intranet/header_menu');
-        $this->load->view('intranet/editperiodo',compact('periodos'));
+            $this->load->view('intranet/data');
+                 $this->load->view('intranet/editperiodo',compact('periodos'));
+            $this->load->view('intranet/cierreData');     
         $this->load->view('general/cierre_bodypagina');
         $this->load->view('general/cierre_footer');
     }
     }
+    public function guardarPeriodo(){
+        $btn=$this->input->post('btnEnviar');
+            if($btn==null){redirect('intranet/config'); }
+            else{
+                    $pkUpdate=$this->input->post('pks');
+                    $newInicio=$this->input->post('inicio');
+                    $newTermino=$this->input->post('termino');
+                    $estado=$this->admin_model->addPeriodo($newInicio,$newTermino,$pkUpdate);
+             
+                     $true=0;
+                     for ($i=0; $i <count($estado) ; $i++) { 
+                         if($estado[$i]==true)
+                             $true++;
+                        }
+                    if($true==count($estado))
+                         $bool=true;
+                    else $bool=false;
+                    if($bool==true){
+                        echo '<script>alert("Periodos Agregados exitosamente"); </script>';
+                        redirect('intranet/editPeriodos', 'refresh');
+                    }else{
+                        echo '<script>alert("Algunos elementos no fueron agregados"); </script>';
+                        redirect('intranet/editPeriodos', 'refresh');
+                    } 
+            
+                 }
 
+    }
 }

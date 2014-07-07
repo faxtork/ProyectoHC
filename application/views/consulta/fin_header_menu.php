@@ -1,2 +1,2 @@
 
-</div>
+	</div><!-- cierre el well-->
