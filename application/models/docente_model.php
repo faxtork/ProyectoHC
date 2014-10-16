@@ -17,12 +17,9 @@
                 ->count_all_results();
         return $query;
     }
-    public function getDocente(){
+    public function getAcademicoXfacultad($codcarrera){
         $query=$this->db
-                ->select('*')
-                ->from('profesor')
-
-                ->get();
+                ->query("select pk,nombres,apellidos from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk in(select pk from campus where pk in(select campus_fk from codigocarrera Where codigo='".$codcarrera."'))))");
         return $query->result();
     }
     public function getAcademico(){
@@ -64,11 +61,15 @@
                ->get();
          return $query->row();
     }     
-     function getAsignatura($pk_docente) {
+     function getPkAsignatura($pk_docente) {
         $query=$this->db->query("SELECT a.pk as pk, a.nombre as nombre, c.seccion as seccion 
                                  FROM cursos as c,asignaturas as a 
                                  WHERE  c.docente_fk='$pk_docente' AND a.pk=c.asignatura_fk;");
         return $query->result();
+     }
+     public function getAsignaturaDoc($pk){ 
+      $query=$this->db->query("select  a.pk,a.nombre,cu.seccion from asignaturas a,cursos cu where cu.docente_fk='".$pk."' AND a.pk=cu.asignatura_fk ");
+      return $query->result();
      }
      
  public function hayProfesor($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion,$date){ 

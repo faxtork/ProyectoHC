@@ -12,8 +12,17 @@
                 ->select('*')
                 ->from('administrador')
                 ->where($where)
-                ->count_all_results();
-        return $query;
+                ->get();
+        return $query->row();
+     }
+          public function loguearAdmin2($nombre, $clave) {
+        $where = array("nombre" => $nombre, "clave" => $clave);
+        $query = $this->db
+                ->select('*')
+                ->from('administradorgeneral')
+                ->where($where)
+                ->get();
+        return $query->row();
      }
      public function getAsignatura(){
             $query=$this->db
@@ -31,10 +40,12 @@
          return true;
      }
      public function getSala(){
+        $cond=array('estado'=>'true');
       $query=$this->db
             ->select('pk,sala')
             ->from('salas')
-            ->order_by('sala','asc')
+             ->where($cond)
+            ->order_by('pk','asc')
             ->get();
         return $query->result();  
      }
@@ -152,7 +163,7 @@
          
          $query=  $this->db->query("UPDATE reservas "
                  . "SET sala_fk=$pkSala , adm_fk=(SELECT pk FROM administrador WHERE nombre='$adm' limit 1) "
-                 . "WHERE pk=$pkPedido");
+                 . "WHERE pk=$pkPedido");   
          return true;
      }
      
@@ -164,27 +175,35 @@
      }
      
      public function getReserva() {
-         
+         date_default_timezone_set("America/Santiago");
+          $fechaHoy=date("Y-m-d");//solo muestra los datos de aqui en adelante
+          $campus=$_SESSION['campus'];
          $query=$this->db
-                ->query("SELECT c.seccion,a.codigo,r.pk,r.fecha,s.sala,s.pk AS pksala,d.nombres AS nombredocente,d.apellidos AS apellidodocente,d.pk AS pkdocente,a.nombre AS asignatura,a.pk AS pkasignatura,c.seccion,p.periodo,p.pk AS pkperiodo 
-                    FROM reservas as r,salas as s,docentes as d,cursos as c,asignaturas as a,periodos as p WHERE 
+                ->query("SELECT c.seccion,a.codigo,r.pk,r.fecha,s.sala,s.pk AS pksala,d.nombres AS nombredocente,d.apellidos AS apellidodocente,d.pk AS pkdocente,a.nombre AS asignatura,a.pk AS pkasignatura,c.seccion,p.periodo,p.pk AS pkperiodo, c.anio AS anio,c.semestre AS semestre
+                     FROM administrador as ad,reservas as r,salas as s,docentes as d,cursos as c,asignaturas as a,periodos as p WHERE
                     r.adm_fk is not NULL and
-                    s.pk=r.sala_fk and 
-                    c.pk=r.curso_fk and 
-                    p.pk=r.periodo_fk and 
-                    d.pk=c.docente_fk and 
-                    a.pk=c.asignatura_fk 
-                    ORDER BY pk asc");
+                    s.pk=r.sala_fk and
+                    c.pk=r.curso_fk and
+                    p.pk=r.periodo_fk and
+                    d.pk=c.docente_fk and
+                    a.pk=c.asignatura_fk and
+                    r.adm_fk=ad.pk and
+                    ad.campus_fk='$campus'
+
+                    AND  r.fecha>='$fechaHoy'
+                    ORDER BY r.fecha asc");
         return $query->result();
      }
      
      
-     public function editarReserva($pkPedido,$pkdocente,$pkAsignatura,$seccion,$fecha,$periodo,$pkSala) {
-         $this->db->
+     public function editarReserva($semestre,$anio,$pkPedido,$pkdocente,$pkAsignatura,$seccion,$fecha,$periodo,$pkSala) {
+        $this->db->query("update cursos set asignatura_fk='$pkAsignatura', docente_fk='$pkdocente',seccion='$seccion' where pk=(SELECT curso_fk FROM reservas WHERE pk='$pkPedido')");
+        //update de la tabla cursos y ahora reserva
+         $this->db->//falta adm_fk
                  query("UPDATE reservas  SET "
                        ."sala_fk='$pkSala', "
                        ."periodo_fk=(SELECT pk FROM periodos WHERE periodo='$periodo'), "
-                       ."curso_fk=(SELECT pk FROM cursos WHERE  asignatura_fk='$pkAsignatura' AND docente_fk='$pkdocente' AND seccion='$seccion' ) ,"
+                       ."curso_fk= (SELECT pk FROM cursos WHERE pk=(select curso_fk from reservas where pk='$pkPedido')) ,"
                        . "fecha='$fecha' "
                        ." WHERE pk=$pkPedido");
          return true;
@@ -204,17 +223,69 @@
 
     public function getFacultad(){
         $query=$this->db
-            ->select('pk,facultad,descripcion')
+            ->select('*')
             ->from('facultades')
             ->order_by('pk','asc')
             ->get();
         return $query->result();
          }
-    public function salas($facultadPk){
+    public function getCampus(){
+    $query=$this->db
+        ->select('pk,nombre,descripcion')
+        ->from('campus')
+        ->order_by('pk','asc')
+        ->get();
+    return $query->result();
+     }     
+          public function salas($facultadPk){
             $query=$this->db
-                 ->query("SELECT pk,sala,estado,descripcion FROM salas WHERE facultad_fk=$facultadPk;");
-         return $query->result();
+            ->query("SELECT pk,sala,estado,descripcion FROM salas WHERE facultad_fk=$facultadPk order by pk asc;");
+            return $query->result();
+            } 
+    public function salasAsignacion($semestre,$ano,$facultadPk,$periodo,$diaIni,$diaFin,$diaElegido){// muestra las bloqueadas y las que estan ocupadas
+            date_default_timezone_set("America/Santiago");
+            $fechaIni=strtotime($diaIni);
+            $fechaFin=strtotime($diaFin);
+            $bool=false;
+            $query=array();
+            for($i=$fechaIni; $i<=$fechaFin; $i+=86400){//recorre cada dia del inicio hasta el fin
+                    $fecha=date("Y-m-d", $i);
+                    $dia=date("w", strtotime($fecha));//saca el dia en cada recorrido
+                    for ($j=0; $j <count($diaElegido) ; $j++) { 
+                        if($dia==$diaElegido[$j]){//una vez que coincidan pregunta si esta ocupada en la tabla de la DB
+                            for ($z=0; $z <count($periodo) ; $z++) { 
+                                //$query[$j]=$this->db->query("SELECT pk,sala FROM salas WHERE facultad_fk='".$facultadPk."' AND pk in (select sala_fk from reservas where periodo_fk='".$periodo[$z]."'  and fecha='".$fecha."') order by pk asc;");
+   //retorna solamente las salas ocupadas
+                                $query[$j]=$this->db->query("SELECT pk,sala FROM salas WHERE facultad_fk='".$facultadPk."' AND pk in (select sala_fk from reservas where periodo_fk='".$periodo[$z]."'  and fecha='".$fecha."'  AND curso_fk in( SELECT pk FROM cursos WHERE anio='".$ano."' AND semestre='".$semestre."')) order by pk asc;");
+                                $query[$j]=$query[$j]->result();
+                            }       
+                        }
+                    }
+                }
+
+        if(count($query)==0){//si es true quiere decir que deve retornar todas las salas habiles
+             return false;
+        }
+
+         return $query;
     } 
+    public function bloqueadaAula($facultadPk){
+        $query=$this->db
+        ->query("SELECT pk,sala FROM salas WHERE facultad_fk='".$facultadPk."' AND estado=false order by pk asc;");
+         return $query->result();
+    }
+    public function docIn($pkOcupada){
+        for ($i=0; $i <count($pkOcupada) ; $i++) { 
+            $query[$i]=$this->db->query("select pk from docentes where pk in(select docente_fk from cursos where pk in (select curso_fk from reservas where sala_fk='".$pkOcupada[$i]."'))");
+            $query[$i]=$query[$i]->result();
+        }
+        return $query;
+    }
+    public function getSalaFacu($facultadPk){//todas las salas menos las bloqueadas
+        $query=$this->db
+            ->query("SELECT pk,sala FROM salas WHERE facultad_fk='".$facultadPk."' AND estado=true order by pk asc;");
+         return $query->result();
+    }
     public function depa($facultadPk){
             $query=$this->db
                  ->query("SELECT pk,departamento FROM departamentos WHERE facultad_fk=$facultadPk order by pk asc;");
@@ -225,6 +296,11 @@
                  ->query("SELECT a.pk, a.codigo,a.nombre FROM asignaturas a,departamentos d, facultades f WHERE $facultadPk=d.facultad_fk AND d.pk=a.departamento_fk group by a.pk;");
                   //  ->query("SELECT pk,codigo FROM asignaturas order by pk asc");
          return $query->result();
+    }
+    public function doc($facultadPk){
+            $query=$this->db
+                 ->query("select pk,nombres,apellidos from docentes where departamento_fk in (select pk from departamentos where facultad_fk in (select pk from facultades where pk='".$facultadPk."')) order by pk asc");
+            return $query->result();
     }         
     public function pkAdmin($nombreAdm){
             $query=$this->db
@@ -243,7 +319,7 @@
     }
     public function getSalaExcp($pk){
             $query=$this->db
-                ->query("SELECT pk,sala FROM salas where pk!=$pk;");
+                ->query("SELECT pk,sala FROM salas where pk!=$pk AND estado=true ");
             return $query->result();
     }
     public function eliminarFacultad($accion){
@@ -261,6 +337,10 @@
         
              return $query;   
     }
+    public function getFacultadPk2($pk){
+             $query=$this->db->query("SELECT pk,facultad FROM facultades where pk=".$pk."");
+             return $query->result();   
+    }
     public function updateFacultades($pk,$newFacultad,$newDescripcion){
         for ($i=0; $i <count($pk) ; $i++) { 
             $query[]=$this->db->query("UPDATE facultades SET facultad='".$newFacultad[$i]."', descripcion='".$newDescripcion[$i]."' WHERE pk='".$pk[$i]."'");
@@ -268,9 +348,16 @@
         }
         return $query; 
     }
-    public function addFacultades($addFacultad,$addDesc){
+    public function addFacultades($addFacultad,$addDesc,$campus_fk){
         for ($i=0; $i <count($addDesc) ; $i++) { 
-            $query[]=$this->db->query("INSERT INTO facultades VALUES(DEFAULT,'".$addFacultad[$i]."','".$addDesc[$i]."')");
+            $query[]=$this->db->query("INSERT INTO facultades VALUES(DEFAULT,'".$addFacultad[$i]."','".$addDesc[$i]."','".$campus_fk."')");
+            
+        }
+        return $query;
+    }
+    public function addSalas($addSala,$pkFacultad){
+        for ($i=0; $i <count($addSala) ; $i++) { 
+            $query[]=$this->db->query("INSERT INTO salas VALUES(DEFAULT,'".$pkFacultad."','".$addSala[$i]."')");
             
         }
         return $query;
@@ -293,6 +380,108 @@
            }
            return $query;
         }
+        public function getSalaPk($pk){
+        for ($i=0; $i <count($pk) ; $i++) { 
+             $query[$i]=$this->db->query("SELECT pk,sala,estado,descripcion FROM salas where pk=".$pk[$i]." ");
+            $query[$i]=$query[$i]->result();
+            }
+        
+             return $query;   
+         }
+         public function updateSalas($pk,$newSala,$newDescripcion,$estadoArray){//
+            for ($i=0; $i <count($estadoArray) ; $i++) { 
+                if($estadoArray[$i]==0){//quiere decir que hay que bloquear la sala
+                    $query[]=$this->db->query("UPDATE salas SET sala='".$newSala[$i]."', descripcion='".$newDescripcion[$i]."',estado='false' WHERE pk='".$pk[$i]."'");
+                }else
+                    $query[]=$this->db->query("UPDATE salas SET sala='".$newSala[$i]."', descripcion='".$newDescripcion[$i]."',estado='true' WHERE pk='".$pk[$i]."'"); 
+
+            }
+                return $query; 
+         }
+         public function eliminarSala($accion){
+                for ($i=0; $i <count($accion) ; $i++) { 
+                    $query[]=$this->db->query("DELETE FROM salas WHERE pk=".$accion[$i]."");
+                }
+                return $query;
+         }
+         public function save($periodo,$date){
+        $query=$this->db->query("SELECT p.periodo,s.sala, d.nombres,d.apellidos, a.nombre as asignatura,c.seccion
+                FROM reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
+                WHERE r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk 
+                AND p.pk=r.periodo_fk AND r.fecha='".$date."' AND p.periodo='".$periodo."' order by s.pk asc"); 
+        return $query->result();
+         }
+         public function getdpto($campus_fk){
+            $query=$this->db->query("select pk,departamento from departamentos where facultad_fk in(select pk FROM facultades WHERE campus_fk='".$campus_fk."') order by pk asc;");
+            return $query->result();
+         }
+         public function getDocPorFacu($pk){
+            $query=$this->db->query("select pk,nombres,apellidos,rut from docentes where departamento_fk in(select pk FROM departamentos WHERE facultad_fk='".$pk."') order by pk asc;");
+            return $query->result();
+         }
+        public function getDocPorDpto($pk){
+            $query=$this->db->query("select pk,nombres,apellidos,rut from docentes where departamento_fk='".$pk."' order by pk asc;");
+            return $query->result();
+         }
+        public function getAsigPorDpto($pk){
+            $query=$this->db->query("select pk,codigo,nombre from asignaturas where departamento_fk='".$pk."' order by pk asc;");
+            return $query->result();
+        } 
+         public function getNameDpto($pk){
+            $query=$this->db->query("select pk,departamento from departamentos where pk='".$pk."' order by pk asc;");
+            return $query->result();
+         }
+         public function agregarDocente($pkDpto,$addDocName,$addDocApe,$addDocRut){
+            $query=$this->db->query("INSERT INTO docentes VALUES(DEFAULT,'".$addDocName."','".$addDocApe."','".$addDocRut."','".$pkDpto."')");
+            return $query;
+         }
+         public function agregarAsig($pkDpto,$addAsigName,$addAsigCod,$addAsigDesc){
+            $query=$this->db->query("INSERT INTO asignaturas VALUES(DEFAULT,'".$pkDpto."','".$addAsigCod."','".$addAsigName."','".$addAsigDesc."')");
+            return $query;            
+         }
+        public function getDocEdit($pk){
+            for ($i=0; $i <count($pk) ; $i++) { 
+                 $query[$i]=$this->db->query("SELECT pk,nombres,apellidos,rut FROM docentes where pk=".$pk[$i]." ");
+                $query[$i]=$query[$i]->result();
+            }
+             return $query;   
+         }
+        public function getAsigEdit($pk){
+            for ($i=0; $i <count($pk) ; $i++) { 
+                 $query[$i]=$this->db->query("SELECT pk,codigo,nombre FROM asignaturas where pk=".$pk[$i]." ");
+                $query[$i]=$query[$i]->result();
+            }
+             return $query; 
+        } 
+         public function updateDocentes($pk,$newName,$newApellidos){
+            for ($i=0; $i <count($pk) ; $i++) { 
+                    $query[]=$this->db->query("UPDATE docentes SET nombres='".$newName[$i]."', apellidos='".$newApellidos[$i]."' WHERE pk='".$pk[$i]."'"); 
+            }
+                return $query; 
+         }
+        public function updateAsignaturas($pk,$newName,$newCodigo){
+            for ($i=0; $i <count($pk) ; $i++) { 
+                    $query[]=$this->db->query("UPDATE asignaturas SET nombre='".$newName[$i]."', codigo='".$newCodigo[$i]."' WHERE pk='".$pk[$i]."'"); 
+            }
+                return $query; 
+        } 
+         public function eliminarDocente($accion){
+            for ($i=0; $i <count($accion) ; $i++) { 
+                $query[]=$this->db->query("DELETE FROM docentes WHERE pk=".$accion[$i]."");
+            }
+            return $query;
+         }
+        public function eliminarAsig($accion){
+            for ($i=0; $i <count($accion) ; $i++) { 
+                $query[]=$this->db->query("DELETE FROM asignaturas WHERE pk=".$accion[$i]."");
+            }
+            return $query;
+         }
+         public function getdptoAll(){
+            $query=$this->db->query("select pk,departamento from departamentos order by pk asc;");
+            return $query->result();
+         }
+           
    }
 ?>
 

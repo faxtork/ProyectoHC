@@ -1,3 +1,20 @@
+
+<script type="text/javascript">
+        $(document).ready(function() {
+           
+                   periodo = $('#periodo').val();
+                   datepicker=$('#datepicker').val();
+                   aulafk=$('#aulafk').val();
+                    $.post("<?= base_url('/index.php/intranet/getSala2')?>", {
+                        periodo : periodo , datepicker : datepicker , aulafk : aulafk
+                    }, function(data) {
+                        $("#divSala").html(data);
+                    });
+               
+            
+        });
+</script>
+<input type="hidden" name="aulafk" id="aulafk" value="<?php echo $solicitudReserva->sala_fk; ?>">
 <script type="text/javascript">
         $(document).ready(function() {
             $("#periodo").change(function() {
@@ -64,7 +81,7 @@ $(function () {
         dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
         dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
         weekHeader: 'Sm',
-        dateFormat: 'dd/mm/yy',
+        dateFormat: 'yy-mm-dd', 
         firstDay: 1,
         isRTL: false,
         showMonthAfterYear: false,
@@ -80,40 +97,104 @@ maxDate: "+1M, 5D"
 
 <?php
 
-   $contenidoPeriodo=array($periodo=>$periodo,);
+  $contenidoPeriodo[$periodoPk]=$solicitudReserva->periodo; 
  foreach ($periodos as $peri) {
-    $contenidoPeriodo[$peri->pk]=$peri->periodo;
+                        $maximo = strlen($peri->inicio);
+                        $inicio = substr(strrev($peri->inicio),3,$maximo);
+                        $termino = substr(strrev($peri->termino),3,$maximo);
+                        $inicio=strrev($inicio);
+                        $termino=strrev($termino);
+    $contenidoPeriodo[$peri->pk] = $peri->pk.'  -  '.$inicio.' - '.$termino;
+
   }
   
- 
-  $contenidoAsignatura=array($pkasignatura=>$asignatura." - ".$seccion,);
-  
-  $contenidoSeccion=array("$seccion"=>"$seccion",);
-  /*foreach ($asignaturas as $asig) {
-    $contenidoAsignatura[$asig->pk]=$asig->nombre;
-    $contenidoSeccion[$asig->seccion]=$asig->seccion;
+
+  $contenidoAsignatura[$asig[0]->pk]=$asig[0]->nombre;  
+    foreach ($ramos as $ram) {
+    $contenidoAsignatura[$ram->pk]=$ram->codigo.' '.$ram->nombre;  
   }
-   * 
-   */
-  
-  $contenidoDocentes=array($pkdocente=>$nombredocente." ".$apellidodocente);
+
+  $contenidoDocentes[$docente->pk]=$docente->nombres." ".$docente->apellidos;
+  //$contenidoDocentes=array($pkdocente=>$nombredocente." ".$apellidodocente);
   foreach ($academicos as $acade) {
-  
     $contenidoDocentes[$acade->pk]=$acade->nombres." ".$acade->apellidos;  
-      
   }
-  
-  
- 
+  //$contenidoSala=
+  $attributes = array('class' => 'form-horizontal', 'role' => 'form'); 
+
 ?>
 
     
-
+<div class="row-fluid">
+    <div class="span12 well">
+         <?=form_open('intranet/editarReservaFinal',$attributes)?> 
+                        <input type="hidden" name="semestre" value="<?php echo $semestre;?>">    
+                          <input type="hidden" name="anio" value="<?php echo $anio;?>"> 
+                <h4>Editar Reserva</h4><br>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">N° Pedido:</label>
+                    <div class="col-sm-5">
+                        <?= form_input(array('class'=>'form-control','name'=>'pkPedido','readonly'=>'readonly','value'=>$solicitudReserva->pk));?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Docente:</label>
+                    <div class="col-sm-5">
+                        <?=form_dropdown('docente',$contenidoDocentes,'','class="form-control" id="docente"')?>
+                    </div>
+                </div>      
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Asignatura:</label>
+                    <div class="col-sm-5">
+                       <?=form_dropdown('asignatura',$contenidoAsignatura,'','class="form-control" id="asignatura"')?>
+                    </div>
+                </div>
+               <div class="form-group">
+                    <label  class="col-sm-4 control-label">Seccion:</label>
+                    <div class="col-sm-5">
+                        <?= form_input(array('class'=>'form-control','name'=>'seccion','id'=>'seccion','value'=>$seccion));?>
+                    </div>
+                </div>
+               <div class="form-group">
+                    <label  class="col-sm-4 control-label">Fecha:</label>
+                    <div class="col-sm-5">
+                        <?= form_input(array('class'=>'form-control','name'=>'datepicker','id'=>'datepicker','value'=>$fecha));?>
+                    </div>
+                </div>
+               <div class="form-group">
+                    <label  class="col-sm-4 control-label">Periodo:</label>
+                    <div class="col-sm-5">
+                       <?=form_dropdown('periodo',$contenidoPeriodo,'','class="form-control" id="periodo"')?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Sala:</label>
+                    <div class="col-sm-5">
+                     <?//=form_dropdown('sala','','','class="form-control" id="divSala"')?>
+                     <select name="sala" id="divSala" class="form-control">
+                         <option selected value="<?php echo $salaPk;?>"><?php echo $sala;?></option>
+                     </select>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12"><br>
+                        <button class="btn btn-primary" type="submit" value="Enviar" name="btnEditarPedido">Enviar <span class="icon-ok icon-white"></span></button>
+                    </div>
+                </div>
+         <?php form_close();?>
+    </div>
+</div>
+<!--
 <div class="well">
   
  <?=form_open('intranet/editarReservaFinal')?>
   
     <h4>Editar Reserva</h4><br>
+        <div class="form-group">
+            <label  class="col-sm-3 control-label">N° Pedido :</label>
+            <div class="col-sm-9">
+                <?= form_input(array('name'=>'pkPedido','readonly'=>'readonly','value'=>$pkPedido,'class'=>'form-control'))?>
+            </div>
+        </div>
      <div class="row">
         <div class="span2">N° Pedido :</div>
         <div class="span3"><?= form_input(array('name'=>'pkPedido','readonly'=>'readonly','value'=>$pkPedido))?></div>
@@ -150,3 +231,4 @@ maxDate: "+1M, 5D"
      <?php form_close();?>
     
 </div>
+-->

@@ -47,7 +47,7 @@ $(function () {
         dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
         dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
         weekHeader: 'Sm',
-        dateFormat: 'dd/mm/yy',
+        dateFormat: 'yy-mm-dd',
         firstDay: 1,
         isRTL: false,
         showMonthAfterYear: false,
@@ -65,21 +65,17 @@ maxDate: "+1M, 5D"
 $atributos_Nombre=array('name'=>'nombre');
 $atributos_Apellido=array('name'=>'Apellido');
 
-    if (isset($asignaturas)) {
-        $atributos_OptionAsig=array(''=>'->Seleccionar Asignatura',);
-        $atributos_OptionSeccion=array(''=>'->Seleccionar seccion',);
+    if (isset($nombreAsignatura)) {
+        $atributos_OptionAsig=array(''=>'Seleccionar Asignatura',);
+        $atributos_OptionSeccion=array(''=>'Seleccionar seccion',);
      //  $atributos_OptionAsig=array(''=>'->Seleccionar Asignatura',);
-       foreach ($asignaturas as $asig) {
-           
-           $atributos_OptionAsig[$asig->pk]=$asig->nombre;
-           $atributos_OptionSeccion[$asig->seccion]=$asig->seccion;
-       }
+
     }
     if (isset($periodos)) {
-        $atributos_OptionPeriodo=array(''=>'->Seleccione Periodo',);
+        $atributos_OptionPeriodo=array(''=>'Seleccione Periodo',);
        foreach($periodos as $peri) {
            
-           $atributos_OptionPeriodo[$peri->periodo]=$peri->pk." -> ".$peri->inicio." ".$peri->termino;
+           $atributos_OptionPeriodo[$peri->periodo]=$peri->pk." - ".$peri->inicio." - ".$peri->termino;
       }
     }
  
@@ -105,66 +101,79 @@ $atributos_Apellido=array('name'=>'Apellido');
     
     if (isset($docente)) {
         ?>
-    <div class="row-fluid">    
+    <div class="row-fluid">
         <div class="span6">
             <h4>Docente</h4>
-                <div class="row-fluid">
-                    <div class="span6"></div>
-                    <div class="span6"></div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span6"><?= form_label('Nombre :');?></div> <div class="span6"><?=  form_label($docente->nombres); ?></div>
-                </div>
-                <div class="row-fluid">
-                   <div class="span6"><?=form_label('Apellido :');?></div>  <div></div><div class="span6"><?=  form_label($docente->apellidos); ?></div>   
-                </div>
-                <div class="row-fluid">
-                   <div class="span6"><?=form_label('Rut :'); ?></div>  <div></div><div class="span6"><?=  form_label($docente->rut); ?></div>   
-                </div>
-                 <?php
+                    <form class='form-horizontal' role ='form'>
+                        <div class="form-group">
+                            <label  class="col-lg-6 control-label" id="c"><?= form_label('Nombre:');?></label>
+                            <label  class="control-label" id="c"><?=  $docente->nombres;?></label>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-6 control-label" id="c"><?= form_label('Apellido:');?></label>                        
+                            <label  class="control-label" id="c"><?=  $docente->apellidos;?></label>                           
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-6 control-label" id="c"><?= form_label('Rut:');?></label>
+                            <label  class="control-label" id="c"><?=  $docente->rut;?></label>
+                        </div>
+                    </form>
+                      <?php
                 }
-                ?>
+                ?>            
         </div>
         <div class="span6">
-               <h4>Pedir Sala</h4>
-                 <?=     form_open(base_url('index.php/pedidos/guardarPedidoSala'));?>
-                 <div class="row-fluid">
-                     <div class="span6"></div><div class="span6"><?php echo form_input(array('name'=>'docente','type'=>'hidden','id'=>'docente','value'=>$docente->pk));?></div>
-                 </div>
-                <div class="row-fluid">
-                    <div class="span6"><label>Asignatura : </label></div><div class="span6">
-                        <?= form_dropdown('asignatura',$atributos_OptionAsig,'',"id='asignatura'style='width:250px'")?>  
-                     </div>
-                </div>
-                 <div class="row-fluid">
-                    <div class="span6"><label>Seccion : </label></div><div class="span6">
-                        <?= form_dropdown('seccion',$atributos_OptionSeccion,'',"id='seccion' style='width:250px'")?>  
-                     </div>
-                </div>
-               
-                <div class="row-fluid">
-                    <div class="span6"><label>Fecha : </label></div>
-                    <div class="span6">
-                        <input required style='width:250px' type="text" id="datepicker" placeholder="->Seleccione Fecha " name="datepicker" />
+            <h4>Pedir Sala</h4>
+            <?php $attributes = array('class' => 'form-horizontal', 'role' => 'form'); echo form_input(array('name'=>'docente','type'=>'hidden','id'=>'docente','value'=>$docente->pk));
+                 echo form_open('pedidos/guardarPedidoSala',$attributes); ?>
+                <div class="form-group">
+                    <label  class="col-lg-6 control-label" id="c">Asignatura: </label>
+                    <div class="col-lg-6"> 
+                        <select name="asignatura" class="form-control" id="asignatura">
+                        <option value="">Seleccionar Asignatura</option>
+                            <?php 
+                               for ($i=0; $i <count($pkAsignatura) ; $i++) { 
+                                echo'<option value='.$pkAsignatura[$i].'>'.$nombreAsignatura[$i].'</option>';
+
+                               }
+                            ?>
+                        </select>
                     </div>
                 </div>
-                 <div class="row-fluid">
-                    <div class="span6"><label>Periodo : </label></div>
-                      <div class="span6">
-                       <?= form_dropdown('sePeriodo',$atributos_OptionPeriodo,'',"id='periodo' style='width:250px'")?>
+                <div class="form-group">
+                    <label  class="col-lg-6 control-label" id="c">Seccion: </label>
+                    <div class="col-lg-6"> 
+                        <select name="seccion" class="form-control" id="seccion">
+                            <option value="">Seleccionar Seccion</option>
+                        </select>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <div class="span6"><label>Sala a priori :</label></div>
-                    <div class="span6" >
-                        <select style='width:250px' id="divSala" name="sala"><option>->Seleccione la sala</option></select> 
+                <div class="form-group">
+                    <label  class="col-lg-6 control-label" id="c">Fecha: </label>
+                    <div class="col-lg-6"> 
+                        <input readonly="readonly" class="form-control"  required  type="text" id="datepicker" placeholder="Seleccione Fecha" name="datepicker" />
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <div class="span6"><button type="submit" class="btn btn-primary btn-lg">Enviar</button> </div>
+                <div class="form-group">
+                    <label  class="col-lg-6 control-label" id="c">Periodo: </label>
+                    <div class="col-lg-6"> 
+                            <?php 
+                                echo form_dropdown('sePeriodo',$atributos_OptionPeriodo,'','class="form-control" id="periodo"');
+                             ?>
+                    </div>
                 </div>
-             <?= form_close();?>
+                <div class="form-group">
+                    <label  class="col-lg-6 control-label" id="c">Sala apriori: </label>
+                    <div class="col-lg-6"> 
+                        <select class="form-control" id="divSala" name="sala">
+                        <option>Seleccione la sala</option>
+                        </select> 
+                    </div>
+                </div>
+            <button type="submit" class="btn btn-primary btn-lg">Enviar</button>     
+            <?php echo form_close(); ?>
         </div>
-    </div>
+    </div>    
+   
   
 </div>

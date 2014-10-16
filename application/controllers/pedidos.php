@@ -40,11 +40,21 @@ class Pedidos extends CI_Controller {
     $this->load->view('general/headers');
     $this->load->view('general/menu_principal');
     $this->load->view('general/abre_bodypagina');
+    $_SESSION['usuarioProfesor']="8.727.547-7";//BOORRAR DESPUES*******************
     $docente=$this->Docente_model->getDocenteRut($_SESSION['usuarioProfesor']); 
-    $asignaturas=$this->Docente_model->getAsignatura($docente->pk);
+    $asignaturas=$this->Docente_model->getAsignaturaDoc($docente->pk);
+foreach ($asignaturas as $key) {
+  $pk[]=$key->pk;
+  $nombre[]=$key->nombre;
+  //$seccion[]=$key->seccion;
+
+}
+$pkAsignatura=array_keys(array_count_values($pk));
+$nombreAsignatura=array_keys(array_count_values($nombre));
+
     $periodos= $this->Admin_model->getPeriodo();
     $this->load->view('pedidos/selecionar_opcionPedidos');
-    $this->load->view('pedidos/pedir_sala',compact("asignaturas","docente","periodos"));     
+    $this->load->view('pedidos/pedir_sala',compact("pkAsignatura","nombreAsignatura","docente","periodos"));     
     $this->load->view('general/cierre_bodypagina');
     $this->load->view('general/cierre_footer');  
   }
@@ -69,7 +79,7 @@ public function verPedidos() {
     $this->load->view('pedidos/selecionar_opcionPedidos');
     
     $docente=$this->Docente_model->getDocenteRut($_SESSION['usuarioProfesor']);
-    $asignaturas=$this->Docente_model->getAsignatura($docente->pk);
+    $asignaturas=$this->Docente_model->getPkAsignatura($docente->pk);
     $this->load->view('pedidos/consultaPorAsignatura',compact("asignaturas",'docente'));
     $asignatura_pk=$this->input->post('asignatura');
     $seccion=  $this->input->post('seccion');
@@ -194,7 +204,27 @@ public function logueoError() {
     $this->load->view('general/cierre_footer');
   }
 }
+public function logueoErrorAlum() {
 
+  if(!isset($_SESSION['usuarioAlumno'])){
+    $this->load->view('general/headers');
+    $this->load->view('general/menu_principal');
+    $this->load->view('general/abre_bodypagina');
+    $mensajeAlerta="No ha iniciado sesion!";
+    $this->load->view('alumnos/login_alum',compact('mensajeAlerta'));
+    $this->load->view('general/cierre_bodypagina');
+    $this->load->view('general/cierre_footer');
+  }
+  else{
+    $this->load->view('general/headers');
+    $this->load->view('general/menu_principal');
+    $this->load->view('general/abre_bodypagina');
+    $mensajeAlerta='Usuario y Clave invalido vuelva a intentar!';
+    $this->load->view('alumnos/login_alum',compact('mensajeAlerta'));
+    $this->load->view('general/cierre_bodypagina');
+    $this->load->view('general/cierre_footer');
+  }
+}
 public function salaDisponible() {
 
   if(!isset($_SESSION['usuarioProfesor'])){

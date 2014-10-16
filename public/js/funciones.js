@@ -18,10 +18,11 @@ function eliminar(url) {
 
 function revisarDigito2(crut){    
   largo = crut.length;    
-  if(largo<2){        
-    alert("Debe ingresar el rut completo")        
+  if(largo<2){            
     window.document.form1.rut.focus();        
-    window.document.form1.rut.select();        
+    window.document.form1.rut.select();
+        window.document.form1.rut.value="";        
+        alert("Debe ingresar el rut completo")         
     return false;    
   }    
   if(largo>2)        
@@ -56,9 +57,11 @@ function revisarDigito2(crut){
     }
     if ( dvr != dv.toLowerCase() )    
     {        
-        alert("EL rut es incorrecto")        
+               
         window.document.form1.rut.focus();        
-        window.document.form1.rut.select();        
+        window.document.form1.rut.select();
+        window.document.form1.rut.value="";        
+        alert("EL rut es incorrecto") 
         return false    
     }
 
@@ -74,17 +77,21 @@ function Rut(texto){
     largo = texto.length;    
 
     if ( largo < 2 ){        
-        alert("Debe ingresar el rut completo")        
+              
         window.document.form1.rut.focus();        
-        window.document.form1.rut.select();        
+        window.document.form1.rut.select();
+        window.document.form1.rut.value="";
+        alert("Debe ingresar el rut completo")            
         return false;    
     }    
 
     for (i=0; i < largo ; i++ ){            
         if ( texto.charAt(i) !="0" && texto.charAt(i) != "1" && texto.charAt(i) !="2" && texto.charAt(i) != "3" && texto.charAt(i) != "4" && texto.charAt(i) !="5" && texto.charAt(i) != "6" && texto.charAt(i) != "7" && texto.charAt(i) !="8" && texto.charAt(i) != "9" && texto.charAt(i) !="k" && texto.charAt(i) != "K" ){            
-            alert("El valor ingresado no corresponde a un R.U.T valido");            
+                    
             window.document.form1.rut.focus();            
-            window.document.form1.rut.select();            
+            window.document.form1.rut.select();
+            window.document.form1.rut.value="";
+            alert("El valor ingresado no corresponde a un R.U.T valido");                  
             return false;        
         }    
     }    

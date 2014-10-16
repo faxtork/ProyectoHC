@@ -2,6 +2,9 @@
 
 class Json extends CI_Controller {
 	public function verifyUser()	{
+
+
+
 		    if (isset($_SERVER['HTTP_ORIGIN'])) {  
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
         header('Access-Control-Allow-Credentials: true');  
@@ -31,6 +34,7 @@ class Json extends CI_Controller {
 				$nuevaHora=date("H:i",$segundos_horaInicial+$segundos_minutoAnadir);
 			 	 return $nuevaHora;
 				}
+
 		$ini = $_GET['ini'];
 		//$fin = $_GET['fin'];
 		$desfase=$_GET['desf'];
@@ -53,7 +57,7 @@ class Json extends CI_Controller {
 		//var_dump($respuestaDesfaseIni);echo "<br /><br /><br />";
 		//var_dump($respuestaDesfaseFin);
 		$merge= array_merge($respuestaDesfaseIni, $respuestaDesfaseFin);
-//var_dump($merge);
+//print_r($merge);
 		//$respuestaDesfase['largo']=count($respuestaDesfase);
 		echo json_encode($merge);
 		//echo json_encode($respuestaDesfaseIni);

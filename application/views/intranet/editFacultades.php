@@ -16,7 +16,7 @@
 												</div>	
 												<label  class="col-sm-1 control-label" id="c">Desc.</label> 
 						 						<div class="col-sm-5">
-						 							<textarea class="form-control" readonly="readonly">'.$sede->descripcion.'</textarea><br>	
+						 							<textarea style="resize:none;" class="form-control" readonly="readonly">'.$sede->descripcion.'</textarea><br>	
 												</div>
 											</div>
 										';

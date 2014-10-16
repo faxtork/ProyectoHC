@@ -14,17 +14,26 @@
 			$this->load->view('general/headers');
             $this->load->view('general/menu_principal');
             $this->load->view('general/abre_bodypagina');
-            $this->load->view('consulta/bienvenido');
+            
+            if(!isset($_SESSION['usuarioAlumno'])){
+                redirect('', 'refresh');//si no esta creada
+            }else{
+                $this->load->view('consulta/bienvenido');
+
+            }
             $this->load->view('consulta/header_menu');
             $this->load->view('consulta/fin_header_menu');
             $this->load->view('general/cierre_bodypagina');
             $this->load->view('general/cierre_footer');
+
+
 		}
 		public function academico(){
 			$this->load->view('general/headers');
             $this->load->view('general/menu_principal');
             $this->load->view('general/abre_bodypagina');
-        	$academico=$this->docente_model->getAcademico();//va a llamara  aextraer a todos los academicos
+            $codCarrera=$_SESSION['codigoCarrera'];
+        	$academico=$this->docente_model->getAcademicoXfacultad($codCarrera);//va a llamara  a extraer a todos los academicos
         	$this->load->view('consulta/bienvenido');
             $this->load->view('consulta/header_menu');
             $this->load->view('consulta/fin_header_menu');
@@ -37,8 +46,8 @@
 
 			$pk=$this->input->post('docente');
             if ($pk != null) {
-                $time=$this->clases_model->getTime();
-                $date=$this->clases_model->getDate();
+                $time=$this->clases_model->getTime();//tiepo de ahora
+                $date=$this->clases_model->getDate();//fecha de ahora
                 $result=$this->docente_model->academicoSemana($pk,$time,$date);
                 $this->load->view('general/headers');
                 $this->load->view('general/menu_principal');
@@ -58,7 +67,7 @@
         public function ahora(){
             $time=$this->clases_model->getTime();
             $date=$this->clases_model->getDate();
-            $clases=$this->clases_model->getAhora($time , $date);
+            $clases=$this->clases_model->getAhora($time,$date);
             $this->load->view('general/headers');
             $this->load->view('general/menu_principal');
             $this->load->view('general/abre_bodypagina');

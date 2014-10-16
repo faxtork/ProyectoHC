@@ -14,7 +14,7 @@
 						
 				echo form_open('consulta/res_academico/','role="form"');
 				echo '<div class="form-group">
-				<label"><h3>Docente</h3></label>';
+				<label"><h3>Clases por Docente a la semana</h3></label>';
 				
 				echo form_dropdown('docente', $atributos,'','class="form-control"');
 				echo "<br/>";

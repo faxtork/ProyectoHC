@@ -41,7 +41,7 @@ return[(day!=0),'']
 $.datepicker.setDefaults($.datepicker.regional["es"]);
 $("#datepicker").datepicker({
 beforeShowDay: noExcursion,
-minDate: "-5D",
+minDate: "0D",
 maxDate: "+7M, 6D",
 	onClose: function (selectedDate) {
 	$("#datepicker2").datepicker("option", "minDate", selectedDate);
@@ -49,7 +49,7 @@ maxDate: "+7M, 6D",
 });
 $('#datepicker2').datepicker({
 beforeShowDay: noExcursion,
-minDate: "-5D",
+minDate: "0D",
 maxDate: "+7M, 6D",
 	onClose: function (selectedDate) {
 	$("#datepicker").datepicker("option", "maxDate", selectedDate);
@@ -70,8 +70,27 @@ maxDate: "+7M, 6D",
             $("#facultad").change(function() {
                 $("#facultad option:selected").each(function() { 
                    facultad=$('#facultad').val();
+                   ano=$('#ano').val();
+                   semestre=$('#semestre').val();
+                   dia1=$('#dia1').val();
+                   dia2=$('#dia2').val();
+                   dia3=$('#dia3').val();
+                   dia4=$('#dia4').val();
+                   dia5=$('#dia5').val();
+                   var diaArray=[dia1,dia2,dia3,,dia4,dia5];
+
+
+                   perio1=$('#periodo1').val();
+                   perio2=$('#periodo2').val();
+                   perio3=$('#periodo3').val();
+                   perio4=$('#periodo4').val();
+                   perio5=$('#periodo5').val();
+                   var perioArray=[perio1,perio2,perio3,perio4,perio5];
+
+                   var datepickerInicio= document.getElementById('datepicker').value;
+                   var datepickerTermino= document.getElementById('datepicker2').value;
                   $.post("<?= base_url('/index.php/intranet/llena_salas')?>", {
-                        facultad : facultad
+                        semestre : semestre, ano : ano, facultad : facultad, perioArray : perioArray, datepickerInicio : datepickerInicio, datepickerTermino:datepickerTermino, diaArray:diaArray
                     }, function(data) {
                         $("#salas").html(data);
                     });
@@ -86,51 +105,33 @@ maxDate: "+7M, 6D",
 	                        facultad : facultad
 	                    }, function(data) {
 	                        $("#asig").html(data);
-	                    });	
-                });
-            });
-        });
-</script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#dia").change(function() {
-                $("#dia option:selected").each(function() { 
-                  	dia=$('#dia').val();
-                  	            $("#periodo").change(function() {
-					                $("#periodo option:selected").each(function() { 
-					                  	perio=$('#periodo').val();
-					                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
-						                        perio : perio , dia : dia
-						                    }, function(data) {
-						                        $("#salas").html(data);
-						                    });		
-					                });
-					            });
-                });
-            });
-        });
+	                    });
+	               $.post("<?= base_url('/index.php/intranet/llena_doc')?>", {
+	                    semestre : semestre, ano : ano, facultad : facultad, perioArray : perioArray, datepickerInicio : datepickerInicio, datepickerTermino:datepickerTermino, diaArray:diaArray
 
-</script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-                  	            $("#periodo").change(function() {
-					                $("#periodo option:selected").each(function() { 
-					                  	perio=$('#periodo').val();
-					                  		            $("#dia").change(function() {
-											                $("#dia option:selected").each(function() { 
-											                  	dia=$('#dia').val();
-					                  $.post("<?= base_url('/index.php/intranet/comprobarDoc')?>", {
-						                        perio : perio , dia : dia
-						                    }, function(data) {
-						                        $("#salas").html(data);
-						                    });		
-					                });
-					            });
+	                    }, function(data) {
+	                        $("#docente").html(data);
+	                    });    	
                 });
             });
         });
-
 </script>
+<script>
+$(document).ready(function() {
+    $("#dia1").change(function() {$.reset();});
+    $("#periodo1").change(function() {$.reset();});
+    $("#datepicker").change(function() {$.reset();});
+    $("#datepicker2").change(function() {$.reset();});
+    $("#ano").change(function() {$.reset();});
+    $("#semestre").change(function() {$.reset();});
+});
+$.reset=function(){
+	    $('#facultad option[selected]').prop('selected', true);
+    	$('#depa option[selected]').prop('selected', true);
+    	$('#asig option[selected]').prop('selected', true);
+    	$('#salas option[selected]').prop('selected', true);
+}    
+ </script>
 <?php 
 $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'return validacion()'); 
 	foreach ($periodos as $peri){ 
@@ -162,6 +163,47 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
  </script>
 <div class="well">
 	<div class="row-fluid"><?= form_open('intranet/llenarReservaSemestre',$attributes);?> 
+		<div class="span7">
+			<div class="row-fluid">
+				<div class="span12">
+					<h4>Asignacion de Horario semanal</h4>
+				</div>
+			</div>
+				<div class="form-group">
+				    <label  class="col-sm-2 control-label" id="c">Periodo</label>
+				    <div class="col-sm-4"><!--algo php para las fechas del la semana-->
+			     		<select name="dia1" class="form-control" id="dia1"><!--onChange="this.form.facultad.selectedIndex=0;"-->
+			     			<option value="1">Lunes</option>
+			     			<option value="2">Martes</option>
+			     			<option value="3">Miercoles</option>
+			     			<option value="4">Jueves</option>
+			     			<option value="5">Viernes</option>
+			     			<option value="6">Sabado</option>
+			     		</select>
+				    </div>
+				    <label  class="col-sm-2 control-label" id="c">Al</label> 
+				 	<div class="col-sm-4">
+				      <!--	<select name="periodo" class="form-control" id="periodo" >-->
+							<?php 
+							echo form_dropdown('periodo1',$atributosPeriodo,'','class="form-control" id="periodo1"')
+							?>
+						<!--</select>-->
+				    </div>
+				</div>
+				<div  id="gr"></div>
+				<div class="form-group">
+				    <label  class="col-sm-2 control-label" id="c">Desde</label>
+				    <div class="col-sm-4"> 
+			     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio" class="form-control"  id="datepicker" >
+				    </div>
+				  	<label  class="col-sm-2 control-label" id="c">Hasta</label>
+				    <div class="col-sm-4">
+			     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2" >
+				    </div>
+				</div>
+					<a type="submit" name="agregarModificacion" value="Agregar" class="btn btn-success" onclick="agregarHijo()"><i class="icon-chevron-down"></i></a>
+					<a name="agregarModificacion" type="submit" class="btn btn-success" onclick="quitarHijo()"><i class="icon-chevron-up"></i></a>
+		</div>
 		<div class="span5">
 				<div class="row-fluid">
 					<div class="span12">
@@ -187,97 +229,61 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 			    	<label  class="col-sm-3 control-label" id="c">Facultad</label>
 			    	<div class="col-sm-9">
 						<select name="facultad" class="form-control" id="facultad" >
-						<option value="">Selececione una Facultad</option>
+						<option value="" selected="selected">Selececione una Facultad</option>
 							<?php 
 							    foreach ($facultades as $facu) {
-							 		echo'<option value='.$facu->pk.'>'.$facu->facultad.'</option>';
+							    	
+							    	if($facu->campus_fk!=$_SESSION['campus']){
+							    		echo'<option disabled value='.$facu->pk.'>'.$facu->facultad.'</option>';
+							    	}else{
+							    		echo'<option value='.$facu->pk.'>'.$facu->facultad.'</option>';
+							    	}
 							    }
 							 ?>
 						</select>
 			    	</div>
 			  	</div>
 				<div class="form-group">
-				    <label  class="col-sm-3 control-label" id="c">Sala</label>
-				    <div class="col-sm-9">
-				     	<select name="salas" class="form-control" id="salas"><option value="">Selecione una sala</option></select>
-				    </div>
-				</div>  
-				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Depto.</label>
 				    <div class="col-sm-9">
-				     	<select name="depa" class="form-control" id="depa"><option value="">Selecione un departamento</option></select>
+				     	<select name="depa" class="form-control" id="depa"><option selected="selected" value="">Selecione un departamento</option></select>
 				    </div>
 				</div>
 			  	<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Asignatura</label>
 				    <div class="col-sm-9">
-				      	<select name="asig" class="form-control" id="asig"><option value="">Selecione una asignatura</option></select>
+				      	<select name="asig" class="form-control" id="asig"><option selected="selected" value="">Selecione una asignatura</option></select>
 				    </div>
 				</div>
+
 			  	<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Seccion</label>
 				    <div class="col-sm-9">
-			     	 	<input name="seccion" class="form-control" type="text" id="seccion">
+			     	 	<input name="seccion" class="form-control" type="text" id="seccion" >
 				    </div>
 				</div>
+				<div class="form-group">
+				    <label  class="col-sm-3 control-label" id="c">Sala</label>
+				    <div class="col-sm-9">
+				     	<select name="salas" class="form-control" id="salas"><option selected="selected" value="">Selecione una sala</option></select>
+				    </div>
+				</div>  
 				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Docente</label>
 				    <div class="col-sm-9">
 				      	<select name="docente" class="form-control" id="docente" >
-						<option value="">Selececione un docente</option>
-						<option value="0">NN</option> 
+						<option value="" selected="selected">Selececione un docente</option>
 							<?php 
 							    foreach ($academico as $doc) {
-							 		echo'<option value='.$doc->pk.'>'.$doc->nombres.' '.$doc->apellidos.'</option>';
+							 		//echo'<option value='.$doc->pk.'>'.$doc->nombres.' '.$doc->apellidos.'</option>';
 							    }
 							?>
 						</select>
 				    </div>
 				</div>  
 		</div>
-		<div class="span7">
-			<div class="row-fluid">
-				<div class="span12">
-					<h4>Asignacion de Horario</h4>
-				</div>
-			</div>
-				<div class="form-group">
-				    <label  class="col-sm-2 control-label" id="c">Periodo</label>
-				    <div class="col-sm-4"><!--algo php para las fechas del la semana-->
-			     		<select name="dia1" class="form-control" id="dia1">
-			     			<option value="1">Lunes</option>
-			     			<option value="2">Martes</option>
-			     			<option value="3">Miercoles</option>
-			     			<option value="4">Jueves</option>
-			     			<option value="5">Viernes</option>
-			     			<option value="6">Sabado</option>
-			     		</select>
-				    </div>
-				    <label  class="col-sm-2 control-label" id="c">Al</label> 
-				 	<div class="col-sm-4">
-				      <!--	<select name="periodo" class="form-control" id="periodo" >-->
-							<?php 
-							echo form_dropdown('periodo1',$atributosPeriodo,'','class="form-control" id="periodo1"')
-							?>
-						<!--</select>-->
-				    </div>
-				</div>
-				<div  id="gr"></div>
-				<div class="form-group">
-				    <label  class="col-sm-2 control-label" id="c">Desde</label>
-				    <div class="col-sm-4"> 
-			     	 	<input readonly="readonly" placeholder="Inicio" name="datepickerInicio" class="form-control"  id="datepicker">
-				    </div>
-				  	<label  class="col-sm-2 control-label" id="c">Hasta</label>
-				    <div class="col-sm-4">
-			     	 	<input readonly="readonly" placeholder="Final" name="datepickerTermino" class="form-control" type="text" id="datepicker2">
-				    </div>
-				</div>
-				</div>
 					
 					<button class="btn btn-primary" type="submit" value="Enviar" name="btnEnviar">Enviar <span class="icon-ok icon-white"></span></button>
-					<a type="submit" name="agregarModificacion" value="Agregar" class="btn btn-success" onclick="agregarHijo()"><i class="icon-chevron-down"></i></a>
-					<a name="agregarModificacion" type="submit" class="btn btn-success" onclick="quitarHijo()"><i class="icon-chevron-up"></i></a>
 					<input type="hidden" value="1" id="cantidadPer" name="cantidadPer">
 					     		
 		</div>
@@ -285,43 +291,12 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 
 	</div>  
 </div>	          
-<script>
-  
 
-/*
-    $(document).ready(function() {
-            $("#repite").change(function() {
-                $("#repite option:selected").each(function() {
-                  	var posicion=document.getElementById('repite').value; //posicion
-					//alert(posicion);
-					if(posicion==1){
-
-						   $('#contenido1').show();
-						   $('#contenido2').hide();
-						   $('#contenido3').hide();
-						   $('#hasta').hide();
-
-					}
-					if(posicion==2){
-						 $('#contenido2').show();
-						 $('#contenido1').hide();
-						 $('#contenido3').hide();
-					}
-					if(posicion==3){
-						 $('#contenido3').show();
-						 $('#contenido1').hide();
-						 $('#contenido2').hide();
-					}
-                  });
-                });
-            });
-*/
-</script>
 <script>
 var gr=1;
 var subgr=0;
 function agregarHijo()
-{
+{ $.reset();
 subgr++;
 
 	 if(gr<=4){
@@ -391,7 +366,7 @@ subgr++;
 		   };
 	}
 }
-function quitarHijo(){
+function quitarHijo(){$.reset();
 		if(gr<=5){
 			var o = document.getElementById('gr'+gr);
 			o.parentNode.removeChild(o); 

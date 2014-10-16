@@ -1,6 +1,7 @@
 
 
 <?php 
+session_destroy();
 echo "<br />";
 echo "<h1> No has Iniciado Sesion</h1>";
 echo "<br />";echo "<br />";

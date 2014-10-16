@@ -52,6 +52,7 @@
                             </span>
                             </div>
                 </div>
+                <div id="xx"></div>
         </div>
         </div>
 </div> 
@@ -63,21 +64,23 @@ function Registrar(cantidad)
             ini[i]=$("#uno"+i).val();
             ter[i]=$("#dos"+i).val();
         };
-        var perio = ini.concat(ter); 
+        var perio = ini.concat(ter); //junto las 2 en una cadena
 var inicio = JSON.stringify(perio);
 //alert(inicio);
+//document.getElementById('xx').innerHTML=inicio;
 //var termino = JSON.stringify(ter);
+//alert(inicio);
     var desfase = $("#desfase").val();
         $.ajax({
         type: "get",
         dataType: 'html',
         cache:false,
        // url: "https://tesis.informatica.utem.cl/~sesparza/ProyectoHC/application/views/intranet/xd2.php",
-        url: 'https://146.83.181.9/~sesparza/ProyectoHC/index.php/json/verifyUser', 
+        url: 'https://146.83.181.9/~sesparza/ProyectoHC/index.php/json/verifyUser', //error link si se cambia de servidor :(
         //data: "u="+ini[1]+"&d="+ter[1]+"&desf="+desfase,
         data: "ini="+inicio+"&desf="+desfase,
         success: function(resp){
-           //alert(resp);
+          // alert(resp);
                 //var  obj = JSON.parse(resp);
                 objeto=eval('('+resp+')');
                 //alert(objeto.length);

@@ -1,12 +1,36 @@
+ <script>
+ function validacion(){
+ 	var campus = document.getElementById("campus").value;
 
+	if(campus==""){
+			alert("Favor elija un Campus");
+			return false;
+	}
+
+
+ }
+ </script>
 		<div class="span9"><div class="well">
 			<div class="row-fluid"><div class="span12"><h3>Agregar Facultades de la UTEM</h3></div></div>
 
 						<?php 
-						$attributes = array('class' => 'form-horizontal', 'role' => 'form');
+						$attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'return validacion()');
 						 ?> 					
 					    <?php 
 						    echo form_open('intranet/agregarFacultad',$attributes);?>
+						    			<div class="form-group">
+									    	<label  class="col-sm-2 control-label" id="c">Campus:</label>
+									    	<div class="col-sm-10">
+												<select name="campus" class="form-control" id="campus" >
+												<option value="">Selececione un Campus</option>
+													<?php 
+															foreach ($campus as $fila) {
+													    		echo'<option value='.$fila->pk.'>'.$fila->nombre.'</option>';				
+													    	    }
+													 ?>
+												</select>
+									    	</div>
+									  	</div>
 				    				<div class="form-group">
 									    <label  class="col-sm-2 control-label" id="c">Facultad</label>
 									    <div class="col-sm-4">
@@ -14,7 +38,7 @@
 										</div>	
 										<label  class="col-sm-1 control-label" id="c">Desc.</label> 
 				 						<div class="col-sm-5">
-				 							<textarea class="form-control" name="addDesc[]" id="addDesc[]"></textarea>	
+				 							<textarea style="resize:none;" class="form-control" name="addDesc[]" id="addDesc[]"></textarea>	
 										</div>
 									</div>
 									<div  id="gr">							
@@ -83,6 +107,7 @@ subgr++;
 		nuevohijo2.type = 'textarea';
 		nuevohijo2.setAttribute('class', 'form-control');
 		nuevohijo2.name = 'addDesc[]';
+		nuevohijo2.setAttribute('style','resize:none');
 		nuevohijo2.id = 'addDesc[]';subgr++;subgr++;
 		document.getElementById('subgr'+subgr).appendChild(nuevohijo2);
 	}	

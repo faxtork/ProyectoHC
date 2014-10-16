@@ -12,7 +12,7 @@ $( window ).resize(function() {
 });
 </script>
 <div class="well">
-    <h4 class="">Reservas de Profesores</h4>
+    <h4 class="">Reservas de Profesores por fecha</h4>
      <div class="mygrid-wrapper-div">
       <table class="table table-hover-striped" style="text-align:left;" border="0">
              <thead>
@@ -33,6 +33,11 @@ $( window ).resize(function() {
                 
                      <?php
                     foreach ($reservas as $pedi) {
+                      //if($pedi->facultad_fk!=$_SESSION['facultad']){}
+                      //else
+                      {
+                         echo form_open('intranet/editarReser');
+
                         echo '<tr>';
                         echo '<td >'.$pedi->pk.'</td>';
                         echo '<td>'.$pedi->nombredocente.'</td>';
@@ -44,16 +49,38 @@ $( window ).resize(function() {
                         echo '<td>'.$pedi->periodo.'</td>';
                         echo '<td>'.$pedi->sala.'</td>'; 
                                                 ?>
-                        <td><a class="btn btn-info" href="<?php base_url()?>editarReserva/<?php echo $pedi->pk."/".$pedi->fecha."/".$pedi->sala."/".$pedi->pksala."/".$pedi->nombredocente."/".$pedi->apellidodocente."/".$pedi->pkdocente."/".$pedi->asignatura."/".$pedi->pkasignatura."/".$pedi->periodo."/".$pedi->seccion;?>" >Editar</a></td>                        
-                        <td><a class="btn btn-danger" href="javascript:void(0);"onclick="eliminar('<?php base_url()?>eliminarPedido/<?php echo $pedi->pk; ?>')">Eliminar</a></td>
+                        <input type="hidden" name="pkReserva" value="<?php echo $pedi->pk;?>"> 
+                        <input type="hidden" name="pkdocente" value="<?php echo $pedi->pkdocente;?>"> 
+                          <input type="hidden" name="seccion" value="<?php echo $pedi->seccion;?>"> 
+                          <input type="hidden" name="fecha" value="<?php echo $pedi->fecha;?>">
+
+                          <input type="hidden" name="sala" value="<?php echo $pedi->sala;?>"> 
+                          <input type="hidden" name="salaPk" value="<?php echo $pedi->pksala?>"> 
+                          <input type="hidden" name="periodoPk" value="<?php echo $pedi->pkperiodo?>"> 
+
+                          <input type="hidden" name="semestre" value="<?php echo $pedi->semestre?>">    
+                          <input type="hidden" name="anio" value="<?php echo $pedi->anio?>">    
+
+
+                                                     
+
+                        <td>
+                        <button class="btn btn-info" name="editar" value="Editar">Editar <span class="icon-edit icon-white"></span></button>
+                    
+                        </td>                        
+                        <td><a class="btn btn-danger" href="javascript:void(0);"onclick="eliminar('<?php base_url()?>eliminarPedido/<?php echo $pedi->pk; ?>')">Eliminar <span class="icon-remove icon-white"></span></a></td>
                         <?php
-                        echo "</tr>";
+
+                        echo "</tr></form>";
+                      }
+
+                        
                     }
                     ?>
                  
                 </tbody>
        </table>
+
      </div>    
     
 </div>
-
