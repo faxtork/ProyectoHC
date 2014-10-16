@@ -56,6 +56,22 @@ maxDate: "0D"
             });
         });
 </script>
+</script>
+<script type="text/javascript">
+        $(document).ready(function() {
+                    	document.getElementById('mes').style.display='none'
+        	document.getElementById('year').style.display='none'
+        	document.getElementById('divResultNivelUtem').style.display='none'
+        	document.getElementById('calendar').style.display='none'//ocultar=none
+        	document.getElementById('subDiv1').style.display='none'//ocultar=none
+        	document.getElementById('subDiv2').style.display='none'//ocultar=none
+        	document.getElementById('subDiv3').style.display='none'//ocultar=none
+        	document.getElementById('subDiv4').style.display='none'//ocultar=none
+        	document.getElementById('subDiv5').style.display='none'//ocultar=none
+
+
+        });
+</script>
     <script type="text/javascript">/*
         $(document).ready(function() {
         	document.getElementById('divResultNivelUtem').style.display='none'
@@ -161,93 +177,212 @@ maxDate: "0D"
 </script>
 <script type="text/javascript">
         $(document).ready(function() {
-        	document.getElementById('fecha').style.display='none'
-        	document.getElementById('mes').style.display='none'
-        	document.getElementById('year').style.display='none'
-        	document.getElementById('divResultNivelUtem').style.display='none'
-        	document.getElementById('calendar').style.display='none'//ocultar=none
-            $("#query").change(function() {
+            $("#query").change(function() {//query maestro********************
+            	//$('#query2 option[selected]').prop('selected', true);
                 $("#query option:selected").each(function() { 
-                   query=$('#query').val();
+                  query=$('#query').val();
+
                    switch(query) {
 						    case "1":
-						            	document.getElementById('fecha').style.display='block'
+						            	document.getElementById('subDiv1').style.display='block'
+                          document.getElementById('subDiv2').style.display='none'
+                          document.getElementById('subDiv3').style.display='none'
+                          document.getElementById('subDiv4').style.display='none'
+                          document.getElementById('subDiv5').style.display='none'
+
+
+
+
+						        break;
+						    case "2":
+                          document.getElementById('subDiv2').style.display='block'
+                          document.getElementById('subDiv1').style.display='none'
+                          document.getElementById('subDiv3').style.display='none'
+                          document.getElementById('subDiv4').style.display='none'
+                          document.getElementById('subDiv5').style.display='none'
+                          //
+						            	document.getElementById('mes').style.display='none'
+		                   				document.getElementById('calendar').style.display='none'//ocultar=none
+	        							document.getElementById('year').style.display='none'
+	        							document.getElementById('divResultNivelUtem').style.display='none'
+	        							document.getElementById('noResult').style.display='none'
+
+
+
+						        break;
+						    case "3":
+                          document.getElementById('subDiv3').style.display='block'
+                          document.getElementById('subDiv1').style.display='none'
+                          document.getElementById('subDiv2').style.display='none'
+                          document.getElementById('subDiv4').style.display='none'
+                          document.getElementById('subDiv5').style.display='none'
+                          //
+						            	document.getElementById('calendar').style.display='none'
 			        					document.getElementById('year').style.display='none'
 			        					document.getElementById('mes').style.display='none'
-
-						        break;
-						    case "2":
-						            	document.getElementById('mes').style.display='block'
-		                   				document.getElementById('fecha').style.display='none'//ocultar=none
-	        							document.getElementById('year').style.display='none'
-						        break;
-						    case "3":
 						    		break;
 						    case "4":
-						    			document.getElementById('year').style.display='block'
-			                   			document.getElementById('fecha').style.display='none'
+                          document.getElementById('subDiv4').style.display='block'
+                          document.getElementById('subDiv1').style.display='none'
+                          document.getElementById('subDiv2').style.display='none'
+                          document.getElementById('subDiv3').style.display='none'
+                          document.getElementById('subDiv5').style.display='none'
+                          //
+						    			document.getElementById('year').style.display='none'
+			                   			document.getElementById('calendar').style.display='none'
 			        					document.getElementById('mes').style.display='none'
 
-						    		break;		    
-						}  
+						    		break;
+                    case "5":
+
+                          document.getElementById('subDiv5').style.display='block'
+                          document.getElementById('subDiv1').style.display='none'
+                          document.getElementById('subDiv2').style.display='none'
+                          document.getElementById('subDiv3').style.display='none'
+                          document.getElementById('subDiv4').style.display='none'
+                          //
+                      break;		    
+						} 
                 });
             });
-            $("#query2").change(function() {
-                $("#query2 option:selected").each(function() { 
-                   query2=$('#query2').val();
-                   switch(query2) {
-						    case "1":
-						            document.getElementById('calendar').style.display='block'
-	        					 	document.getElementById('divResultNivelUtem').style.display='none'
-						            document.getElementById('mes').style.display='none'
-	        						document.getElementById('year').style.display='none'
-	        						document.getElementById('noResult').style.display='none'
-	        						document.getElementById('titulo').style.display='none'
-							break;
-						    case "2":
-						            document.getElementById('mes').style.display='block'
-		                   		    document.getElementById('calendar').style.display='none'//ocultar=none
-	        					 	document.getElementById('divResultNivelUtem').style.display='none'
-	        						document.getElementById('year').style.display='none'
-	        						document.getElementById('noResult').style.display='none'
-	        						document.getElementById('titulo').style.display='none'
-						        break;
-						    case "3":
-						            document.getElementById('year').style.display='block'
-			                   		document.getElementById('calendar').style.display='none'
-						            document.getElementById('mes').style.display='none'
-						            document.getElementById('divResultNivelUtem').style.display='none'
-	        						document.getElementById('noResult').style.display='none'
-	        						document.getElementById('titulo').style.display='none'
-						    		break;		    
-						}  
+            $("#query1").change(function() {//*********UTEM**********
+                $("#query1 option:selected").each(function() {
+                  window.query1=$('#query1').val();
+                   switch(query1){
+                      case "1"://*****DIA******
+                                    document.getElementById('calendar').style.display='block'
+                                    document.getElementById('divResultNivelUtem').style.display='none'
+                                    document.getElementById('mes').style.display='none'
+                                    document.getElementById('year').style.display='none'
+                                    document.getElementById('noResult').style.display='none'
+                                    document.getElementById('titulo').style.display='none'
+                                   
+                        break;
+                      case "2"://*****MES******
+                                    document.getElementById('mes').style.display='block'
+                                    document.getElementById('calendar').style.display='none'//ocultar=none
+                                    document.getElementById('divResultNivelUtem').style.display='none'
+                                    document.getElementById('year').style.display='none'
+                                    document.getElementById('noResult').style.display='none'
+                                    document.getElementById('titulo').style.display='none'
+                        break;
+                      case "3"://*****AÑO******
+                                    document.getElementById('year').style.display='block'
+                                    document.getElementById('calendar').style.display='none'
+                                    document.getElementById('mes').style.display='none'
+                                    document.getElementById('divResultNivelUtem').style.display='none'
+                                    document.getElementById('noResult').style.display='none'
+                                    document.getElementById('titulo').style.display='none'  
+                        break;
+                   }
                 });
             });
+            $("#query2").change(function() {//*********CAMPUS**********
+                $("#query2 option:selected").each(function() {  
+                  window.query2=$('#query2').val();
+                   switch(query2){
+                      case "1":
+                                    document.getElementById('calendar').style.display='block'
+                                    document.getElementById('divResultNivelUtem').style.display='none'
+                                    document.getElementById('mes').style.display='none'
+                                    document.getElementById('year').style.display='none'
+                                    document.getElementById('noResult').style.display='none'
+                                    document.getElementById('titulo').style.display='none'
+                                   
+                        break;
+                      case "2":
+                                    document.getElementById('mes').style.display='block'
+                                    document.getElementById('calendar').style.display='none'//ocultar=none
+                                    document.getElementById('divResultNivelUtem').style.display='none'
+                                    document.getElementById('year').style.display='none'
+                                    document.getElementById('noResult').style.display='none'
+                                    document.getElementById('titulo').style.display='none'
+                        break;
+                      case "3":
+                                    document.getElementById('year').style.display='block'
+                                    document.getElementById('calendar').style.display='none'
+                                    document.getElementById('mes').style.display='none'
+                                    document.getElementById('divResultNivelUtem').style.display='none'
+                                    document.getElementById('noResult').style.display='none'
+                                    document.getElementById('titulo').style.display='none'  
+                        break;
+                   }
+                });
+            });
+
             $("#datepicker").change(function() {
-                   datepi=$('#datepicker').val();  
-                   $.post("<?= base_url('/index.php/estadistica/nivelUtemDia')?>", {
-				              datepi : datepi
-				                    }, function(data) {
-				                     	  //$("#divResultNivelUtemDia").html(data);
-				                     	 if(data==false){
-						                 document.getElementById('divResultNivelUtem').style.display='none'
-		  								document.getElementById('noResult').style.display='block'
-				                $("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para esta fecha");
-				                     	 }else{ 
-				                     	  data=data.split("/");
-				                     	  objeto1=eval('('+data[0]+')');
-				                     	  objeto2=eval('('+data[1]+')');
-				                     	  	piechart(objeto1,objeto2);
-				  							document.getElementById('divResultNivelUtem').style.display='block'
-				  							document.getElementById('noResult').style.display='none'
-				  							document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
-				  							document.getElementById('titulo').style.display='block'
-				  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Día UTEM</h3>"; 
-								}
-				                    });  
-window.myPieGlobal.destroy();
-            });
-		
+              datepi=$('#datepicker').val();  
+
+              if(query==1)utemDia(datepi);
+              if(query==2)campusDia(datepi);
+              if(query==3)que3(datepi);
+              if(query==4)que4(datepi);
+              if(query==5)que5(datepi);
+                  function utemDia(datepi){
+                               
+                               $.post("<?= base_url('/index.php/estadistica/nivelUtemDia')?>", {
+            				              datepi : datepi
+            				                    }, function(data) {
+            				                     	  //$("#divResultNivelUtemDia").html(data);
+            				                     	 if(data==false){
+            						                 	document.getElementById('divResultNivelUtem').style.display='none'
+            		  									document.getElementById('noResult').style.display='block'
+            				                			$("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para esta fecha");
+            				                     	 }else{ 
+            				                     	  data=data.split("/");
+            				                     	  objeto1=eval('('+data[0]+')');
+            				                     	  objeto2=eval('('+data[1]+')');
+            				                     	  	piechart(objeto1,objeto2);
+            				  							document.getElementById('divResultNivelUtem').style.display='block'
+            				  							document.getElementById('noResult').style.display='none'
+            				  							document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
+            				  							document.getElementById('titulo').style.display='block'
+            				  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Día UTEM</h3>"; 
+            										}
+            				                    });
+
+                  }
+                  function campusDia(datepi){
+                                
+                            
+                            $.post("<?= base_url('/index.php/estadistica/nivelCampus')?>", {
+                                query : query
+                            }, function(data) {
+                               // $("#divResultNivelCampus").html(data);
+                          var asisten=new Array();
+                          var ausente=new Array();
+                          var etiquetas=new Array();
+                               objeto=eval('('+data+')');
+                              var tot=0;
+                              for (i in objeto) {
+                                   tot++;
+                               };
+                               var partes=tot/3;//dividido 3 xq son nombres,asistieron,no asistieron
+
+                               for (var i = 0; i < tot; i++) {
+                                  if(i<partes)
+                                    etiquetas.push(objeto[i]);
+                                  else{
+                                    if(i<(partes*2) && i>=partes)
+                                      asisten.push(objeto[i]);
+                                    else
+                                      ausente.push(objeto[i]);
+                                  }
+
+                               };
+                               barrachart(asisten,ausente,etiquetas);
+
+                            }); 
+                        document.getElementById('divResultNivelUtem').style.display='block'
+                       // document.getElementById('divResultNivelUtem').style.display='none'
+
+                            
+
+                  }              
+				window.myPieGlobal.destroy();
+           });
+
+
 			 $("#selectMes").change(function() {
 
                 $("#selectMes option:selected").each(function() { 
@@ -330,30 +465,83 @@ window.myPieGlobal.destroy();
 						    	<label  class="col-sm-3 control-label" id="c">Nivel: </label>
 						    	<div class="col-sm-8">
 									<select name="query" class="form-control" id="query" >
-									<option value="">Elegir Consulta</option>
-									<option value="1">UTEM</option>
-									<option value="2">Campus</option>
-									<option value="3">Facultad</option>
-									<option value="4">Departamento</option>
-									<option value="5">Docente</option>
+  									<option selected="selected" value="">Elegir Consulta</option>
+  									<option value="1">UTEM</option>
+  									<option value="2">Campus</option>
+  									<option value="3">Facultad</option>
+  									<option value="4">Departamento</option>
+  									<option value="5">Docente</option>
 									</select>
 						    	</div>
 							</div>
-						<div id="utem">		
-							<div id="fecha"><!--se habilita cuando selecciono UTEM-->		
-									<div class="form-group">
-								    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
-								    	<div class="col-sm-8">
-											<select name="query2" class="form-control" id="query2" >
-											<option value="">Elegir Consulta</option>
-											<option value="1">Día</option>
-											<option value="2">Mes</option>
-											<option value="3">Año</option>
-											</select>
-								    	</div>
-									</div>
-
+							<div id="subDiv1">
+								<div class="form-group">
+							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
+							    	<div class="col-sm-8">
+										<select name="query1" class="form-control" id="query1" >
+  										<option selected="selected" value="">Elegir Consulta</option>
+  										<option value="1">Día</option>
+  										<option value="2">Mes</option>
+  										<option value="3">Año</option>
+										</select>
+							    	</div>
+								</div>
 							</div>
+							<div id="subDiv2">
+								<div class="form-group">
+							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
+							    	<div class="col-sm-8">
+										<select name="query2" class="form-control" id="query2" >
+  										<option selected="selected" value="">Elegir Consulta</option>
+  										<option value="1">Día</option>
+  										<option value="2">Mes</option>
+  										<option value="3">Año</option>
+										</select>
+							    	</div>
+								</div>
+							</div>
+							<div id="subDiv3">
+								<div class="form-group">
+							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
+							    	<div class="col-sm-8">
+										<select name="query3" class="form-control" id="query3" >
+  										<option selected="selected" value="">Elegir Consulta</option>
+  										<option value="1">Día</option>
+  										<option value="2">Mes</option>
+  										<option value="3">Año</option>
+										</select>
+							    	</div>
+								</div>
+							</div>
+							<div id="subDiv4">
+								<div class="form-group">
+							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
+							    	<div class="col-sm-8">
+										<select name="query4" class="form-control" id="query4" >
+  										<option selected="selected" value="">Elegir Consulta</option>
+  										<option value="1">Día</option>
+  										<option value="2">Mes</option>
+  										<option value="3">Año</option>
+										</select>
+							    	</div>
+								</div>
+							</div>
+							<div id="subDiv5">
+								<div class="form-group">
+							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
+							    	<div class="col-sm-8">
+										<select name="query5" class="form-control" id="query5" >
+  										<option selected="selected" value="">Elegir Consulta</option>
+  										<option value="1">Día</option>
+  										<option value="2">Mes</option>
+  										<option value="3">Año</option>
+										</select>
+							    	</div>
+								</div>
+							</div>
+
+
+							
 							<div id="calendar">
 								<div class="form-group">
 									<label  class="col-sm-3 control-label" id="c">Selecione un Día: </label>
@@ -409,7 +597,7 @@ window.myPieGlobal.destroy();
 									</div>
 								</div>
 							</div>
-						</div>
+						
 							<div id="noResult"></div>
 							<div id="divResultNivelUtem">
 								<div id="titulo"></div>
@@ -425,9 +613,13 @@ window.myPieGlobal.destroy();
 <script>
 $(document).ready(function() {
     $("#selectAnio").change(function() {$.reset();});
+
+
 });
 $.reset=function(){
 	    $('#selectMes option[selected]').prop('selected', true);
+
+
 }    
  </script>
  <script>
@@ -456,4 +648,28 @@ function piechart(var1,var2){
 						var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
 						window.myPieGlobal=new Chart(ctx2).Pie(pieData2);
 	}
+  function barrachart(asisten,ausente,etiquetas){
+                  var barChartData = {
+                        labels : etiquetas,
+                        datasets : [
+                          {
+                            fillColor : "#6b9dfa",
+                            strokeColor : "#000000",
+                            highlightFill: "#1864f2",
+                            highlightStroke: "#000000",
+                            data : asisten
+                          },
+                          {
+                            fillColor : "#e9e225",
+                            strokeColor : "#000000",
+                            highlightFill : "#ee7f49",
+                            highlightStroke : "#000000",
+                            data : ausente
+                          }
+                        ]
+
+                      }
+                          var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+                          window.myPieGlobal = new Chart(ctx2).Bar(barChartData, {responsive:true});
+  }
  </script>
