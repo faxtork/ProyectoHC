@@ -59,17 +59,14 @@ maxDate: "0D"
 </script>
 <script type="text/javascript">
         $(document).ready(function() {
-                    	document.getElementById('mes').style.display='none'
-        	document.getElementById('year').style.display='none'
-        	document.getElementById('divResultNivelUtem').style.display='none'
-        	document.getElementById('calendar').style.display='none'//ocultar=none
-        	document.getElementById('subDiv1').style.display='none'//ocultar=none
-        	document.getElementById('subDiv2').style.display='none'//ocultar=none
-        	document.getElementById('subDiv3').style.display='none'//ocultar=none
-        	document.getElementById('subDiv4').style.display='none'//ocultar=none
-        	document.getElementById('subDiv5').style.display='none'//ocultar=none
+              	document.getElementById('mes').style.display='none'
+                document.getElementById('subDiv').style.display='none'
+                                    document.getElementById('mesNameCampus').style.display='none'
 
-
+              	document.getElementById('year').style.display='none'
+	             document.getElementById('noResult').style.display='none'
+               document.getElementById('divResultNivelUtem').style.display='none'
+  	           document.getElementById('calendar').style.display='none'//ocultar=none
         });
 </script>
     <script type="text/javascript">/*
@@ -178,71 +175,29 @@ maxDate: "0D"
 <script type="text/javascript">
         $(document).ready(function() {
             $("#query").change(function() {//query maestro********************
-            	//$('#query2 option[selected]').prop('selected', true);
+            	$('#query1 option[selected]').prop('selected', true);
+
                 $("#query option:selected").each(function() { 
-                  query=$('#query').val();
+                document.getElementById('subDiv').style.display='block'
 
-                   switch(query) {
-						    case "1":
-						            	document.getElementById('subDiv1').style.display='block'
-                          document.getElementById('subDiv2').style.display='none'
-                          document.getElementById('subDiv3').style.display='none'
-                          document.getElementById('subDiv4').style.display='none'
-                          document.getElementById('subDiv5').style.display='none'
+                  window.query=$('#query').val();
+                if(query=="")document.getElementById('subDiv').style.display='none'
 
+                                    document.getElementById('calendar').style.display='none'//muestra el datepicker
+                                    document.getElementById('mes').style.display='none'
+                                    document.getElementById('year').style.display='none'//ocultar=none
+                                    document.getElementById('divResultNivelUtem').style.display='none'//ocultar=none
+                                    document.getElementById('noResult').style.display='none'//ocultar=none
+                                    document.getElementById('mesNameCampus').style.display='none'//ocultar=none
 
-
-
-						        break;
-						    case "2":
-                          document.getElementById('subDiv2').style.display='block'
-                          document.getElementById('subDiv1').style.display='none'
-                          document.getElementById('subDiv3').style.display='none'
-                          document.getElementById('subDiv4').style.display='none'
-                          document.getElementById('subDiv5').style.display='none'
-                          //
-						            	document.getElementById('mes').style.display='none'
-		                   				document.getElementById('calendar').style.display='none'//ocultar=none
-	        							document.getElementById('year').style.display='none'
-	        							document.getElementById('divResultNivelUtem').style.display='none'
-	        							document.getElementById('noResult').style.display='none'
+                                   
+                document.getElementById("datepicker").value= "";
+              $('#selectAnio option[selected]').prop('selected', true);
+              $('#selectYear option[selected]').prop('selected', true);
+              $('#selectCampus option[selected]').prop('selected', true);
 
 
-
-						        break;
-						    case "3":
-                          document.getElementById('subDiv3').style.display='block'
-                          document.getElementById('subDiv1').style.display='none'
-                          document.getElementById('subDiv2').style.display='none'
-                          document.getElementById('subDiv4').style.display='none'
-                          document.getElementById('subDiv5').style.display='none'
-                          //
-						            	document.getElementById('calendar').style.display='none'
-			        					document.getElementById('year').style.display='none'
-			        					document.getElementById('mes').style.display='none'
-						    		break;
-						    case "4":
-                          document.getElementById('subDiv4').style.display='block'
-                          document.getElementById('subDiv1').style.display='none'
-                          document.getElementById('subDiv2').style.display='none'
-                          document.getElementById('subDiv3').style.display='none'
-                          document.getElementById('subDiv5').style.display='none'
-                          //
-						    			document.getElementById('year').style.display='none'
-			                   			document.getElementById('calendar').style.display='none'
-			        					document.getElementById('mes').style.display='none'
-
-						    		break;
-                    case "5":
-
-                          document.getElementById('subDiv5').style.display='block'
-                          document.getElementById('subDiv1').style.display='none'
-                          document.getElementById('subDiv2').style.display='none'
-                          document.getElementById('subDiv3').style.display='none'
-                          document.getElementById('subDiv4').style.display='none'
-                          //
-                      break;		    
-						} 
+                          
                 });
             });
             $("#query1").change(function() {//*********UTEM**********
@@ -250,21 +205,33 @@ maxDate: "0D"
                   window.query1=$('#query1').val();
                    switch(query1){
                       case "1"://*****DIA******
-                                    document.getElementById('calendar').style.display='block'
-                                    document.getElementById('divResultNivelUtem').style.display='none'
+                                    document.getElementById('calendar').style.display='block'//muestra el datepicker
                                     document.getElementById('mes').style.display='none'
-                                    document.getElementById('year').style.display='none'
+                                    document.getElementById('year').style.display='none'//ocultar=none
+                                    document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
-                                    document.getElementById('titulo').style.display='none'
-                                   
+                                    document.getElementById('mesNameCampus').style.display='none'
+
+
+
+                                    
                         break;
                       case "2"://*****MES******
                                     document.getElementById('mes').style.display='block'
                                     document.getElementById('calendar').style.display='none'//ocultar=none
-                                    document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('year').style.display='none'
+                                    document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
-                                    document.getElementById('titulo').style.display='none'
+                                  if(query==2){//del campus se despliega el select del mes
+                                    document.getElementById('mesNameCampus').style.display='block'
+
+                                  }else{
+                                    document.getElementById('mesNameCampus').style.display='none'
+
+
+                                  }
+
+
                         break;
                       case "3"://*****AÑO******
                                     document.getElementById('year').style.display='block'
@@ -272,156 +239,250 @@ maxDate: "0D"
                                     document.getElementById('mes').style.display='none'
                                     document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
-                                    document.getElementById('titulo').style.display='none'  
+                                    document.getElementById('mesNameCampus').style.display='none'
+
+
+
                         break;
-                   }
-                });
-            });
-            $("#query2").change(function() {//*********CAMPUS**********
-                $("#query2 option:selected").each(function() {  
-                  window.query2=$('#query2').val();
-                   switch(query2){
-                      case "1":
-                                    document.getElementById('calendar').style.display='block'
-                                    document.getElementById('divResultNivelUtem').style.display='none'
-                                    document.getElementById('mes').style.display='none'
+                      case "":
                                     document.getElementById('year').style.display='none'
-                                    document.getElementById('noResult').style.display='none'
-                                    document.getElementById('titulo').style.display='none'
-                                   
-                        break;
-                      case "2":
-                                    document.getElementById('mes').style.display='block'
-                                    document.getElementById('calendar').style.display='none'//ocultar=none
-                                    document.getElementById('divResultNivelUtem').style.display='none'
-                                    document.getElementById('year').style.display='none'
-                                    document.getElementById('noResult').style.display='none'
-                                    document.getElementById('titulo').style.display='none'
-                        break;
-                      case "3":
-                                    document.getElementById('year').style.display='block'
                                     document.getElementById('calendar').style.display='none'
                                     document.getElementById('mes').style.display='none'
                                     document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
-                                    document.getElementById('titulo').style.display='none'  
-                        break;
+                                    document.getElementById('mesNameCampus').style.display='none'
+
+
+
+                        break;             
                    }
                 });
             });
-
+            function dataFalse(texto){
+                document.getElementById('divResultNivelUtem').style.display='none'
+                document.getElementById('noResult').style.display='block'
+                $("#noResult").html(texto);
+            }
+            function dataTrue(titulo){
+                  document.getElementById('divResultNivelUtem').style.display='block'
+                  document.getElementById('noResult').style.display='none'
+                  document.getElementById('titulo').style.display='block'
+                  document.getElementById("titulo").innerHTML = titulo; 
+            }
             $("#datepicker").change(function() {
               datepi=$('#datepicker').val();  
 
               if(query==1)utemDia(datepi);
               if(query==2)campusDia(datepi);
-              if(query==3)que3(datepi);
+              if(query==3)facultadDia(datepi);
               if(query==4)que4(datepi);
               if(query==5)que5(datepi);
-                  function utemDia(datepi){
-                               
-                               $.post("<?= base_url('/index.php/estadistica/nivelUtemDia')?>", {
-            				              datepi : datepi
-            				                    }, function(data) {
-            				                     	  //$("#divResultNivelUtemDia").html(data);
-            				                     	 if(data==false){
-            						                 	document.getElementById('divResultNivelUtem').style.display='none'
-            		  									document.getElementById('noResult').style.display='block'
-            				                			$("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para esta fecha");
-            				                     	 }else{ 
-            				                     	  data=data.split("/");
-            				                     	  objeto1=eval('('+data[0]+')');
-            				                     	  objeto2=eval('('+data[1]+')');
-            				                     	  	piechart(objeto1,objeto2);
-            				  							document.getElementById('divResultNivelUtem').style.display='block'
-            				  							document.getElementById('noResult').style.display='none'
-            				  							document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
-            				  							document.getElementById('titulo').style.display='block'
-            				  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Día UTEM</h3>"; 
-            										}
-            				                    });
 
-                  }
-                  function campusDia(datepi){
-                                
-                            
-                            $.post("<?= base_url('/index.php/estadistica/nivelCampus')?>", {
-                                query : query
-                            }, function(data) {
-                               // $("#divResultNivelCampus").html(data);
-                          var asisten=new Array();
-                          var ausente=new Array();
-                          var etiquetas=new Array();
-                               objeto=eval('('+data+')');
-                              var tot=0;
-                              for (i in objeto) {
-                                   tot++;
-                               };
-                               var partes=tot/3;//dividido 3 xq son nombres,asistieron,no asistieron
+                function utemDia(datepi){
+                   $.post("<?= base_url('/index.php/estadistica/nivelUtemDia')?>", {
+				              datepi : datepi
+				                    }, function(data) {
+				                     	  //$("#divResultNivelUtemDia").html(data);
+				                     	 if(data==false){
+                                var texto="Lo lamentamos No hay registros en nuestro sistema para esta fecha";
+                                dataFalse(texto);
 
-                               for (var i = 0; i < tot; i++) {
-                                  if(i<partes)
-                                    etiquetas.push(objeto[i]);
-                                  else{
-                                    if(i<(partes*2) && i>=partes)
-                                      asisten.push(objeto[i]);
-                                    else
-                                      ausente.push(objeto[i]);
-                                  }
-
-                               };
-                               barrachart(asisten,ausente,etiquetas);
-
-                            }); 
-                        document.getElementById('divResultNivelUtem').style.display='block'
-                       // document.getElementById('divResultNivelUtem').style.display='none'
-
-                            
-
-                  }              
-				window.myPieGlobal.destroy();
-           });
-
-
-			 $("#selectMes").change(function() {
-
-                $("#selectMes option:selected").each(function() { 
-                   selectMes=$('#selectMes').val();
-                   selectAnio=$('#selectAnio').val();
-                       var d = new Date();
-    					var anio = d.getFullYear();
-    					var month= d.getMonth(); 
-  							var futuro=false;
-    					if(selectMes<=(month+1) && selectAnio<=anio){}
-    					else {alert("Favor Seleccione Otro Mes"); $.reset();
-  							document.getElementById('noResult').style.display='block'
-  							document.getElementById("noResult").innerHTML = "Lo lamentamos No hay registros en nuestro sistema para esta fecha"; 
-  							document.getElementById('divResultNivelUtem').style.display='none'
-  							var futuro=true;
-    						}
-  					$.post("<?= base_url('/index.php/estadistica/nivelUtemMes')?>", {
-  						selectMes : selectMes, selectAnio : selectAnio
-  						 },function(data) {
-  						 	if(data==false || futuro==true){//quiere decir que no hay registros
-  							document.getElementById('noResult').style.display='block'
-  							document.getElementById("noResult").innerHTML = "Lo lamentamos No hay registros en nuestro sistema para esta fecha"; 
-  							document.getElementById('divResultNivelUtem').style.display='none'
-  						 	}else{
-  									data=data.split("/");
+				                     	 }else{ 
+				                     	  data=data.split("/");
 				                     	  objeto1=eval('('+data[0]+')');
 				                     	  objeto2=eval('('+data[1]+')');
-									piechart(objeto1,objeto2);                     	 
-  		  							document.getElementById('divResultNivelUtem').style.display='block'
-  									document.getElementById('noResult').style.display='none'
-		  							document.getElementById('total').style.display='block'
-		  							document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
-		  							document.getElementById('titulo').style.display='block'
-		  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Mes UTEM</h3>"; 		
-  							}
-  					});
-        window.myPieGlobal.destroy();
+				                     	  	piechart(objeto1,objeto2);
+                                  var titulo="<h3>Asistencia Por Día UTEM</h3>";
+                                  dataTrue(titulo);
+										            }
+				                    });
+                }
+                function campusDia(datepi){
+                      $.post("<?= base_url('/index.php/estadistica/nivelCampusDia')?>", {
+                          datepi : datepi
+                       }, function(data) {
+                         // $("#divResultNivelCampus").html(data);
+                            if(data==false){
+                                      var texto="Lo lamentamos No hay registros en nuestro sistema para esta fecha";
+                                      dataFalse(texto);
+                                     }else{ 
+                                         var asisten=new Array();
+                                        var ausente=new Array();
+                                        var etiquetas=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/3;//dividido 3 xq son nombres,asistieron,no asistieron
+                                             for (var i = 0; i < tot; i++) {
+                                                if(i<partes)
+                                                  etiquetas.push(objeto[i]);
+                                                else{
+                                                  if(i<(partes*2) && i>=partes)
+                                                    asisten.push(objeto[i]);
+                                                  else
+                                                    ausente.push(objeto[i]);
+                                                }
+                                             };
+                                        barrachart(asisten,ausente,etiquetas);
+                                        var titulo="<h3>Asistencia Por Campus</h3>";
+                                        dataTrue(titulo);
+                                     }
+                      }); 
+                }
+                function facultadDia(datepi){
+                      $.post("<?= base_url('/index.php/estadistica/nivelFacultadDia')?>", {
+                          datepi : datepi
+                      }, function(data) {
+                         // $("#divResultNivelCampus").html(data);
+                                                       // alert(data);
+                            if(data==false){
+                                      var texto="Lo lamentamos No hay registros en nuestro sistema para esta fecha";
+                                      dataFalse(texto);
+                                     }else{ 
+                                         var asisten=new Array();
+                                        var ausente=new Array();
+                                        var etiquetas=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/3;//dividido 3 xq son nombres,asistieron,no asistieron
+                                             var abreviar;
+                                             for (var i = 0; i < tot; i++) {
+                                                if(i<partes){
+                                                           //*******quitar conectores******
+                                                               abreviar=objeto[i].split(" ");
+                                                               var abreviar2="";
+                                                               for (var z = 0; z < abreviar.length; z++) {
+                                                                 if(abreviar[z].length>3){
+                                                                  abreviar2=abreviar2+" "+abreviar[z];
+                                                                 }
+                                                               }
+                                                              //******* FIN quitar conectores******
+                                                              var abreviar3;
+                                                               abreviar3=abreviar2.split(" ");
+                                                               if(abreviar3.length<=2)
+                                                                    etiquetas.push(abreviar3[1]);
+                                                                else{
+                                                                  etiquetas.push(abreviar3[1]+" "+abreviar3[2]);
+                                                                }               
+                                                }else{
+                                                  if(i<(partes*2) && i>=partes)
+                                                    asisten.push(objeto[i]);
+                                                  else
+                                                    ausente.push(objeto[i]);
+                                                }
+                                             };
+                                           barrachart(asisten,ausente,etiquetas);
+                                          var titulo="<h3>Asistencia Por Facultad</h3>";
+                                          dataTrue(titulo);
+                                     }
+                      }); 
+                }               
+			     	window.myPieGlobal.destroy();
+           });//******FIN $("#datepicker").change(function() **********
+			     $("#selectAnio").change(function() {
+            $("#selectAnio option:selected").each(function() { 
+                   window.selectAnio=$('#selectAnio').val();
+                   selectCampus=$('#selectCampus').val();
+              if(query==1)utemMes(selectAnio);
+              if(query==2)campusMes(selectAnio,selectCampus);
+              if(query==3)facultadMes(selectAnio);
+              if(query==4)que4(datepi);
+              if(query==5)que5(datepi);
+                function utemMes(selectAnio){
+            					$.post("<?= base_url('/index.php/estadistica/nivelUtemMes')?>", {
+            						selectAnio : selectAnio
+            						 },function(data) {
+            						 	if(data==false){
+                                var texto="Lo lamentamos No hay registros en nuestro sistema para esta fecha";
+                                dataFalse(texto);
+            						 	}else{
+                                          var asiste=new Array();
+                                          var ausente=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/2;
+                                             for (var i = 0; i < tot; i++) {
+                                               if(i<partes)asiste.push(objeto[i]);
+                                               else ausente.push(objeto[i]);
+
+                                             };
+                                          linechart(asiste,ausente);
+                                  var titulo="<h3>Asistencia Por Meses UTEM</h3>";
+                                  dataTrue(titulo); 
+                          }
+
+            					});
+                }
+                function campusMes(selectAnio,selectCampus){ 
+                      $.post("<?= base_url('/index.php/estadistica/nivelCampusMes')?>", {
+                        selectAnio : selectAnio,selectCampus : selectCampus
+                         },function(data) {
+                          if(data==false){
+                                var texto="Lo lamentamos No hay registros en nuestro sistema para esta fecha";
+                                dataFalse(texto);
+                          }else{
+                                          var asiste=new Array();
+                                          var ausente=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/2;
+                                             for (var i = 0; i < tot; i++) {
+                                               if(i<partes)asiste.push(objeto[i]);
+                                               else ausente.push(objeto[i]);
+
+                                             };
+                                          linechart(asiste,ausente);
+                                  var titulo="<h3>Asistencia Por Meses Campus </h3>";
+                                  dataTrue(titulo); 
+                          }
+
+                      });
+                }
+                function facultadMes(selectAnio){
+                      $.post("<?= base_url('/index.php/estadistica/nivelUtemMes')?>", {
+                        selectAnio : selectAnio
+                         },function(data) {
+                          if(data==false || futuro==true){//quiere decir que no hay registros
+                          document.getElementById('noResult').style.display='block'
+                          document.getElementById("noResult").innerHTML = "Lo lamentamos No hay registros en nuestro sistema para esta fecha"; 
+                          document.getElementById('divResultNivelUtem').style.display='none'
+                          }else{
+                              data=data.split("/");
+                                          objeto1=eval('('+data[0]+')');
+                                          objeto2=eval('('+data[1]+')');
+                            piechart(objeto1,objeto2);                       
+                                document.getElementById('divResultNivelUtem').style.display='block'
+                              document.getElementById('noResult').style.display='none'
+                              document.getElementById('total').style.display='block'
+                              document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
+                              document.getElementById('titulo').style.display='block'
+                              document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Mes UTEM</h3>";     
+                          }
+                      });
+                }    
+            window.myPieGlobal.destroy();
                 });
             });
+    $('#selectMes').change(function(){
+      $('#selectMes option:selected').each(function(){
+          selectMes=$('#selectMes').val();
+          selectCampus=$('#selectCampus').val();
+         if(query==2)campusMes(selectAnio,selectCampus);
+
+
+      });
+    });
 		$("#selectYear").change(function() {
                 $("#selectYear option:selected").each(function() { 
                    selectYear=$('#selectYear').val();
@@ -474,72 +535,34 @@ maxDate: "0D"
 									</select>
 						    	</div>
 							</div>
-							<div id="subDiv1">
-								<div class="form-group">
-							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
-							    	<div class="col-sm-8">
-										<select name="query1" class="form-control" id="query1" >
+              <div id="subDiv">
+  							<div class="form-group">
+  						    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
+  						    	<div class="col-sm-8">
+  									<select name="query1" class="form-control" id="query1" >
   										<option selected="selected" value="">Elegir Consulta</option>
   										<option value="1">Día</option>
   										<option value="2">Mes</option>
   										<option value="3">Año</option>
-										</select>
-							    	</div>
-								</div>
-							</div>
-							<div id="subDiv2">
-								<div class="form-group">
-							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
-							    	<div class="col-sm-8">
-										<select name="query2" class="form-control" id="query2" >
-  										<option selected="selected" value="">Elegir Consulta</option>
-  										<option value="1">Día</option>
-  										<option value="2">Mes</option>
-  										<option value="3">Año</option>
-										</select>
-							    	</div>
-								</div>
-							</div>
-							<div id="subDiv3">
-								<div class="form-group">
-							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
-							    	<div class="col-sm-8">
-										<select name="query3" class="form-control" id="query3" >
-  										<option selected="selected" value="">Elegir Consulta</option>
-  										<option value="1">Día</option>
-  										<option value="2">Mes</option>
-  										<option value="3">Año</option>
-										</select>
-							    	</div>
-								</div>
-							</div>
-							<div id="subDiv4">
-								<div class="form-group">
-							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
-							    	<div class="col-sm-8">
-										<select name="query4" class="form-control" id="query4" >
-  										<option selected="selected" value="">Elegir Consulta</option>
-  										<option value="1">Día</option>
-  										<option value="2">Mes</option>
-  										<option value="3">Año</option>
-										</select>
-							    	</div>
-								</div>
-							</div>
-							<div id="subDiv5">
-								<div class="form-group">
-							    	<label  class="col-sm-3 control-label" id="c">Tipo Consulta</label>
-							    	<div class="col-sm-8">
-										<select name="query5" class="form-control" id="query5" >
-  										<option selected="selected" value="">Elegir Consulta</option>
-  										<option value="1">Día</option>
-  										<option value="2">Mes</option>
-  										<option value="3">Año</option>
-										</select>
-							    	</div>
-								</div>
-							</div>
-
+  									</select>
+  						    	</div>
+  							</div>
+              </div>
+              <div id="mesNameCampus">
+                <div class="form-group">
+                  <label  class="col-sm-3 control-label" id="c">Elegir Campus: </label>
+                    <div class="col-sm-8">
+                      <select name="selectCampus" class="form-control" id="selectCampus">
+                        <option selected="selected" value="">Selecione un campus</option>
+                        <?php     
+                          foreach ($campus as $key) {
+                            echo'<option value="'.$key->pk.'">'.$key->nombre.'</option>';
+                          }
+                         ?>
+                      </select>
+                    </div>
+                </div>
+              </div>
 
 							
 							<div id="calendar">
@@ -553,26 +576,13 @@ maxDate: "0D"
 							<div id="mes">
 								<div class="form-group">
 									<label  class="col-sm-3 control-label" id="c">Año: </label>
-									<div class="col-sm-2">
+									<div class="col-sm-3">
 
 										<select name="selectAnio" class="form-control" id="selectAnio">
 											<option selected="selected" value="">Selecione un Año</option>
 											<?php     date_default_timezone_set("America/Santiago");
     													$año = date('Y');
-											for ($i=$año; $i >=($año-10) ; $i--) { 
-												echo'<option value="'.$i.'">'.$i.'</option>';
-											}
-											 ?>
-										</select>
-									</div>
-									<label  class="col-sm-3 control-label" id="c">Mes: </label>
-									<div class="col-sm-3">
-										<select name="selectMes" class="form-control" id="selectMes">
-										<option selected="selected" value="">Selecione un Mes: </option>
-											<?php //ver el tema de si elije un mes futuro tomarlo ocmo pasado o preguntar por año
-												date_default_timezone_set("America/Santiago");
-    													$año = date('Y');
-											for ($i=1; $i <=12 ; $i++) { 
+											for ($i=$año; $i >=($año-5) ; $i--) { 
 												echo'<option value="'.$i.'">'.$i.'</option>';
 											}
 											 ?>
@@ -589,20 +599,22 @@ maxDate: "0D"
 											<option selected="selected" value="">Selecione un Año</option>
 											<?php     date_default_timezone_set("America/Santiago");
     													$año = date('Y');
-											for ($i=$año; $i >=($año-10) ; $i--) { 
+											for ($i=$año; $i >=($año-5) ; $i--) { 
 												echo'<option value="'.$i.'">'.$i.'</option>';
 											}
 											 ?>
 										</select>
 									</div>
 								</div>
+
 							</div>
-						
+
 							<div id="noResult"></div>
 							<div id="divResultNivelUtem">
 								<div id="titulo"></div>
 								<canvas id="chart-areaGlobal" width="300" height="300"></canvas>
 								<div id="total"></div>	
+                <div id="chartt"></div>
 							</div>
 					</form>		
 				</div>
@@ -612,12 +624,12 @@ maxDate: "0D"
 </div></div>
 <script>
 $(document).ready(function() {
-    $("#selectAnio").change(function() {$.reset();});
+    $("#selectCampus").change(function() {$.reset();});
 
 
 });
 $.reset=function(){
-	    $('#selectMes option[selected]').prop('selected', true);
+	    $('#selectAnio option[selected]').prop('selected', true);
 
 
 }    
@@ -668,8 +680,44 @@ function piechart(var1,var2){
                           }
                         ]
 
-                      }
+                      }   
                           var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
-                          window.myPieGlobal = new Chart(ctx2).Bar(barChartData, {responsive:true});
+                          window.myPieGlobal = new Chart(ctx2).Bar(barChartData,{responsive:false});
+                            /*var legend = myPieGlobal.generateLegend();
+
+                          //and append it to your page somewhere
+                          $('#chartt').append(legend);*/
+  }
+    function linechart(asisten,ausente){
+                  var barChartData = {
+                        labels : ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],//["90","30","10","80","15"],
+                        datasets : [
+                          {
+                            fillColor : "rgba(220,220,220,0.2)",
+                            strokeColor : "#6b9dfa",
+                            pointColor : "#1e45d7",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(220,220,220,1)",
+                            data : asisten
+                          },
+                          {
+                            fillColor : "rgba(151,187,205,0.2)",
+                            strokeColor : "#e9e225",
+                            pointColor : "#faab12",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(151,187,205,1)",
+                            data : ausente
+                          }
+                        ]
+
+                      }   
+                          var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+                          window.myPieGlobal = new Chart(ctx2).Line(barChartData);
+                            /*var legend = myPieGlobal.generateLegend();
+
+                          //and append it to your page somewhere
+                          $('#chartt').append(legend);*/
   }
  </script>

@@ -48,7 +48,9 @@
                 $this->load->view('general/abre_bodypagina');   
                 $this->load->view('estadistica/est_bienvenido');
                      $this->load->view('estadistica/data');
-                            $this->load->view('estadistica/infoAsistencia');
+            $campus=$this->asistencia_model->getCampusName();
+
+                            $this->load->view('estadistica/infoAsistencia',compact('campus'));
                      $this->load->view('adminGeneral/cierreData');
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
@@ -68,20 +70,37 @@
 
        }
         public function nivelUtemMes(){
-            $selectMes=$this->input->post('selectMes');
             $selectAnio=$this->input->post('selectAnio');
-            $fechaIni=$selectAnio."-".$selectMes."-01";
-            $fechaFin=$selectAnio."-".($selectMes+1)."-01";
-             $totalMesSi=$this->asistencia_model->totalAsistenciaMes($fechaIni,$fechaFin);
-             $totalMesNo=$this->asistencia_model->totalAusenciaMes($fechaIni,$fechaFin);
-             if($totalMesSi->asistieron==0 && $totalMesNo->noasistieron==0)
+            $sumSi=0;
+            $sumNo=0;
+
+             $totalMesSi=$this->asistencia_model->totalAsistenciaMes2($selectAnio);
+             $totalMesNo=$this->asistencia_model->totalAusenciaMes2($selectAnio);
+
+            for ($i=0; $i <count($totalMesSi) ; $i++) { 
+                    foreach ($totalMesSi[$i] as $fila) {
+                     $mesesAsistio[]=$fila->asistieron;
+                       $sumSi=$sumSi+$fila->asistieron;
+
+                    }
+            }
+            for ($i=0; $i <count($totalMesNo) ; $i++) { 
+                    foreach ($totalMesNo[$i] as $fila) {
+                     $mesesAusente[]=$fila->asistieron;
+                       $sumNo=$sumNo+$fila->asistieron;
+
+                    }
+            }
+
+             if($sumNo==0 && $sumSi==0)
                 echo false;
             else{
-                    echo  $totalMesSi->asistieron;
-                    echo "/";
-                    echo $totalMesNo->noasistieron;
+            $merge=array_merge($mesesAsistio,$mesesAusente);
+                echo  json_encode($merge);
+
             }
        }
+       /**************/
         public function nivelUtemYear(){
             $selectAnio=$this->input->post('selectYear');
             $yearIni=$selectAnio."-01-01";
@@ -96,34 +115,107 @@
                     echo $totalYearNo->noasistieron;
             }
        }
-        public function nivelCampus(){
+        public function nivelCampusDia(){
+            $fecha=$this->input->post('datepi');
             $campus=$this->asistencia_model->getCampusName();
+            $sumSi=0;
+            $sumNo=0;
+
             foreach ($campus as $key ) {
                 $nameCampus[]=$key->nombre;
                 $totalAsist[]=$key->nombre;
             }
-            $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorCampus($nameCampus);
+
+            $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorCampus($nameCampus,$fecha);
             for ($i=0; $i <count($asistenciaCampus) ; $i++) { 
                     foreach ($asistenciaCampus[$i] as $fila) {
                        
                        $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
                     }
             }
-            $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorCampus($nameCampus);
+            $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorCampus($nameCampus,$fecha);
             for ($i=0; $i <count($NoasistenciaCampus) ; $i++) { 
                     foreach ($NoasistenciaCampus[$i] as $fila) {
                        
                        $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
+
+
                     }
             }
-        $consulta=$this->input->post('query');
-
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else    
+         echo json_encode($totalAsist);
             //echo $totalAsist;
-echo json_encode($totalAsist);
+
+       }
+    public function nivelCampusMes(){
+            $selectAnio=$this->input->post('selectAnio');
+            $selectCampusPk=$this->input->post('selectCampus');
+            $sumSi=0;
+            $sumNo=0;
+
+            $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorCampusMes($selectAnio,$selectCampusPk);
+            for ($i=0; $i <count($asistenciaCampus) ; $i++) { 
+                    foreach ($asistenciaCampus[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
+                    }
+            }
+            $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorCampusMes($selectAnio,$selectCampusPk);
+            for ($i=0; $i <count($asistenciaCampus) ; $i++) {         
+                    foreach ($NoasistenciaCampus[$i] as $fila) {
+                       $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
 
 
+                    }
+            }        
+    
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else    
+         echo json_encode($totalAsist);
+            //echo $totalAsist;
+
+       }
+       public function nivelFacultadDia(){
+                    $fecha=$this->input->post('datepi');
+            $facultad=$this->asistencia_model->getFacultadName();
+            $sumSi=0;
+            $sumNo=0;
+
+            foreach ($facultad as $key ) {
+                $nameFacultad[]=$key->facultad;
+                $totalAsist[]=$key->facultad;
+            }
+
+            $asistenciaFacul=$this->asistencia_model->totalAsistenciaPorFacul($nameFacultad,$fecha);
+            for ($i=0; $i <count($asistenciaFacul) ; $i++) { 
+                    foreach ($asistenciaFacul[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
+                    }
+            }
+            $ausenciaFacul=$this->asistencia_model->totalNoAsistenciaPorFacul($nameFacultad,$fecha);
+            for ($i=0; $i <count($ausenciaFacul) ; $i++) { 
+                    foreach ($ausenciaFacul[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
 
 
+                    }
+            }
+            if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+                echo false;
+            else    
+         echo json_encode($totalAsist);
+            //echo $totalAsist;
        }
 }
 ?>
