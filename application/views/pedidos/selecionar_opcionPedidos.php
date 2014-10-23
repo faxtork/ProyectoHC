@@ -12,7 +12,6 @@
 
         </div><br><br>
   <!-- <a href="<?= site_url('login/desconectar');?>" class="btn btn-warning">desconectar</a> -->
-
     </div>
     </form>
     </div>

@@ -7,6 +7,10 @@ class Pedidos extends CI_Controller {
 
   function __construct() {
     parent::__construct();
+      $this->load->model('admin_model');
+      $this->load->model('docente_model');
+
+
     session_start();   
   }
 
@@ -19,12 +23,32 @@ class Pedidos extends CI_Controller {
       $this->load->view('pedidos/login_docente');
     }
     else{
-      $this->load->view('pedidos/selecionar_opcionPedidos');
+      $tieneDepto=$this->docente_model->tieneDpto($_SESSION['usuarioProfesor']);
+      $tieneDepto=$tieneDepto->departamento_fk;
+        if($tieneDepto==null){
+               $dptos=$this->admin_model->getdptoAll();//todos los dptos
+                $this->load->view('pedidos/selecioneDpto',compact('dptos'));
+        }else{
+          $this->load->view('pedidos/selecionar_opcionPedidos');
+        }
+
     }
     $this->load->view('general/cierre_bodypagina');
     $this->load->view('general/cierre_footer');
   }
+  public function llenaDptoDoc(){
+    $btn=  $this->input->post('btnEnviar');
+    $dpto=  $this->input->post('dpto');
+    $rut=  $this->input->post('rut');
+    if($btn=="Enviar"){
+      $estado=$this->docente_model->guardarDptoDoc($dpto,$rut);
+      if($estado==true){
+             echo '<script>alert("Has completado el proceso Exitosamente"); </script>';
+                          redirect('pedidos',301);     
+      }
+    }
 
+  }
   public function pedirSala(){
 
    if(!isset($_SESSION['usuarioProfesor'])){
@@ -40,7 +64,7 @@ class Pedidos extends CI_Controller {
     $this->load->view('general/headers');
     $this->load->view('general/menu_principal');
     $this->load->view('general/abre_bodypagina');
-    $_SESSION['usuarioProfesor']="8.727.547-7";//BOORRAR DESPUES*******************
+    $_SESSION['usuarioProfesor']="8.727.547-7";//BORRAR DESPUES************************************************
     $docente=$this->Docente_model->getDocenteRut($_SESSION['usuarioProfesor']); 
     $asignaturas=$this->Docente_model->getAsignaturaDoc($docente->pk);
 foreach ($asignaturas as $key) {

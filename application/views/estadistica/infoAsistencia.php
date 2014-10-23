@@ -61,116 +61,13 @@ maxDate: "0D"
         $(document).ready(function() {
               	document.getElementById('mes').style.display='none'
                 document.getElementById('subDiv').style.display='none'
-                                    document.getElementById('mesNameCampus').style.display='none'
-
+                document.getElementById('mesNameCampus').style.display='none'
+                document.getElementById('mesNameFacultad').style.display='none'
               	document.getElementById('year').style.display='none'
 	             document.getElementById('noResult').style.display='none'
                document.getElementById('divResultNivelUtem').style.display='none'
   	           document.getElementById('calendar').style.display='none'//ocultar=none
         });
-</script>
-    <script type="text/javascript">/*
-        $(document).ready(function() {
-        	document.getElementById('divResultNivelUtem').style.display='none'
-        	document.getElementById('divResultNivelCampus').style.display='none'
-
-            $("#query").change(function() {
-                $("#query option:selected").each(function() { 
-                   query=$('#query').val();
-                   switch(query) {
-						    case "1":
-		    					$.post("<?= base_url('/index.php/estadistica/nivelUtem')?>", {
-				                        query : query
-				                    }, function(data) {
-				                     	  //$("#divResult").html(data);
-				                     	  data=data.split("/");
-				                     	  objeto1=eval('('+data[0]+')');
-				                     	  objeto2=eval('('+data[1]+')');
-													var pieData = [
-																	{
-																		value: objeto1,
-																		color:"#0b82e7",
-																		highlight: "#0c62ab",
-																		label: "Asistieron"},
-																	{
-																		value: objeto2,
-																		color: "#e3e860",
-																		highlight: "#a9ad47",
-																		label: "Ausencia"
-																	}
-																];
-													var ctx = document.getElementById("chart-area").getContext("2d");
-													window.myPie = new Chart(ctx).Pie(pieData);
-
-				                    });  
-								        document.getElementById('divResultNivelUtem').style.display='block'
-        								document.getElementById('divResultNivelCampus').style.display='none'
-
-
-						        break;
-						    case "2":
-		    						$.post("<?= base_url('/index.php/estadistica/nivelCampus')?>", {
-				                        query : query
-				                    }, function(data) {
-				                     	 // $("#divResultNivelCampus").html(data);
-				                  var asisten=new Array();
-				                  var ausente=new Array();
-				                  var etiquetas=new Array();
-				                     	 objeto=eval('('+data+')');
-							                var tot=0;
-							                for (i in objeto) {
-							                     tot++;
-							                 };
-							                 var partes=tot/3;//dividido 3 xq son nombres,asistieron,no asistieron
-
-							                 for (var i = 0; i < tot; i++) {
-							                	if(i<partes)
-							                		etiquetas.push(objeto[i]);
-							                	else{
-							                		if(i<(partes*2) && i>=partes)
-							                			asisten.push(objeto[i]);
-							                		else
-							                			ausente.push(objeto[i]);
-							                	}
-
-							                 };
-				                     	  	var barChartData = {
-												labels : etiquetas,
-												datasets : [
-													{
-														fillColor : "#6b9dfa",
-														strokeColor : "#000000",
-														highlightFill: "#1864f2",
-														highlightStroke: "#000000",
-														data : asisten
-													},
-													{
-														fillColor : "#e9e225",
-														strokeColor : "#000000",
-														highlightFill : "#ee7f49",
-														highlightStroke : "#000000",
-														data : ausente
-													}
-												]
-
-											}
-													var ctx2 = document.getElementById("chart-area2").getContext("2d");
-													window.myPie = new Chart(ctx2).Bar(barChartData, {responsive:true});
-				                    }); 
-								        document.getElementById('divResultNivelCampus').style.display='block'
-        								document.getElementById('divResultNivelUtem').style.display='none'
-
-						        break;
-						    case "3":
-						    		break;
-						    case "4":
-
-						    		break;		    
-						}
-                });
-            });
-        });
-*/
 </script>
 <script type="text/javascript">
         $(document).ready(function() {
@@ -189,12 +86,16 @@ maxDate: "0D"
                                     document.getElementById('divResultNivelUtem').style.display='none'//ocultar=none
                                     document.getElementById('noResult').style.display='none'//ocultar=none
                                     document.getElementById('mesNameCampus').style.display='none'//ocultar=none
+                                    document.getElementById('mesNameFacultad').style.display='none'//ocultar=none
+
 
                                    
                 document.getElementById("datepicker").value= "";
               $('#selectAnio option[selected]').prop('selected', true);
               $('#selectYear option[selected]').prop('selected', true);
               $('#selectCampus option[selected]').prop('selected', true);
+              $('#selectFacultad option[selected]').prop('selected', true);
+
 
 
                           
@@ -202,6 +103,9 @@ maxDate: "0D"
             });
             $("#query1").change(function() {//*********UTEM**********
                 $("#query1 option:selected").each(function() {
+              $('#selectCampus option[selected]').prop('selected', true);
+              $('#selectFacultad option[selected]').prop('selected', true);
+                document.getElementById("datepicker").value= "";
                   window.query1=$('#query1').val();
                    switch(query1){
                       case "1"://*****DIA******
@@ -211,6 +115,8 @@ maxDate: "0D"
                                     document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
                                     document.getElementById('mesNameCampus').style.display='none'
+                                    document.getElementById('mesNameFacultad').style.display='none'//ocultar=none
+
 
 
 
@@ -227,8 +133,12 @@ maxDate: "0D"
 
                                   }else{
                                     document.getElementById('mesNameCampus').style.display='none'
+                                  }
+                                  if(query==3){//del campus se despliega el select del mes
+                                    document.getElementById('mesNameFacultad').style.display='block'
 
-
+                                  }else{
+                                    document.getElementById('mesNameFacultad').style.display='none'
                                   }
 
 
@@ -240,8 +150,21 @@ maxDate: "0D"
                                     document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
                                     document.getElementById('mesNameCampus').style.display='none'
+                                    document.getElementById('mesNameFacultad').style.display='none'
 
 
+                                  if(query==2){//del campus se despliega el select del mes
+                                    document.getElementById('mesNameCampus').style.display='block'
+
+                                  }else{
+                                    document.getElementById('mesNameCampus').style.display='none'
+                                  }
+                                  if(query==3){//del campus se despliega el select del mes
+                                    document.getElementById('mesNameFacultad').style.display='block'
+
+                                  }else{
+                                    document.getElementById('mesNameFacultad').style.display='none'
+                                  }
 
                         break;
                       case "":
@@ -251,6 +174,8 @@ maxDate: "0D"
                                     document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
                                     document.getElementById('mesNameCampus').style.display='none'
+                                    document.getElementById('mesNameFacultad').style.display='none'//ocultar=none
+
 
 
 
@@ -294,6 +219,8 @@ maxDate: "0D"
 				                     	  	piechart(objeto1,objeto2);
                                   var titulo="<h3>Asistencia Por Día UTEM</h3>";
                                   dataTrue(titulo);
+                                  window.test="nivelUtemDia";
+                                  document.getElementById("test").innerHTML=test;
 										            }
 				                    });
                 }
@@ -328,6 +255,8 @@ maxDate: "0D"
                                         barrachart(asisten,ausente,etiquetas);
                                         var titulo="<h3>Asistencia Por Campus</h3>";
                                         dataTrue(titulo);
+                                  window.test="nivelCampusDia";
+                                  document.getElementById("test").innerHTML=test;
                                      }
                       }); 
                 }
@@ -379,18 +308,22 @@ maxDate: "0D"
                                            barrachart(asisten,ausente,etiquetas);
                                           var titulo="<h3>Asistencia Por Facultad</h3>";
                                           dataTrue(titulo);
+                                        window.test="nivelFacultadDia";
+                                        document.getElementById("test").innerHTML=test;
                                      }
                       }); 
                 }               
 			     	window.myPieGlobal.destroy();
            });//******FIN $("#datepicker").change(function() **********
-			     $("#selectAnio").change(function() {
+			     $("#selectAnio").change(function() {//este es del mes****************+
             $("#selectAnio option:selected").each(function() { 
                    window.selectAnio=$('#selectAnio').val();
                    selectCampus=$('#selectCampus').val();
+                   selectFacultad=$('#selectFacultad').val();
+
               if(query==1)utemMes(selectAnio);
               if(query==2)campusMes(selectAnio,selectCampus);
-              if(query==3)facultadMes(selectAnio);
+              if(query==3)facultadMes(selectAnio,selectFacultad);
               if(query==4)que4(datepi);
               if(query==5)que5(datepi);
                 function utemMes(selectAnio){
@@ -417,6 +350,8 @@ maxDate: "0D"
                                           linechart(asiste,ausente);
                                   var titulo="<h3>Asistencia Por Meses UTEM</h3>";
                                   dataTrue(titulo); 
+                                  window.test="nivelUtemMes";
+                                  document.getElementById("test").innerHTML=test;
                           }
 
             					});
@@ -445,36 +380,51 @@ maxDate: "0D"
                                           linechart(asiste,ausente);
                                   var titulo="<h3>Asistencia Por Meses Campus </h3>";
                                   dataTrue(titulo); 
+                                        window.test="nivelCampusMes";
+                                  document.getElementById("test").innerHTML=test;
                           }
 
                       });
                 }
-                function facultadMes(selectAnio){
-                      $.post("<?= base_url('/index.php/estadistica/nivelUtemMes')?>", {
-                        selectAnio : selectAnio
+                function facultadMes(selectAnio,selectFacultad){
+                      $.post("<?= base_url('/index.php/estadistica/nivelFacultadMes')?>", {
+                        selectAnio : selectAnio , selectFacultad : selectFacultad
                          },function(data) {
-                          if(data==false || futuro==true){//quiere decir que no hay registros
+                          if(data==false){//quiere decir que no hay registros
                           document.getElementById('noResult').style.display='block'
                           document.getElementById("noResult").innerHTML = "Lo lamentamos No hay registros en nuestro sistema para esta fecha"; 
                           document.getElementById('divResultNivelUtem').style.display='none'
                           }else{
-                              data=data.split("/");
-                                          objeto1=eval('('+data[0]+')');
-                                          objeto2=eval('('+data[1]+')');
-                            piechart(objeto1,objeto2);                       
+                                       var asiste=new Array();
+                                          var ausente=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/2;
+                                             for (var i = 0; i < tot; i++) {
+                                               if(i<partes)asiste.push(objeto[i]);
+                                               else ausente.push(objeto[i]);
+
+                                             };
+                                          linechart(asiste,ausente); 
+                                           window.test="nivelFacultadMes";
+                                  document.getElementById("test").innerHTML=test;
+
                                 document.getElementById('divResultNivelUtem').style.display='block'
                               document.getElementById('noResult').style.display='none'
-                              document.getElementById('total').style.display='block'
-                              document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
+                              //document.getElementById('total').style.display='block'
+                             // document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
                               document.getElementById('titulo').style.display='block'
-                              document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Mes UTEM</h3>";     
+                              document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Mes Facultades UTEM</h3>";     
                           }
                       });
                 }    
             window.myPieGlobal.destroy();
                 });
             });
-    $('#selectMes').change(function(){
+   /* $('#selectMes').change(function(){
       $('#selectMes option:selected').each(function(){
           selectMes=$('#selectMes').val();
           selectCampus=$('#selectCampus').val();
@@ -482,36 +432,100 @@ maxDate: "0D"
 
 
       });
-    });
+    });*/
 		$("#selectYear").change(function() {
-                $("#selectYear option:selected").each(function() { 
+        $("#selectYear option:selected").each(function() { 
+                   selectFacultad=$('#selectFacultad').val();
+                   selectCampus=$('#selectCampus').val();
+                   
                    selectYear=$('#selectYear').val();
-  					$.post("<?= base_url('/index.php/estadistica/nivelUtemYear')?>", {
-  						selectYear : selectYear
-  						 },function(data) {
-  						 	if(data==false){//quiere decir que no hay registros
-  							document.getElementById('noResult').style.display='block'
-  							document.getElementById('divResultNivelUtem').style.display='none'
+              if(query==1)utemYear(selectYear);
+              if(query==2)campusYear(selectYear,selectCampus);
+              if(query==3)facultadYear1(selectYear,selectFacultad);
+             /* if(query==4)que4(datepi);
+              if(query==5)que5(datepi);*/
+              function utemYear(selectYear){ 
+        					$.post("<?= base_url('/index.php/estadistica/nivelUtemYear')?>", {
+        						selectYear : selectYear
+        						 },function(data) {
+        						 	if(data==false){//quiere decir que no hay registros
+        							document.getElementById('noResult').style.display='block'
+        							document.getElementById('divResultNivelUtem').style.display='none'
 
-				                $("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para este Año");
+      				                $("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para este Año");
 
-  						 	}else{
-  									data=data.split("/");
-				                     	  objeto1=eval('('+data[0]+')');
-				                     	  objeto2=eval('('+data[1]+')');
-												piechart(objeto1,objeto2);
-					  							document.getElementById('divResultNivelUtem').style.display='block'
-					  							document.getElementById('noResult').style.display='none'
-					  							document.getElementById('total').style.display='block'
-					  							document.getElementById('titulo').style.display='block'
-					  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Año UTEM</h3>";
-					  							document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
-  							}
-  					});
+        						 	}else{
+        									data=data.split("/");
+      				                     	  objeto1=eval('('+data[0]+')');
+      				                     	  objeto2=eval('('+data[1]+')');
+      												piechart(objeto1,objeto2);
+                              window.test="nivelUtemYear";
+                                  document.getElementById("test").innerHTML=test;
+      					  							document.getElementById('divResultNivelUtem').style.display='block'
+      					  							document.getElementById('noResult').style.display='none'
+      					  							//document.getElementById('total').style.display='block'
+      					  							document.getElementById('titulo').style.display='block'
+      					  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Año UTEM</h3>";
+      					  							//document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
+        							}
+        					});
+              }
+              function campusYear(selectYear,selectCampus){ 
+                  $.post("<?= base_url('/index.php/estadistica/nivelCampusYear')?>", {
+                    selectYear : selectYear , selectCampus : selectCampus
+                     },function(data) {
+                      if(data==false){//quiere decir que no hay registros
+                      document.getElementById('noResult').style.display='block'
+                      document.getElementById('divResultNivelUtem').style.display='none'
+
+                              $("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para este Año");
+
+                      }else{
+                          data=data.split("/");
+                                      objeto1=eval('('+data[0]+')');
+                                      objeto2=eval('('+data[1]+')');
+                              piechart(objeto1,objeto2);
+                              window.test="nivelCampusYear";
+                                  document.getElementById("test").innerHTML=test;
+                                document.getElementById('divResultNivelUtem').style.display='block'
+                                document.getElementById('noResult').style.display='none'
+                                //document.getElementById('total').style.display='block'
+                                document.getElementById('titulo').style.display='block'
+                                document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Año UTEM</h3>";
+                               // document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
+                      }
+                  });
+              }
+              function facultadYear1(selectYear,selectFacultad){ 
+                  $.post("<?= base_url('/index.php/estadistica/nivelFacultadYear')?>", {
+                    selectYear : selectYear , selectFacultad : selectFacultad
+                     },function(data) {
+                      if(data==false){//quiere decir que no hay registros
+                      document.getElementById('noResult').style.display='block'
+                      document.getElementById('divResultNivelUtem').style.display='none'
+
+                              $("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para este Año");
+
+                      }else{
+                          data=data.split("/");
+                                      objeto1=eval('('+data[0]+')');
+                                      objeto2=eval('('+data[1]+')');
+                              piechart(objeto1,objeto2);
+                              window.test="nivelFacultadYear";
+                                  document.getElementById("test").innerHTML=test;
+                                document.getElementById('divResultNivelUtem').style.display='block'
+                                document.getElementById('noResult').style.display='none'
+                                //document.getElementById('total').style.display='block'
+                                document.getElementById('titulo').style.display='block'
+                                document.getElementById("titulo").innerHTML = "<h3>Asistencia Por año Facultad</h3>";
+                               // document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
+                      }
+                  });
+              }
                    	
-                });
-  window.myPieGlobal.destroy();
-            });
+        });
+       window.myPieGlobal.destroy();
+      });
     });
 </script>
 
@@ -521,7 +535,8 @@ maxDate: "0D"
 				<div class="span12">
 					<p>Este tipo de consulta solo contempla la asistencia de los docentes</p>
 					<p>Seleccione un tipo de consulta para desplegar la información</p>
-					<form class='form-horizontal' role='form'>
+					<?php $attributes = array('class' => 'form-horizontal', 'role' => 'form'); 
+          echo form_open('estadistica/descargar',$attributes); ?>
 							<div class="form-group">
 						    	<label  class="col-sm-3 control-label" id="c">Nivel: </label>
 						    	<div class="col-sm-8">
@@ -563,7 +578,21 @@ maxDate: "0D"
                     </div>
                 </div>
               </div>
-
+              <div id="mesNameFacultad">
+                <div class="form-group">
+                  <label  class="col-sm-3 control-label" id="c">Elegir Facultad: </label>
+                    <div class="col-sm-8">
+                      <select name="selectFacultad" class="form-control" id="selectFacultad">
+                        <option selected="selected" value="">Selecione un facultad</option>
+                        <?php     
+                          foreach ($facultades as $key) {
+                            echo'<option value="'.$key->pk.'">'.$key->facultad.'</option>';
+                          }
+                         ?>
+                      </select>
+                    </div>
+                </div>
+              </div>
 							
 							<div id="calendar">
 								<div class="form-group">
@@ -576,7 +605,7 @@ maxDate: "0D"
 							<div id="mes">
 								<div class="form-group">
 									<label  class="col-sm-3 control-label" id="c">Año: </label>
-									<div class="col-sm-3">
+									<div class="col-sm-4">
 
 										<select name="selectAnio" class="form-control" id="selectAnio">
 											<option selected="selected" value="">Selecione un Año</option>
@@ -613,25 +642,37 @@ maxDate: "0D"
 							<div id="divResultNivelUtem">
 								<div id="titulo"></div>
 								<canvas id="chart-areaGlobal" width="300" height="300"></canvas>
-								<div id="total"></div>	
-                <div id="chartt"></div>
+                <div id="pieLegend"></div>
+                <div id="descargar"><br> <?php 
+                  
+                  echo '<input type="submit" class="btn btn-success center" onclick="extraer();" name="Descargar" value="Descargar">';
+                  echo '<input type="hidden" id="hidden" name="descargaHidden">';
+                  
+                 ?></div>
 							</div>
-					</form>		
+					<?php echo form_close();?>
 				</div>
 			</div><br>
 		</div>
 	</div>
 </div></div>
+<div id="test"></div>
+<script>
+  function extraer(){
+    document.getElementById("hidden").value=test;
+  }
+</script>
 <script>
 $(document).ready(function() {
     $("#selectCampus").change(function() {$.reset();});
+    $("#selectFacultad").change(function() {$.reset();});
+
 
 
 });
 $.reset=function(){
 	    $('#selectAnio option[selected]').prop('selected', true);
-
-
+      $('#selectYear option[selected]').prop('selected', true);
 }    
  </script>
  <script>
@@ -644,21 +685,33 @@ $.reset=function(){
     return color;
 }
 function piechart(var1,var2){
-						var pieData2 = [
+					window.datasets = [
 						{
 							value: var1,
 							color:"#0b82e7",
+              lineColor: "#0b82e7", 
 							highlight: "#0c62ab",
-							label: "Asistieron"},
+							label: "Asistieron",
+              title:'Asistieron'},
 						{
 							value: var2,
 							color: "#e3e860",
+              lineColor: "#e3e860",
 							highlight: "#a9ad47",
-							label: "Ausencia"
-						}
-					];
-						var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
-						window.myPieGlobal=new Chart(ctx2).Pie(pieData2);
+							label: "Ausencia",
+              title:'Ausencia'
+						},
+            ];
+
+    
+              var options = {
+        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\">&nbsp;&nbsp;&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+              };
+					//	var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+					 window.myPieGlobal=new Chart(document.getElementById("chart-areaGlobal").getContext("2d")).Pie(datasets,options);
+                      document.getElementById("pieLegend").innerHTML = myPieGlobal.generateLegend();
+                      //document.getElementById("descargar").innerHTML = myPieGlobal.toBase64Image();
+
 	}
   function barrachart(asisten,ausente,etiquetas){
                   var barChartData = {
@@ -669,24 +722,30 @@ function piechart(var1,var2){
                             strokeColor : "#000000",
                             highlightFill: "#1864f2",
                             highlightStroke: "#000000",
-                            data : asisten
+                            data : asisten,
+                            label:"Asistieron"
                           },
                           {
                             fillColor : "#e9e225",
                             strokeColor : "#000000",
                             highlightFill : "#ee7f49",
                             highlightStroke : "#000000",
-                            data : ausente
+                            data : ausente,
+                            label:"Ausencia"
+
                           }
                         ]
 
                       }   
-                          var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+  /*                        var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
                           window.myPieGlobal = new Chart(ctx2).Bar(barChartData,{responsive:false});
-                            /*var legend = myPieGlobal.generateLegend();
-
-                          //and append it to your page somewhere
-                          $('#chartt').append(legend);*/
+*/
+              var options = {
+        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\">&nbsp;&nbsp;&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+              };
+          //  var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+           window.myPieGlobal=new Chart(document.getElementById("chart-areaGlobal").getContext("2d")).Bar(barChartData,options);
+                      document.getElementById("pieLegend").innerHTML = myPieGlobal.generateLegend();
   }
     function linechart(asisten,ausente){
                   var barChartData = {
@@ -699,7 +758,9 @@ function piechart(var1,var2){
                             pointStrokeColor : "#fff",
                             pointHighlightFill : "#fff",
                             pointHighlightStroke : "rgba(220,220,220,1)",
-                            data : asisten
+                            data : asisten,
+                            label:"Asistieron"
+
                           },
                           {
                             fillColor : "rgba(151,187,205,0.2)",
@@ -708,16 +769,72 @@ function piechart(var1,var2){
                             pointStrokeColor : "#fff",
                             pointHighlightFill : "#fff",
                             pointHighlightStroke : "rgba(151,187,205,1)",
-                            data : ausente
+                            data : ausente,
+                            label:"Ausencia"
+
                           }
                         ]
 
                       }   
-                          var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
-                          window.myPieGlobal = new Chart(ctx2).Line(barChartData);
-                            /*var legend = myPieGlobal.generateLegend();
-
-                          //and append it to your page somewhere
-                          $('#chartt').append(legend);*/
+                          /*var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+                          window.myPieGlobal = new Chart(ctx2).Line(barChartData);*/
+              var options = {
+        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\">&nbsp;&nbsp;&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+              };
+          //  var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+           window.myPieGlobal=new Chart(document.getElementById("chart-areaGlobal").getContext("2d")).Line(barChartData,options);
+                      document.getElementById("pieLegend").innerHTML = myPieGlobal.generateLegend();
   }
  </script>
+    <style>
+      .center {
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+      }
+      ul.pie-legend {
+          list-style: none outside none;
+          float: left;
+          margin: 0 0 0 0;
+          padding: 0;
+          position: relative;
+          left: 50%;
+      }
+      ul.pie-legend > li {
+          float: left;
+          margin-right: 5px;
+          padding: 5px;
+          position: relative;
+          left: -50%;
+      }
+      ul.bar-legend {
+          list-style: none outside none;
+          float: left;
+          margin: 0 0 0 0;
+          padding: 0;
+          position: relative;
+          left: 50%;
+      }
+      ul.bar-legend > li {
+          float: left;
+          margin-right: 5px;
+          padding: 5px;
+          position: relative;
+          left: -50%;
+      }
+      ul.line-legend {
+          list-style: none outside none;
+          float: left;
+          margin: 0 0 0 0;
+          padding: 0;
+          position: relative;
+          left: 50%;
+      }
+      ul.line-legend > li {
+          float: left;
+          margin-right: 5px;
+          padding: 5px;
+          position: relative;
+          left: -50%;
+      }
+    </style>

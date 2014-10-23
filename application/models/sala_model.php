@@ -17,6 +17,7 @@
            ->query($consul);
            return $query->result();
         }
+        //***************AFECTA***************
         public function getSalasDisponibles2($pkPeriodo,$fecha,$salaFk) {//$semestre,$ano,$facultadPk,$periodo,$diaIni,$diaFin,$diaElegido
             date_default_timezone_set("America/Santiago");
             $fechaIni=strtotime($diaIni);

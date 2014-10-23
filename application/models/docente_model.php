@@ -5,7 +5,28 @@
        function __construct() {
            parent::__construct();
        }
-    
+       public function estaDoc($rut){
+                $where=array("rut"=>$rut);
+        
+            $query=$this->db
+                    ->select('pk')
+                    ->from('docentes')
+                    ->where($where)
+                    ->count_all_results();
+            return $query;
+       }
+    public function alamcenarDocNew($rut,$nombres,$apellidos){
+          $query=$this->db ->query("INSERT INTO docentes (rut,nombres,apellidos) values('$rut','$nombres','$apellidos');");
+     return $query; 
+    }
+    public function tieneDpto($rut){
+        $query=$this->db->query("SELECT departamento_fk FROM docentes WHERE rut='".$rut."'");
+            return $query->row();
+    }
+    public function guardarDptoDoc($dpto,$rut){
+      $query=$this->db ->query("UPDATE docentes SET departamento_fk='".$dpto."' WHERE rut='".$rut."'");
+     return $query; 
+    }
     public function loguearDocente($rut,$clave) {
         
         $where=array("rut"=>$rut,'clave'=>$clave);

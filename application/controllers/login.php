@@ -9,6 +9,8 @@ class Login extends CI_Controller {
         $this->load->helper("ws_helper");
         $this->load->library('form_validation');
         $this->load->library('ws_dirdoc');
+      $this->load->model('docente_model');
+        
        session_start();
        //session_unset();
     }
@@ -27,10 +29,23 @@ class Login extends CI_Controller {
           $docente = $this->ws_dirdoc->consultarDocente($rut);
           $tipo= $docente->tipo;
           $docenteName = $docente->alias;
-            if($resultado==true && $tipo=="PROF"){
+          $docenteNombres=$docente->nombres;
+          $docenteApellidos=$docente->apellidoPaterno." ".$docente->apellidoMaterno;
+            if($resultado==true && $tipo=="PROF"){//pasa cuando evalua todas las posibilidaddes
                   $_SESSION['usuarioProfesor']=  $this->input->post('rut',true);
                     $_SESSION['bnv'] = $docenteName;
-                   redirect('pedidos',301);
+                    //si es un profesor que por primera ves entra al sistema se debe almacenar su rut y datos
+                    //pregunto si el profesor que se logeo existe en nuestra BD
+                      $queryDoc=$this->docente_model->estaDoc($_SESSION['usuarioProfesor']);
+                        if($queryDoc==0){//si es !=0 quiere decir que esta logeado y no crea nada
+                           $newDoc=$this->docente_model->alamcenarDocNew($_SESSION['usuarioProfesor'],$docenteNombres,$docenteApellidos);
+                          if($newDoc==true){//quiere decir que se guardo
+                            redirect('pedidos',301);
+                          }else{}//si entra al else hay problemas al crearlo 
+                        }else{//si entra aqui es xq esta en la BD antes
+                          redirect('pedidos',301);
+                        }
+                       
                   }
                 else{
                    redirect('pedidos/logueoError',301);

@@ -21,7 +21,7 @@
         <li><a class="btn btn-primary" href="<?= site_url('consulta');?>">Consulta</a></li>
         <li><a class="btn btn-primary" href="<?= site_url('pedidos');?>">Pedidos</a></li>
         <li><a class="btn btn-primary" href="<?= site_url('intranet');?>">Intranet</a></li>
-        <li><a class="btn btn-primary" href="<?= site_url('contacto');?>">Contacto</a></li>
+        <!--<li><a class="btn btn-primary" href="<?= site_url('contacto');?>">Contacto</a></li>-->
         <li><a class="btn btn-primary" href="<?= site_url('estadistica');?>">Estadistica</a></li>
       </ul>
               <?php

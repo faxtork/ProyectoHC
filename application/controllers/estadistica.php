@@ -10,8 +10,7 @@
             $this->load->model('clases_model');
             $this->load->model('admin_model');
             $this->load->model('asistencia_model');
-
-
+            $this->load->library("excel");
         }
         function index(){
         	/*$this->load->view('general/headers');
@@ -49,12 +48,15 @@
                 $this->load->view('estadistica/est_bienvenido');
                      $this->load->view('estadistica/data');
             $campus=$this->asistencia_model->getCampusName();
+            $facultades=$this->asistencia_model->getFacultadName();
 
-                            $this->load->view('estadistica/infoAsistencia',compact('campus'));
+
+                            $this->load->view('estadistica/infoAsistencia',compact('campus','facultades'));
                      $this->load->view('adminGeneral/cierreData');
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
        }
+        //***********************UTEM******************
        public function nivelUtemDia(){
             $fecha=$this->input->post('datepi');
              $total=$this->asistencia_model->totalAsistencia($fecha);
@@ -100,11 +102,23 @@
 
             }
        }
-       /**************/
+
         public function nivelUtemYear(){
+                         date_default_timezone_set("America/Santiago");
+
             $selectAnio=$this->input->post('selectYear');
-            $yearIni=$selectAnio."-01-01";
-            $yearFin=($selectAnio+1)."-01-01";
+            $añoHoy=date('Y');
+            if($selectAnio==$añoHoy){//si el que elije son iguales se toma la fecha final hoy menos un dia
+                    $fechaHoy=date('Y-m-j');//fecha de hoy
+                    $yearIni=$selectAnio."-01-01";  
+                        $nuevafecha = strtotime ( '-1 day' , strtotime ( $fechaHoy ) ) ;
+                        $fechaMenos = date ( 'm-j' , $nuevafecha );//hoy menos un dia
+                    $yearFin=$selectAnio."-".$fechaMenos;
+            }else{
+                $yearIni=$selectAnio."-01-01";  
+                $yearFin=($selectAnio+1)."-01-01";  
+
+            }
              $totalYearSi=$this->asistencia_model->totalAsistenciaMes($yearIni,$yearFin);
              $totalYearNo=$this->asistencia_model->totalAusenciaMes($yearIni,$yearFin);
              if($totalYearSi->asistieron==0 && $totalYearNo->noasistieron==0)
@@ -115,6 +129,8 @@
                     echo $totalYearNo->noasistieron;
             }
        }
+        //***********************FIN UTEM******************
+        //***********************CAMPUS******************
         public function nivelCampusDia(){
             $fecha=$this->input->post('datepi');
             $campus=$this->asistencia_model->getCampusName();
@@ -154,6 +170,7 @@
     public function nivelCampusMes(){
             $selectAnio=$this->input->post('selectAnio');
             $selectCampusPk=$this->input->post('selectCampus');
+            
             $sumSi=0;
             $sumNo=0;
 
@@ -166,7 +183,7 @@
                     }
             }
             $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorCampusMes($selectAnio,$selectCampusPk);
-            for ($i=0; $i <count($asistenciaCampus) ; $i++) {         
+            for ($i=0; $i <count($NoasistenciaCampus) ; $i++) {         
                     foreach ($NoasistenciaCampus[$i] as $fila) {
                        $totalAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
@@ -182,6 +199,42 @@
             //echo $totalAsist;
 
        }
+        public function nivelCampusYear(){
+             date_default_timezone_set("America/Santiago");
+
+            $selectAnio=$this->input->post('selectYear');
+            $selectCampusPk=$this->input->post('selectCampus');
+
+            $añoHoy=date('Y');
+            if($selectAnio==$añoHoy){//si el que elije son iguales se toma la fecha final hoy menos un dia
+                    $fechaHoy=date('Y-m-j');//fecha de hoy
+                    $yearIni=$selectAnio."-01-01";  
+                        $nuevafecha = strtotime ( '-1 day' , strtotime ( $fechaHoy ) ) ;
+                        $fechaMenos = date ( 'm-j' , $nuevafecha );//hoy menos un dia
+                    $yearFin=$selectAnio."-".$fechaMenos;
+            }else{
+                $yearIni=$selectAnio."-01-01";  
+                $yearFin=($selectAnio+1)."-01-01";  
+
+            }
+
+            $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorCampusAnio($yearIni,$yearFin,$selectCampusPk);
+
+            $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorCampusAnio($yearIni,$yearFin,$selectCampusPk);
+
+        if($asistenciaCampus->cantidad==0 && $NoasistenciaCampus->cantidad==0)//si es asi es xq no hay nada
+            echo false;
+        else  {
+                    echo  $asistenciaCampus->cantidad;
+                    echo "/";
+                    echo $NoasistenciaCampus->cantidad;
+        }  
+
+            //echo $totalAsist;
+
+       }
+       //***********************FIN CAMPUS******************
+        //***********************FACULTAD******************
        public function nivelFacultadDia(){
                     $fecha=$this->input->post('datepi');
             $facultad=$this->asistencia_model->getFacultadName();
@@ -216,6 +269,87 @@
             else    
          echo json_encode($totalAsist);
             //echo $totalAsist;
+       }
+       public function nivelFacultadMes(){
+            $selectAnio=$this->input->post('selectAnio');
+            $selectFacultad=$this->input->post('selectFacultad');
+            
+            $sumSi=0;
+            $sumNo=0;
+
+            $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorFacultadMes($selectAnio,$selectFacultad);
+            for ($i=0; $i <count($asistenciaCampus) ; $i++) { 
+                    foreach ($asistenciaCampus[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
+                    }
+            }
+            $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorFacultadMes($selectAnio,$selectFacultad);
+            for ($i=0; $i <count($NoasistenciaCampus) ; $i++) {         
+                    foreach ($NoasistenciaCampus[$i] as $fila) {
+                       $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
+
+
+                    }
+            }        
+    
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else    
+         echo json_encode($totalAsist);
+       }
+       public function nivelFacultadYear(){
+           date_default_timezone_set("America/Santiago");
+
+            $selectAnio=$this->input->post('selectYear');
+            $selectFacultad=$this->input->post('selectFacultad');
+
+            $añoHoy=date('Y');
+            if($selectAnio==$añoHoy){//si el que elije son iguales se toma la fecha final hoy menos un dia
+                    $fechaHoy=date('Y-m-j');//fecha de hoy
+                    $yearIni=$selectAnio."-01-01";  
+                        $nuevafecha = strtotime ( '-1 day' , strtotime ( $fechaHoy ) ) ;
+                        $fechaMenos = date ( 'm-j' , $nuevafecha );//hoy menos un dia
+                    $yearFin=$selectAnio."-".$fechaMenos;
+            }else{
+                $yearIni=$selectAnio."-01-01";  
+                $yearFin=($selectAnio+1)."-01-01";  
+
+            }
+            $sumSi=0;
+            $sumNo=0;
+
+            $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorFacultadAnio($yearIni,$yearFin,$selectFacultad);
+
+            $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorFacultadAnio($yearIni,$yearFin,$selectFacultad);
+
+        if($asistenciaCampus->cantidad==0 && $NoasistenciaCampus->cantidad==0)//si es asi es xq no hay nada
+            echo false;
+        else  {
+                    echo  $asistenciaCampus->cantidad;
+                    echo "/";
+                    echo $NoasistenciaCampus->cantidad;
+        }  
+       }
+        //***********************FIN FACULTAD******************
+       public function descargar(){
+        $tipo=$this->input->post("descargaHidden");
+       $fecha=$this->input->post('datepicker');
+       $fecha="2014-10-14";
+
+
+             $this->excel->setActiveSheetIndex(0);
+             $total=$this->asistencia_model->totalAsistencia($fecha);
+             $totalNo=$this->asistencia_model->totalNoAsistencia($fecha);
+                 $a1[0]=$total;
+                 $a1[1]=$totalNo;
+                // $total2=array_merge($a1,$a2);
+
+print_r($a1);
+         $this->excel->stream('prueba2.xls', $a1);
+
        }
 }
 ?>

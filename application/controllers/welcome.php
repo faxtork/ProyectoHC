@@ -11,13 +11,10 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		//redirect('consulta');
-		/*$rut="18.120.924-0";
-		$resultado = $this->ws_dirdoc->consultarUltimaFichaEstudiante($rut);
+	/*	$rut="15.997.886-9";
+		$resultado = $this->ws_dirdoc->consultarDocente($rut);
 		print_r($resultado);
-		echo $code=$resultado->nombreCarrera;echo "<br />";
-		$code=explode(" ",$code);
-		echo $code=$code[0];
-		echo $resultado->tipo;*/
+*/
 		$this->load->view('general/headers');
 	    $this->load->view('general/menu_principal');
 	    $this->load->view('general/abre_bodypagina');

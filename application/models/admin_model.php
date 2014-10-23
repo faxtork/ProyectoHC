@@ -237,11 +237,12 @@
         ->get();
     return $query->result();
      }     
-          public function salas($facultadPk){
+          public function salas($facultadPk){//***************AFECTA***************
             $query=$this->db
             ->query("SELECT pk,sala,estado,descripcion FROM salas WHERE facultad_fk=$facultadPk order by pk asc;");
             return $query->result();
             } 
+            //***************AFECTA***************
     public function salasAsignacion($semestre,$ano,$facultadPk,$periodo,$diaIni,$diaFin,$diaElegido){// muestra las bloqueadas y las que estan ocupadas
             date_default_timezone_set("America/Santiago");
             $fechaIni=strtotime($diaIni);
@@ -269,7 +270,7 @@
 
          return $query;
     } 
-    public function bloqueadaAula($facultadPk){
+    public function bloqueadaAula($facultadPk){//***************AFECTA***************
         $query=$this->db
         ->query("SELECT pk,sala FROM salas WHERE facultad_fk='".$facultadPk."' AND estado=false order by pk asc;");
          return $query->result();
@@ -280,7 +281,7 @@
             $query[$i]=$query[$i]->result();
         }
         return $query;
-    }
+    }//***************AFECTA***************
     public function getSalaFacu($facultadPk){//todas las salas menos las bloqueadas
         $query=$this->db
             ->query("SELECT pk,sala FROM salas WHERE facultad_fk='".$facultadPk."' AND estado=true order by pk asc;");
@@ -373,7 +374,7 @@
              $query=$this->db->query("SELECT count(pk) as cantFacu FROM  facultades");
               return $query->row();    
         }
-        public function getSalaPorFk(){ 
+        public function getSalaPorFk(){ //***************AFECTA***************
            for ($i=1; $i <=4 ; $i++) { 
                 $query[$i]=$this->db->query("SELECT sala FROM salas WHERE facultad_fk='".$i."'");
                 $query[$i]=$query[$i]->result();
@@ -402,7 +403,7 @@
                 for ($i=0; $i <count($accion) ; $i++) { 
                     $query[]=$this->db->query("DELETE FROM salas WHERE pk=".$accion[$i]."");
                 }
-                return $query;
+                return $query; 
          }
          public function save($periodo,$date){
         $query=$this->db->query("SELECT p.periodo,s.sala, d.nombres,d.apellidos, a.nombre as asignatura,c.seccion
