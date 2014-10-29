@@ -3,7 +3,7 @@
 		<div class="span12">
 			<h3>Bienvenido<?php 
 			if(isset($_SESSION['usuarioAdmin'])){
-				echo ": ".$_SESSION['usuarioAdmin'];
+				echo ": ".$_SESSION['usuarioAdmin'];echo "<br/>";echo "</h3><p>Administrador para el Campus: <b>".$_SESSION['nombreCampus']."</b></p><h3>";
 			}else{
 				echo " Administrador General: ".$_SESSION['adminGeneral'];
 			}

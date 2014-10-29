@@ -1,5 +1,5 @@
 		<div class="span9"><div class="well">
-			<div class="row-fluid"><div class="span12"><h3>Agregar Salas Para Facultad de: <?php echo $facultadOtorgada[0]->facultad;  ?></h3></div></div>
+			<div class="row-fluid"><div class="span12"><h3>Agregar Salas Para Campus de: <?php echo $campusOtrorgado->nombre;  ?></h3></div></div>
 						<?php 
 						$attributes = array('class' => 'form-horizontal', 'role' => 'form');
 						 ?> 					
@@ -10,7 +10,7 @@
 									    <div class="col-sm-4">
 											<input class="form-control"  name="addSala[]" id="addSala[]" type="text">
 										</div>	
-										<?php echo '<input type="hidden" name="pkFacultad" value="'.$facultadOtorgada[0]->pk.'">'; ?>
+										<?php echo '<input type="hidden" name="pkCampus" value="'.$campusOtrorgado->pk.'">'; ?>
 									</div>
 									<div  id="gr">							
 									</div>

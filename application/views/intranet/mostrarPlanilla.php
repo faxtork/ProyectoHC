@@ -31,6 +31,7 @@ else {
                             <th>Profesor</th>
                             <th>Asignatura</th>
                             <th>Seccion</th>
+                            <th>Dpto.</th>
                             <th>Estado</th>
                             <th colspan='2'>Asiste</th>
 
@@ -52,6 +53,8 @@ else {
                                                 <td><?= $nam=$aula->nombres." ".$aula->apellidos;?></td>
                                                 <td><?= $asig=$aula->nombre ;?></td>
                                                 <td><?= $sec=$aula->seccion ;?></td>
+                                                <td><?= $sec=$aula->departamento ;?></td>
+
 
                     <?php 
                       if($aula->estado=='t'){//t de true

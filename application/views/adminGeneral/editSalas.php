@@ -13,12 +13,12 @@ $( window ).resize(function() {
 </script>
 
     <script type="text/javascript">
-       /* $(document).ready(function() {
-            $("#facultad").change(function() {
-                $("#facultad option:selected").each(function() { 
-                   facultad=$('#facultad').val();
+        $(document).ready(function() {
+            $("#campus").change(function() {
+                $("#campus option:selected").each(function() { 
+                   campus=$('#campus').val();
                   $.post("<?= base_url('/index.php/intranet/llena_salas2')?>", {
-                        facultad : facultad
+                        campus : campus
                     }, function(data) {
                      	  $("#salas").html(data);
 
@@ -29,37 +29,37 @@ $( window ).resize(function() {
                     });
                 });
             });
-        });*/
+        });
 </script>
 		<div class="span9">	<div class="well">
 			<div class="row-fluid"><div class="span12"><h3>Lista de Salas Campus de la UTEM</h3></div></div>
 			<?php $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 				echo form_open('intranet/modificarSalas',$attributes);  ?>
 			<div class="row-fluid">
-				<div class="span12">
+				<div class="span4">
+						<?php
+									echo' <div class="form-group">
+									<label class="col-sm-3 control-label" id="c">Facultad</label>
+									<div class="col-sm-9">
+										<select name="campus" class="form-control" id="campus" >
+										<option value="">Selececione un Campus</option>
+										';
+										foreach ($campusName as $fila) {
+										
+										echo'<option value='.$fila->pk.'>'.$fila->nombre.'</option>';//permite a todos
+		
+										
+										}
+										echo'
+										</select>
+									</div>
+									</div>';
+									?>
+				</div>
+
+				<div class="span8">
 					
-					<div class="mygrid-wrapper-div"><div id="salas">
-						<?php 
-				            foreach($salaXCampus as $fila)
-  							  {
-        
-	                            echo'   <div class="form-group">
-	                                        <label  class="col-sm-1 control-label" id="c">Sala</label>
-	                                        <div class="col-sm-4">
-	                                            <div class="input-group">  
-	                                                <span class="input-group-addon"><input type="checkbox" name="accion[]" id="'.$fila->pk.'" value="'.$fila->pk.'"></span>
-	                                                    <input class="form-control" readonly="readonly" type="text" value="'.$fila->sala.'">
-	                                               
-	                                            </div>
-	                                        </div>  
-	                                        <label  class="col-sm-1 control-label" id="c">Desc.</label> 
-	                                        <div class="col-sm-4">
-	                                            <textarea style="resize:none;" readonly="readonly" class="form-control" name="addDesc[]" id="'.$fila->pk.'">'.$fila->descripcion.'</textarea>  <br />
-	                                        </div>
-	                                    </div>';
-	           						}
-						 ?>
-					</div></div>
+					<div class="mygrid-wrapper-div"><div id="salas"></div></div>
 								
 				</div>
 			</div><br>

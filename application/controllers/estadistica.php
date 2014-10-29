@@ -58,6 +58,8 @@
        }
         //***********************UTEM******************
        public function nivelUtemDia(){
+                               if($this->input->post('datepi'))
+        {
             $fecha=$this->input->post('datepi');
              $total=$this->asistencia_model->totalAsistencia($fecha);
              $totalNo=$this->asistencia_model->totalNoAsistencia($fecha);
@@ -71,7 +73,10 @@
             }
 
        }
+   }
         public function nivelUtemMes(){
+                                   if($this->input->post('selectAnio'))
+        {
             $selectAnio=$this->input->post('selectAnio');
             $sumSi=0;
             $sumNo=0;
@@ -102,10 +107,11 @@
 
             }
        }
-
+   }
         public function nivelUtemYear(){
                          date_default_timezone_set("America/Santiago");
-
+        if($this->input->post('selectYear'))
+        {              
             $selectAnio=$this->input->post('selectYear');
             $añoHoy=date('Y');
             if($selectAnio==$añoHoy){//si el que elije son iguales se toma la fecha final hoy menos un dia
@@ -128,10 +134,12 @@
                     echo "/";
                     echo $totalYearNo->noasistieron;
             }
-       }
+       }}
         //***********************FIN UTEM******************
         //***********************CAMPUS******************
         public function nivelCampusDia(){
+        if($this->input->post('datepi'))
+        {              
             $fecha=$this->input->post('datepi');
             $campus=$this->asistencia_model->getCampusName();
             $sumSi=0;
@@ -166,8 +174,10 @@
          echo json_encode($totalAsist);
             //echo $totalAsist;
 
-       }
+       }}
     public function nivelCampusMes(){
+                if($this->input->post('selectAnio'))
+        { 
             $selectAnio=$this->input->post('selectAnio');
             $selectCampusPk=$this->input->post('selectCampus');
             
@@ -198,10 +208,11 @@
          echo json_encode($totalAsist);
             //echo $totalAsist;
 
-       }
+       }}
         public function nivelCampusYear(){
              date_default_timezone_set("America/Santiago");
-
+                if($this->input->post('selectYear'))
+        { 
             $selectAnio=$this->input->post('selectYear');
             $selectCampusPk=$this->input->post('selectCampus');
 
@@ -232,10 +243,12 @@
 
             //echo $totalAsist;
 
-       }
+       }}
        //***********************FIN CAMPUS******************
         //***********************FACULTAD******************
        public function nivelFacultadDia(){
+                       if($this->input->post('datepi'))
+        {
                     $fecha=$this->input->post('datepi');
             $facultad=$this->asistencia_model->getFacultadName();
             $sumSi=0;
@@ -270,7 +283,10 @@
          echo json_encode($totalAsist);
             //echo $totalAsist;
        }
+   }
        public function nivelFacultadMes(){
+                if($this->input->post('selectAnio'))
+        {
             $selectAnio=$this->input->post('selectAnio');
             $selectFacultad=$this->input->post('selectFacultad');
             
@@ -300,9 +316,11 @@
         else    
          echo json_encode($totalAsist);
        }
+   }
        public function nivelFacultadYear(){
            date_default_timezone_set("America/Santiago");
-
+                if($this->input->post('selectYear'))
+        {
             $selectAnio=$this->input->post('selectYear');
             $selectFacultad=$this->input->post('selectFacultad');
 
@@ -332,8 +350,153 @@
                     echo "/";
                     echo $NoasistenciaCampus->cantidad;
         }  
-       }
+       }}
         //***********************FIN FACULTAD******************
+
+       public function llena_Dpto(){
+                 $options = "";
+        if($this->input->post('selectFacultad'))
+        {
+            $facultadPk = $this->input->post('selectFacultad');
+            $depa = $this->asistencia_model->getDptoPk($facultadPk);
+           $options='<div class="form-group">
+                        <label  class="col-sm-3 control-label" id="c">Elegir Dpto: </label>
+                         <div class="col-sm-8">
+                             <select name="selectDpto" class="form-control" id="selectDpto">
+                             <option selected="selected" value="">Selecione un departamento</option>';
+            foreach($depa as $fila)
+            {
+          
+                $options .='<option value='.$fila->pk.'>'.$fila->departamento.'</option>';
+           
+            }
+            $options.='</select></div></div>';
+            echo $options;
+        }
+       }
+       //***********************DPTO******************
+       public function nivelDepartamentoDia(){
+                if($this->input->post('datepi'))
+        {
+            $fecha=$this->input->post('datepi');
+            $facultad=$this->input->post('selectFacultad');
+            $dptoPkXFacul=$this->asistencia_model->getDptoPk($facultad);
+            $sumSi=0;
+            $sumNo=0;
+
+            foreach ($dptoPkXFacul as $key ) {
+                $dptoPk[]=$key->pk;
+                $totalAsist[]=$key->departamento;
+            }
+
+            $asistenciaDpto=$this->asistencia_model->totalAsistenciaPorDpto($dptoPk,$fecha);
+            for ($i=0; $i <count($asistenciaDpto) ; $i++) { 
+                    foreach ($asistenciaDpto[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
+                    }
+            }
+
+            $ausenciaDpto=$this->asistencia_model->totalNoAsistenciaPorDpto($dptoPk,$fecha);
+            for ($i=0; $i <count($ausenciaDpto) ; $i++) { 
+                    foreach ($ausenciaDpto[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
+
+
+                    }
+            }
+            if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+               echo false;
+        else    
+     echo json_encode($totalAsist);
+       }}
+       public function nivelDepartamentoMes(){
+                if($this->input->post('selectAnio'))
+        {        
+            $selectAnio=$this->input->post('selectAnio');
+            $selectDpto=$this->input->post('selectDpto');
+            $sumSi=0;
+            $sumNo=0;
+
+            $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorDptoMes($selectAnio,$selectDpto);
+            for ($i=0; $i <count($asistenciaCampus) ; $i++) { 
+                    foreach ($asistenciaCampus[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
+                    }
+            }
+            $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorDptoMes($selectAnio,$selectDpto);
+            for ($i=0; $i <count($NoasistenciaCampus) ; $i++) {         
+                    foreach ($NoasistenciaCampus[$i] as $fila) {
+                       $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
+
+
+                    }
+            }        
+    
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else    
+         echo json_encode($totalAsist);
+       }}
+       public function nivelDepartamentoYear(){
+           date_default_timezone_set("America/Santiago");
+        if($this->input->post('selectYear'))
+        {
+            $selectAnio=$this->input->post('selectYear');
+            $selectFacultad=$this->input->post('selectFacultad');
+            $dptoPkXFacul=$this->asistencia_model->getDptoPk($selectFacultad);
+            foreach ($dptoPkXFacul as $key ) {
+                $dptoPk[]=$key->pk;
+                $totalAsist[]=$key->departamento;
+            }
+             
+            $añoHoy=date('Y');
+            if($selectAnio==$añoHoy){//si el que elije son iguales se toma la fecha final hoy menos un dia
+                    $fechaHoy=date('Y-m-j');//fecha de hoy
+                    $yearIni=$selectAnio."-01-01";  
+                        $nuevafecha = strtotime ( '-1 day' , strtotime ( $fechaHoy ) ) ;
+                        $fechaMenos = date ( 'm-j' , $nuevafecha );//hoy menos un dia
+                    $yearFin=$selectAnio."-".$fechaMenos;
+            }else{
+                $yearIni=$selectAnio."-01-01";  
+                $yearFin=($selectAnio+1)."-01-01";  
+
+            }
+            $sumSi=0;
+            $sumNo=0;
+
+            $asistenciaDpto=$this->asistencia_model->totalAsistenciaPorDptoAnio($yearIni,$yearFin,$dptoPk);
+            for ($i=0; $i <count($asistenciaDpto) ; $i++) { 
+                    foreach ($asistenciaDpto[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
+                    }
+            }
+            $ausenciaDpto=$this->asistencia_model->totalNoAsistenciaPorDptoAnio($yearIni,$yearFin,$dptoPk);
+            for ($i=0; $i <count($ausenciaDpto) ; $i++) {         
+                    foreach ($ausenciaDpto[$i] as $fila) {
+                       $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
+
+
+                    }
+            } 
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else    
+         echo json_encode($totalAsist);
+       
+        } 
+       }
+       //***********************FIN DPTO******************
+
        public function descargar(){
         $tipo=$this->input->post("descargaHidden");
        $fecha=$this->input->post('datepicker');

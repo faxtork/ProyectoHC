@@ -222,11 +222,12 @@ class Clases_model extends CI_Model{
                 'r.fecha ='=>$date,
               );
         for ($i=1; $i <=$cantPer ; $i++) { 
-        $arrayPadre[($i-1)]=$this->db->query("SELECT r.estado,r.pk, p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion
-                FROM administrador as ad,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
+        $arrayPadre[($i-1)]=$this->db->query("SELECT  depa.departamento, r.estado,r.pk, p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion
+                FROM departamentos as depa, administrador as ad,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
                 WHERE r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk 
                 AND p.pk=r.periodo_fk AND                     
                     r.adm_fk=ad.pk and
+                    a.departamento_fk=depa.pk AND
                     ad.campus_fk='$campus' and
                     r.fecha='".$date."' AND p.periodo='".$i."' order by s.pk asc"); 
          $xx[]=$arrayPadre[($i-1)]->result();

@@ -1,7 +1,6 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-<script src="jquery.ui.datepicker-es.js"></script>
 <script>
 $(function () {
  $.datepicker.regional['es'] = {
@@ -37,26 +36,7 @@ maxDate: "0D"
 });
 </script>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#dpto").change(function() {
-                $("#dpto option:selected").each(function() { 
-                   dpto=$('#dpto').val();
-                  $.post("<?= base_url('/index.php/intranet/llena_docDpto')?>", {
-                        dpto : dpto
-                    }, function(data) {
-                     	  $("#doc").html(data);
 
-                     		if(data==false)
-                     		{ 
-                     			 $("#doc").html("Selecciona otra facultad o Agrega uno nuevo Seleccionando una facultad.");
-                     		}
-                    });
-                });
-            });
-        });
-</script>
-</script>
 <script type="text/javascript">
         $(document).ready(function() {
               	document.getElementById('mes').style.display='none'
@@ -87,9 +67,7 @@ maxDate: "0D"
                                     document.getElementById('noResult').style.display='none'//ocultar=none
                                     document.getElementById('mesNameCampus').style.display='none'//ocultar=none
                                     document.getElementById('mesNameFacultad').style.display='none'//ocultar=none
-
-
-                                   
+                                    document.getElementById('dpto').style.display='none'
                 document.getElementById("datepicker").value= "";
               $('#selectAnio option[selected]').prop('selected', true);
               $('#selectYear option[selected]').prop('selected', true);
@@ -104,6 +82,7 @@ maxDate: "0D"
             $("#query1").change(function() {//*********UTEM**********
                 $("#query1 option:selected").each(function() {
               $('#selectCampus option[selected]').prop('selected', true);
+              $('#selectDpto option[selected]').prop('selected', true);
               $('#selectFacultad option[selected]').prop('selected', true);
                 document.getElementById("datepicker").value= "";
                   window.query1=$('#query1').val();
@@ -116,11 +95,14 @@ maxDate: "0D"
                                     document.getElementById('noResult').style.display='none'
                                     document.getElementById('mesNameCampus').style.display='none'
                                     document.getElementById('mesNameFacultad').style.display='none'//ocultar=none
+                                    document.getElementById('dpto').style.display='none'
 
+                                  if(query==4){//del campus se despliega el select del mes
+                                    document.getElementById('mesNameFacultad').style.display='block'
 
-
-
-                                    
+                                  }else{
+                                    document.getElementById('mesNameFacultad').style.display='none'
+                                  } 
                         break;
                       case "2"://*****MES******
                                     document.getElementById('mes').style.display='block'
@@ -128,20 +110,19 @@ maxDate: "0D"
                                     document.getElementById('year').style.display='none'
                                     document.getElementById('divResultNivelUtem').style.display='none'
                                     document.getElementById('noResult').style.display='none'
+
                                   if(query==2){//del campus se despliega el select del mes
                                     document.getElementById('mesNameCampus').style.display='block'
 
                                   }else{
                                     document.getElementById('mesNameCampus').style.display='none'
                                   }
-                                  if(query==3){//del campus se despliega el select del mes
+                                  if(query==3 || query==4){//del campus se despliega el select del mes
                                     document.getElementById('mesNameFacultad').style.display='block'
 
                                   }else{
                                     document.getElementById('mesNameFacultad').style.display='none'
                                   }
-
-
                         break;
                       case "3"://*****AÑO******
                                     document.getElementById('year').style.display='block'
@@ -151,21 +132,18 @@ maxDate: "0D"
                                     document.getElementById('noResult').style.display='none'
                                     document.getElementById('mesNameCampus').style.display='none'
                                     document.getElementById('mesNameFacultad').style.display='none'
-
-
                                   if(query==2){//del campus se despliega el select del mes
                                     document.getElementById('mesNameCampus').style.display='block'
 
                                   }else{
                                     document.getElementById('mesNameCampus').style.display='none'
                                   }
-                                  if(query==3){//del campus se despliega el select del mes
+                                  if(query==3 || query==4){//del campus se despliega el select del mes
                                     document.getElementById('mesNameFacultad').style.display='block'
-
+                                document.getElementById('dpto').style.display='none'
                                   }else{
                                     document.getElementById('mesNameFacultad').style.display='none'
                                   }
-
                         break;
                       case "":
                                     document.getElementById('year').style.display='none'
@@ -175,10 +153,7 @@ maxDate: "0D"
                                     document.getElementById('noResult').style.display='none'
                                     document.getElementById('mesNameCampus').style.display='none'
                                     document.getElementById('mesNameFacultad').style.display='none'//ocultar=none
-
-
-
-
+                                    document.getElementById('dpto').style.display='none'
                         break;             
                    }
                 });
@@ -196,11 +171,12 @@ maxDate: "0D"
             }
             $("#datepicker").change(function() {
               datepi=$('#datepicker').val();  
+                   selectFacultad=$('#selectFacultad').val();
 
               if(query==1)utemDia(datepi);
               if(query==2)campusDia(datepi);
               if(query==3)facultadDia(datepi);
-              if(query==4)que4(datepi);
+              if(query==4)departamentoDia(datepi,selectFacultad);
               if(query==5)que5(datepi);
 
                 function utemDia(datepi){
@@ -217,7 +193,7 @@ maxDate: "0D"
 				                     	  objeto1=eval('('+data[0]+')');
 				                     	  objeto2=eval('('+data[1]+')');
 				                     	  	piechart(objeto1,objeto2);
-                                  var titulo="<h3>Asistencia Por Día UTEM</h3>";
+                                  var titulo="<h3>Asistencia Día - UTEM</h3>";
                                   dataTrue(titulo);
                                   window.test="nivelUtemDia";
                                   document.getElementById("test").innerHTML=test;
@@ -253,7 +229,7 @@ maxDate: "0D"
                                                 }
                                              };
                                         barrachart(asisten,ausente,etiquetas);
-                                        var titulo="<h3>Asistencia Por Campus</h3>";
+                                        var titulo="<h3>Asistencia Día - Campus</h3>";
                                         dataTrue(titulo);
                                   window.test="nivelCampusDia";
                                   document.getElementById("test").innerHTML=test;
@@ -306,7 +282,59 @@ maxDate: "0D"
                                                 }
                                              };
                                            barrachart(asisten,ausente,etiquetas);
-                                          var titulo="<h3>Asistencia Por Facultad</h3>";
+                                          var titulo="<h3>Asistencia Día - Facultad</h3>";
+                                          dataTrue(titulo);
+                                        window.test="nivelFacultadDia";
+                                        document.getElementById("test").innerHTML=test;
+                                     }
+                      }); 
+                }
+                function departamentoDia(datepi,selectFacultad){
+                      $.post("<?= base_url('/index.php/estadistica/nivelDepartamentoDia')?>", {
+                          datepi : datepi, selectFacultad:selectFacultad
+                      }, function(data) {
+                         // $("#divResultNivelCampus").html(data);
+                            if(data==false){
+                                      var texto="Lo lamentamos No hay registros en nuestro sistema para esta fecha";
+                                      dataFalse(texto);
+                                     }else{ 
+                                         var asisten=new Array();
+                                        var ausente=new Array();
+                                        var etiquetas=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/3;//dividido 3 xq son nombres,asistieron,no asistieron
+                                             var abreviar;
+                                             for (var i = 0; i < tot; i++) {
+                                                if(i<partes){
+                                                           //*******quitar conectores******
+                                                               abreviar=objeto[i].split(" ");
+                                                               var abreviar2="";
+                                                               for (var z = 0; z < abreviar.length; z++) {
+                                                                 if(abreviar[z].length>3){
+                                                                  abreviar2=abreviar2+" "+abreviar[z];
+                                                                 }
+                                                               }
+                                                              //******* FIN quitar conectores******
+                                                              var abreviar3;
+                                                               abreviar3=abreviar2.split(" ");
+                                                               if(abreviar3.length<=2)
+                                                                    etiquetas.push(abreviar3[1]);
+                                                                else{
+                                                                  etiquetas.push(abreviar3[1]+" "+abreviar3[2]);
+                                                                }               
+                                                }else{
+                                                  if(i<(partes*2) && i>=partes)
+                                                    asisten.push(objeto[i]);
+                                                  else
+                                                    ausente.push(objeto[i]);
+                                                }
+                                             };
+                                           barrachart(asisten,ausente,etiquetas);
+                                          var titulo="<h3>Asistencia Dia - Dptos.</h3>";
                                           dataTrue(titulo);
                                         window.test="nivelFacultadDia";
                                         document.getElementById("test").innerHTML=test;
@@ -320,11 +348,15 @@ maxDate: "0D"
                    window.selectAnio=$('#selectAnio').val();
                    selectCampus=$('#selectCampus').val();
                    selectFacultad=$('#selectFacultad').val();
-
+                   selectDpto=$('#selectDpto').val();
+                   if(selectCampus=='' && selectAnio!='' && query==2){alert("Favor elija un Campus"); $('#selectAnio option[selected]').prop('selected', true);} 
+                   if(selectFacultad=='' && selectAnio!='' && query==3){alert("Favor elija una Facultad"); $('#selectAnio option[selected]').prop('selected', true);} 
+                  if(selectFacultad=='' && selectAnio!='' && query==4){alert("Favor elija una Facultad"); $('#selectAnio option[selected]').prop('selected', true);} 
+                  if(selectDpto=='' && selectAnio!='' && query==4){alert("Favor elija un Departamento"); $('#selectAnio option[selected]').prop('selected', true);} 
               if(query==1)utemMes(selectAnio);
               if(query==2)campusMes(selectAnio,selectCampus);
               if(query==3)facultadMes(selectAnio,selectFacultad);
-              if(query==4)que4(datepi);
+              if(query==4)departamentoMes(selectAnio,selectDpto);
               if(query==5)que5(datepi);
                 function utemMes(selectAnio){
             					$.post("<?= base_url('/index.php/estadistica/nivelUtemMes')?>", {
@@ -348,7 +380,7 @@ maxDate: "0D"
 
                                              };
                                           linechart(asiste,ausente);
-                                  var titulo="<h3>Asistencia Por Meses UTEM</h3>";
+                                  var titulo="<h3>Asistencia Meses - UTEM</h3>";
                                   dataTrue(titulo); 
                                   window.test="nivelUtemMes";
                                   document.getElementById("test").innerHTML=test;
@@ -378,7 +410,7 @@ maxDate: "0D"
 
                                              };
                                           linechart(asiste,ausente);
-                                  var titulo="<h3>Asistencia Por Meses Campus </h3>";
+                                  var titulo="<h3>Asistencia Meses - Campus </h3>";
                                   dataTrue(titulo); 
                                         window.test="nivelCampusMes";
                                   document.getElementById("test").innerHTML=test;
@@ -417,7 +449,42 @@ maxDate: "0D"
                               //document.getElementById('total').style.display='block'
                              // document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
                               document.getElementById('titulo').style.display='block'
-                              document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Mes Facultades UTEM</h3>";     
+                              document.getElementById("titulo").innerHTML = "<h3>Asistencia Meses - Facultades</h3>";     
+                          }
+                      });
+                }
+                function departamentoMes(selectAnio,selectDpto){
+                      $.post("<?= base_url('/index.php/estadistica/nivelDepartamentoMes')?>", {
+                        selectAnio : selectAnio , selectDpto : selectDpto
+                         },function(data) {
+                          if(data==false){//quiere decir que no hay registros
+                          document.getElementById('noResult').style.display='block'
+                          document.getElementById("noResult").innerHTML = "Lo lamentamos No hay registros en nuestro sistema para esta fecha"; 
+                          document.getElementById('divResultNivelUtem').style.display='none'
+                          }else{
+                                       var asiste=new Array();
+                                          var ausente=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/2;
+                                             for (var i = 0; i < tot; i++) {
+                                               if(i<partes)asiste.push(objeto[i]);
+                                               else ausente.push(objeto[i]);
+
+                                             };
+                                          linechart(asiste,ausente); 
+                                           window.test="nivelFacultadMes";
+                                  document.getElementById("test").innerHTML=test;
+
+                                document.getElementById('divResultNivelUtem').style.display='block'
+                              document.getElementById('noResult').style.display='none'
+                              //document.getElementById('total').style.display='block'
+                             // document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
+                              document.getElementById('titulo').style.display='block'
+                              document.getElementById("titulo").innerHTML = "<h3>Asistencia Meses - Dptos.</h3>";     
                           }
                       });
                 }    
@@ -437,13 +504,15 @@ maxDate: "0D"
         $("#selectYear option:selected").each(function() { 
                    selectFacultad=$('#selectFacultad').val();
                    selectCampus=$('#selectCampus').val();
-                   
                    selectYear=$('#selectYear').val();
+                  if(selectCampus=='' && selectYear!='' && query==2){alert("Favor elija un Campus"); $('#selectYear option[selected]').prop('selected', true);} 
+                   if(selectFacultad=='' && selectAnio!='' && query==3){alert("Favor elija una Facultad"); $('#selectYear option[selected]').prop('selected', true);} 
+                 if(selectFacultad=='' && selectAnio!='' && query==4){alert("Favor elija una Facultad"); $('#selectYear option[selected]').prop('selected', true);} 
               if(query==1)utemYear(selectYear);
               if(query==2)campusYear(selectYear,selectCampus);
               if(query==3)facultadYear1(selectYear,selectFacultad);
-             /* if(query==4)que4(datepi);
-              if(query==5)que5(datepi);*/
+             if(query==4)departamentoYear(selectYear,selectFacultad);
+             /* if(query==5)que5(datepi);*/
               function utemYear(selectYear){ 
         					$.post("<?= base_url('/index.php/estadistica/nivelUtemYear')?>", {
         						selectYear : selectYear
@@ -465,7 +534,7 @@ maxDate: "0D"
       					  							document.getElementById('noResult').style.display='none'
       					  							//document.getElementById('total').style.display='block'
       					  							document.getElementById('titulo').style.display='block'
-      					  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Año UTEM</h3>";
+      					  							document.getElementById("titulo").innerHTML = "<h3>Asistencia Año - UTEM</h3>";
       					  							//document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
         							}
         					});
@@ -491,7 +560,7 @@ maxDate: "0D"
                                 document.getElementById('noResult').style.display='none'
                                 //document.getElementById('total').style.display='block'
                                 document.getElementById('titulo').style.display='block'
-                                document.getElementById("titulo").innerHTML = "<h3>Asistencia Por Año UTEM</h3>";
+                                document.getElementById("titulo").innerHTML = "<h3>Asistencia Año - Campus</h3>";
                                // document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
                       }
                   });
@@ -517,9 +586,63 @@ maxDate: "0D"
                                 document.getElementById('noResult').style.display='none'
                                 //document.getElementById('total').style.display='block'
                                 document.getElementById('titulo').style.display='block'
-                                document.getElementById("titulo").innerHTML = "<h3>Asistencia Por año Facultad</h3>";
+                                document.getElementById("titulo").innerHTML = "<h3>Asistencia Año - Facultad</h3>";
                                // document.getElementById("total").innerHTML = "Total Personal: "+(objeto1+objeto2);
                       }
+                  });
+              }
+              function departamentoYear(selectYear,selectFacultad){ 
+                  $.post("<?= base_url('/index.php/estadistica/nivelDepartamentoYear')?>", {
+                    selectYear : selectYear , selectFacultad : selectFacultad
+                     },function(data) {
+                      if(data==false){//quiere decir que no hay registros
+                       
+                      document.getElementById('noResult').style.display='block'
+                      document.getElementById('divResultNivelUtem').style.display='none'
+
+                              $("#noResult").html("Lo lamentamos No hay registros en nuestro sistema para este Año");
+
+                      }else{
+                                         var asisten=new Array();
+                                        var ausente=new Array();
+                                        var etiquetas=new Array();
+                                             objeto=eval('('+data+')');
+                                            var tot=0;
+                                            for (i in objeto) {
+                                                 tot++;
+                                             };
+                                             var partes=tot/3;//dividido 3 xq son nombres,asistieron,no asistieron
+                                             var abreviar;
+                                             for (var i = 0; i < tot; i++) {
+                                                if(i<partes){
+                                                           //*******quitar conectores******
+                                                               abreviar=objeto[i].split(" ");
+                                                               var abreviar2="";
+                                                               for (var z = 0; z < abreviar.length; z++) {
+                                                                 if(abreviar[z].length>3){
+                                                                  abreviar2=abreviar2+" "+abreviar[z];
+                                                                 }
+                                                               }
+                                                              //******* FIN quitar conectores******
+                                                              var abreviar3;
+                                                               abreviar3=abreviar2.split(" ");
+                                                               if(abreviar3.length<=2)
+                                                                    etiquetas.push(abreviar3[1]);
+                                                                else{
+                                                                  etiquetas.push(abreviar3[1]+" "+abreviar3[2]);
+                                                                }               
+                                                }else{
+                                                  if(i<(partes*2) && i>=partes)
+                                                    asisten.push(objeto[i]);
+                                                  else
+                                                    ausente.push(objeto[i]);
+                                                }
+                                             };
+                                           radarchart(asisten,ausente,etiquetas);
+                                          var titulo="<h3>Asistencia Año - Dptos.</h3>";
+                                          dataTrue(titulo);
+                                        window.test="nivelFacultadDia";
+                                        document.getElementById("test").innerHTML=test;}
                   });
               }
                    	
@@ -593,7 +716,9 @@ maxDate: "0D"
                     </div>
                 </div>
               </div>
-							
+							<div id="dpto">
+
+              </div>
 							<div id="calendar">
 								<div class="form-group">
 									<label  class="col-sm-3 control-label" id="c">Selecione un Día: </label>
@@ -641,12 +766,12 @@ maxDate: "0D"
 							<div id="noResult"></div>
 							<div id="divResultNivelUtem">
 								<div id="titulo"></div>
-								<canvas id="chart-areaGlobal" width="300" height="300"></canvas>
+								<canvas id="chart-areaGlobal" width="400" height="400"></canvas>
                 <div id="pieLegend"></div>
                 <div id="descargar"><br> <?php 
                   
-                  echo '<input type="submit" class="btn btn-success center" onclick="extraer();" name="Descargar" value="Descargar">';
-                  echo '<input type="hidden" id="hidden" name="descargaHidden">';
+                 // echo '<input type="submit" class="btn btn-success center" onclick="extraer();" name="Descargar" value="Descargar">';
+                  //echo '<input type="hidden" id="hidden" name="descargaHidden">';
                   
                  ?></div>
 							</div>
@@ -665,15 +790,35 @@ maxDate: "0D"
 <script>
 $(document).ready(function() {
     $("#selectCampus").change(function() {$.reset();});
-    $("#selectFacultad").change(function() {$.reset();});
-
-
-
+    $("#dpto").change(function() {$.reset();});
+    $("#selectFacultad").change(function() {$.reset();}
+      
+      );
 });
 $.reset=function(){
 	    $('#selectAnio option[selected]').prop('selected', true);
+                document.getElementById("datepicker").value= "";
       $('#selectYear option[selected]').prop('selected', true);
-}    
+} 
+     
+      $("#selectFacultad").change(function() {
+      
+                  $("#selectFacultad option:selected").each(function() {
+                   selectFacultad=$('#selectFacultad').val();
+                   if((query1==2 && query==4)){
+                          $.post("<?= base_url('/index.php/estadistica/llena_Dpto')?>",{
+                             selectFacultad : selectFacultad
+                          },function(data) {
+                    document.getElementById('dpto').style.display='block'
+                            if(data==false)
+                            { 
+                               $("#dpto").html("Selecciona otra Facultad");
+                            }else $("#dpto").html(data);
+                        });
+                       }
+      }); 
+    });
+          
  </script>
  <script>
  function getRandomColor() {
@@ -732,14 +877,9 @@ function piechart(var1,var2){
                             highlightStroke : "#000000",
                             data : ausente,
                             label:"Ausencia"
-
                           }
                         ]
-
                       }   
-  /*                        var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
-                          window.myPieGlobal = new Chart(ctx2).Bar(barChartData,{responsive:false});
-*/
               var options = {
         legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\">&nbsp;&nbsp;&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
               };
@@ -760,7 +900,6 @@ function piechart(var1,var2){
                             pointHighlightStroke : "rgba(220,220,220,1)",
                             data : asisten,
                             label:"Asistieron"
-
                           },
                           {
                             fillColor : "rgba(151,187,205,0.2)",
@@ -771,18 +910,43 @@ function piechart(var1,var2){
                             pointHighlightStroke : "rgba(151,187,205,1)",
                             data : ausente,
                             label:"Ausencia"
-
                           }
                         ]
-
                       }   
-                          /*var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
-                          window.myPieGlobal = new Chart(ctx2).Line(barChartData);*/
               var options = {
         legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\">&nbsp;&nbsp;&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
               };
           //  var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
            window.myPieGlobal=new Chart(document.getElementById("chart-areaGlobal").getContext("2d")).Line(barChartData,options);
+                      document.getElementById("pieLegend").innerHTML = myPieGlobal.generateLegend();
+  }
+  function radarchart(asisten,ausente,etiquetas){
+                      var radarChartData = {
+                        labels : etiquetas,
+                        datasets : [
+                          {
+                            fillColor :"rgba(52,152,219,0.23)",
+                            strokeColor : "rgba(52,152,219,1)",
+                            pointColor : "rgba(52,152,219,1)",
+                            pointStrokeColor : "rgba(255,255,255,1.00)",
+                            data : asisten,
+                            label:"Asistieron"
+                          },
+                          {
+                            fillColor :"rgba(46,204,112,0.49)",
+                            strokeColor : "rgba(46,204,113,1)",
+                            pointColor : "rgba(46,204,113,1)",
+                            pointStrokeColor : "rgba(255,255,255,1)",
+                            data : ausente,
+                            label:"Ausencia"
+                          }
+                        ]
+                      }   
+              var options = {scaleLineColor:"#000",angleLineColor:"#000",pointLabelFontColor:"#000",scaleFontSize:15,pointLabelFontSize:16,
+        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\">&nbsp;&nbsp;&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+              };
+          //  var ctx2 = document.getElementById("chart-areaGlobal").getContext("2d");
+           window.myPieGlobal=new Chart(document.getElementById("chart-areaGlobal").getContext("2d")).Radar(radarChartData,options);
                       document.getElementById("pieLegend").innerHTML = myPieGlobal.generateLegend();
   }
  </script>
@@ -831,6 +995,21 @@ function piechart(var1,var2){
           left: 50%;
       }
       ul.line-legend > li {
+          float: left;
+          margin-right: 5px;
+          padding: 5px;
+          position: relative;
+          left: -50%;
+      }
+      ul.radar-legend {
+          list-style: none outside none;
+          float: left;
+          margin: 0 0 0 0;
+          padding: 0;
+          position: relative;
+          left: 50%;
+      }
+      ul.radar-legend > li {
           float: left;
           margin-right: 5px;
           padding: 5px;
