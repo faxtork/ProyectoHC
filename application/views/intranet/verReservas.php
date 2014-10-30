@@ -20,9 +20,10 @@ $( window ).resize(function() {
                         <th>N° Pedido</th>
                         <th >Profesor</th>
                         <th>Apellido</th>
-                        <th>Fecha</th>                 
+                        <th>Fecha</th>   
+                        <th>Codigo</th>                               
                         <th>Asignatura</th>
-                        <th>Seccion</th>
+                        <th>Sec.</th>
                         <th>Periodo</th>
                         <th>Sala</th>
                         <th>Editar</th>
@@ -44,7 +45,8 @@ $( window ).resize(function() {
                         echo '<td>'.$pedi->apellidodocente.'</td>';
                         echo '<td>'.$pedi->fecha.'</td>'; 
                         
-                        echo '<td><b>'.$pedi->codigo.'</b> '.$pedi->asignatura.'</td>';
+                        echo '<td><b>'.$pedi->codigo.'</b></td>';
+                        echo '<td>'.$pedi->asignatura.'</td>';
                         echo '<td>'.$pedi->seccion.'</td>';
                         echo '<td>'.$pedi->periodo.'</td>';
                         echo '<td>'.$pedi->sala.'</td>'; 

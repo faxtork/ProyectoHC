@@ -53,7 +53,7 @@ else {
                                                 <td><?= $nam=$aula->nombres." ".$aula->apellidos;?></td>
                                                 <td><?= $asig=$aula->nombre ;?></td>
                                                 <td><?= $sec=$aula->seccion ;?></td>
-                                                <td><?= $sec=$aula->departamento ;?></td>
+                                                <td><?= $aula->departamento ;?></td>
 
 
                     <?php 
@@ -146,38 +146,29 @@ else {
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
           <h3 class="modal-title" id="myModalLabel">Suspencion de Clase</h3>
         </div>
-        <div class="modal-body">
-          <h4>Esta seguro cancelar clase:</h4>
+        <div class="modal-body">          <h4>Esta seguro cancelar clase:</h4>
+       <!-- <form action="" role="form" class="form-horizontal">-->
               <div class="form-group">
                   <label  class="col-sm-6 control-label">Periodo:</label>
-                  <div class="col-sm-6">
                     <div id="per" ></div>
-                  </div>
-              </div>   <br>  
+              </div>   
               <div class="form-group">
                   <label  class="col-sm-6 control-label">Sala: </label>
-                  <div class="col-sm-6">
                     <div id="sala" ></div>
-                  </div>
-              </div><br>
+              </div>
               <div class="form-group">
                   <label  class="col-sm-6 control-label">Nombre:</label>
-                  <div class="col-sm-6">
                     <div id="nombre" ></div>
-                  </div>
-              </div><br>
+              </div>
               <div class="form-group">    
                   <label  class="col-sm-6 control-label">Asignatura: </label>
-                  <div class="col-sm-6">
                     <div id="asign" ></div>
-                  </div>
-              </div><br>
+              </div>
               <div class="form-group">    
                   <label  class="col-sm-6 control-label">Seccion: </label>
-                  <div class="col-sm-6">
                     <div id="secc" ></div>
-                  </div>
-              </div><br>
+              </div>
+              <!--</form>-->
               <div class="form-group">    
                   <label  class="col-sm-6 control-label">Motivo: </label>
                   <div class="col-sm-3">
@@ -185,6 +176,7 @@ else {
                     <textarea name="motivo" id="motivo" style="width: 259px; height: 49px; resize: none;"></textarea>
                   </div>
               </div>
+            
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

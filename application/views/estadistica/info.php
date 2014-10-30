@@ -3,5 +3,5 @@
 			<div class="row-fluid"><div class="span12"><h3>Estadisticas UTEM</h3></div></div>
 
 				<br>	
-				<p>Usted puede consultar y ver estadisticas....</p>
+				<p>Usted puede consultar y ver Estadisticas</p>
 		</div></div>

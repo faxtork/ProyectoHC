@@ -472,7 +472,7 @@
                 return $texto;
                 }
             for ($i=0; $i <count($pk) ; $i++) { 
-                    $query[]=$this->db->query("UPDATE docentes SET nombres='".strtolower(quitar_tildes($newName[$i]))."', apellidos='".strtolower(quitar_tildes($newApellidos[$i]))."' WHERE pk='".$pk[$i]."'"); 
+                    $query[]=$this->db->query("UPDATE docentes SET nombres='".ucwords(strtolower(quitar_tildes($newName[$i])))."', apellidos='".ucwords(strtolower(quitar_tildes($newApellidos[$i])))."' WHERE pk='".$pk[$i]."'"); 
             }
                 return $query; 
          }
@@ -484,7 +484,7 @@
                 return $texto;
                 }
             for ($i=0; $i <count($pk) ; $i++) { 
-                    $query[]=$this->db->query("UPDATE asignaturas SET nombre='".strtolower(quitar_tildes($newName[$i]))."', codigo='".strtoupper($newCodigo[$i])."' WHERE pk='".$pk[$i]."'"); 
+                    $query[]=$this->db->query("UPDATE asignaturas SET nombre='".ucwords(strtolower(quitar_tildes($newName[$i])))."', codigo='".strtoupper($newCodigo[$i])."' WHERE pk='".$pk[$i]."'"); 
             }
                 return $query; 
         } 

@@ -1958,7 +1958,7 @@
 		scaleShowGridLines : true,
 
 		//String - Colour of the grid lines
-		scaleGridLineColor : "rgba(0,0,0,0.5)",
+		scaleGridLineColor : "#000",
 
 		//Number - Width of the grid lines
 		scaleGridLineWidth : 1,
@@ -2433,7 +2433,7 @@
 		scaleShowGridLines : true,
 
 		//String - Colour of the grid lines
-		scaleGridLineColor : "rgba(0,0,0,.05)",
+		scaleGridLineColor : "#000",
 
 		//Number - Width of the grid lines
 		scaleGridLineWidth : 1,

@@ -9,6 +9,7 @@
             session_start();
 			$this->load->model('docente_model');
             $this->load->model('clases_model');
+
 		}
 		public function index(){
 			$this->load->view('general/headers');
@@ -18,7 +19,8 @@
             if(!isset($_SESSION['usuarioAlumno'])){
                 redirect('', 'refresh');//si no esta creada
             }else{
-                $this->load->view('consulta/bienvenido');
+                $queCampus=$this->clases_model->getNameCampusXCode($_SESSION['codigoCarrera']);
+                $this->load->view('consulta/bienvenido',compact('queCampus'));
 
             }
             $this->load->view('consulta/header_menu');

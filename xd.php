@@ -1,119 +1,86 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Chart.jsで凡例付き円グラフ</title>
-     <script src="http://146.83.181.9/~sesparza/ProyectoHC/public/js/jquery.js" type="text/javascript"></script>
-<script type="text/javascript" src="http://146.83.181.9/~sesparza/ProyectoHC/public/js/Chart.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
 
-  </head>
+        <!-- Bootstrap -->
+                <script src="http://146.83.181.9/~sesparza/ProyectoHC/public/js/jquery.js" type="text/javascript"></script>
+
+        <!--<link href="http://146.83.181.9/~sesparza/ProyectoHC/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen">-->
+        <link href="http://146.83.181.9/~sesparza/ProyectoHC/public/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" media="screen">
+        <link href="http://146.83.181.9/~sesparza/ProyectoHC/public/bootstrap/bootstrap.css" rel="stylesheet" type="text/css" media="screen">
+
+        <link href="http://146.83.181.9/~sesparza/ProyectoHC/public/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" media="screen">
+
+        <link href="http://146.83.181.9/~sesparza/ProyectoHC/public/css/style_general.css" rel="stylesheet" type="text/css" media="screen">
+        <script type="text/javascript" src="http://146.83.181.9/~sesparza/ProyectoHC/public/js/funciones.js"></script>
+
+        <script type="text/javascript" src="http://146.83.181.9/~sesparza/ProyectoHC/public/bootstrap/js/bootstrap-dropdown.js"></script>
+        <script type="text/javascript" src="http://146.83.181.9/~sesparza/ProyectoHC/public/bootstrap/js/json.js"></script>
+        <script type="text/javascript" src="http://146.83.181.9/~sesparza/ProyectoHC/public/js/Chart.js"></script>
+
+
+
   <body>
-    <div id="chartArea" class="center">
-      <canvas id="pieArea" height="300" width="300"></canvas>
-      <div id="pieLegend"></div>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
     </div>
-    <script>
-    // 円グラフ用データ
-    // この変数名を legendTemplate の中で使っているので注意
-var mydata1 = {//["Inform\u00e1tica y Computaci\u00f3n","Industria","Electricidad","Mec\u00e1nica","Ciencias","61","2","0","0","2","3","0","0","0","1"]
-  labels : ["Inform\u00e1tica y Computaci\u00f3n","Industria","Electricidad","Mec\u00e1nica","Ciencias"],
-  datasets : [
-    {
-      fillColor : "rgba(220,220,220,0.5)",
-      strokeColor : "rgba(220,220,220,1)",
-      pointColor : "rgba(220,220,220,1)",
-      pointStrokeColor : "#fff",
-      data : ["61","2","0","0","2"],
-      title : "pFirst data"
-    },
-    {
-      fillColor : "rgba(151,187,205,0.5)",
-      strokeColor : "rgba(151,187,205,1)",
-      pointColor : "rgba(151,187,205,1)",
-      pointStrokeColor : "#fff",
-      data : ["30","0","0","0","1"],
-      title : "pSecond data"
-    }
-  ]
-}
-
-var newopts = {
-canvasBackgroundColor:'#000',
-spaceLeft:12,spaceRight:12,spaceTop:12,
-spaceBottom:12,canvasBorders:false,
-canvasBordersWidth:1,canvasBordersColor:"#000",
-yAxisMinimumInterval:4,scaleShowLabels:true,scaleShowLine:true,
-scaleLineWidth:1,scaleLineColor:"#000",
-scaleOverlay :false,scaleOverride :false,
-scaleSteps:2,scaleStepWidth:2,scaleStartValue:10,legend:false,
-maxLegendCols:5,legendBlockSize:15,legendFillColor:'#000',
-legendColorIndicatorStrokeWidth:1,legendPosX:-2,legendPosY:4,
-legendXPadding:0,legendYPadding:0,legendBorders:false,legendBordersWidth:1,
-legendBordersColors:"#000",legendBordersSpaceBefore:5,
-legendBordersSpaceLeft:5,legendBordersSpaceRight:5,
-legendBordersSpaceAfter:5,legendSpaceBeforeText:5,
-legendSpaceLeftText:5,legendSpaceRightText:5,
-legendSpaceAfterText:5,legendSpaceBetweenBoxAndText:5,
-legendSpaceBetweenTextHorizontal:5,legendSpaceBetweenTextVertical:5,
-legendFontFamily:"'Open Sans'",legendFontStyle:"normal normal",
-legendFontColor:"#000",legendFontSize:10,showYAxisMin:false,
-rotateLabels:"smart",xAxisBottom:true,yAxisLeft:true,
-yAxisRight:false,scaleFontFamily:"'Open Sans'",
-scaleFontStyle:"normal bold",scaleFontColor:"#000",
-scaleFontSize:20,pointLabelFontFamily:"'Rubik One'",
-pointLabelFontStyle:"normal normal",pointLabelFontColor:"#000",
-pointLabelFontSize:16,angleShowLineOut:true,angleLineWidth:1,
-angleLineColor:"#000",
-percentageInnerCutout:50,scaleShowGridLines:true,
-scaleGridLineWidth:10,scaleGridLineColor:"#000",scaleXGridLinesStep:10,
-scaleYGridLinesStep:3,segmentShowStroke:true,segmentStrokeWidth:2,
-segmentStrokeColor:"rgba(255,255,255,1.00)",datasetStroke:true,datasetFill : true,
-datasetStrokeWidth:2,bezierCurve:true,pointDotStrokeWidth : 1,pointDotRadius : 3,pointDot : false,
-pointDotMarker :"circle",barShowStroke : false,barBorderRadius:0,barStrokeWidth:1,barValueSpacing:15,
-barDatasetSpacing:0,scaleShowLabelBackdrop :true,scaleBackdropColor:'rgba(255,255,255,0.75)',
-scaleBackdropPaddingX :20,scaleBackdropPaddingY :2,animation : true,
-}
 
 
 
-    setopts=newopts;
-    // var myLine = new Chart(document.getElementById("canvas_line").getContext("2d")).Radar(mydata1,setopts);
-    // オプション
-    var options = {
-        // 凡例表示用の HTML テンプレート
-        legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\">&nbsp;&nbsp;&nbsp;</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
-    };
-    // 円グラフ描画
-    var myPie = new Chart(document.getElementById("pieArea").getContext("2d")).Radar(mydata1,newopts);
-    // generateLegend() の出力を HTML に入れる
-  //  document.getElementById("pieLegend").innerHTML = myPie.generateLegend();
-    </script>
+    <footer>
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>
+
   </body>
 </html>
-    <style>
-      .center {
-          margin-left: auto;
-          margin-right: auto;
-          text-align: center;
-      }
-      #pieLegend {
-          padding: 10px;
-          overflow: hidden;
-          position: relative;
-      }
-      ul.radar-legend {
-          list-style: none outside none;
-          float: left;
-          margin: 0 0 0 0;
-          padding: 0;
-          position: relative;
-          left: 50%;
-      }
-      ul.radar-legend > li {
-          float: left;
-          margin-right: 5px;
-          padding: 5px;
-          position: relative;
-          left: -50%;
-      }
-    </style>
+<style>
+  html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+</style>

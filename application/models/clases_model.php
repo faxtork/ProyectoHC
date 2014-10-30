@@ -1,6 +1,9 @@
 <?php 
 class Clases_model extends CI_Model{
-
+    public function getNameCampusXCode($code){
+        $query=$this->db->query("select pk,nombre from campus where pk in(select campus_fk from codigocarrera where codigo='".$code."' )");
+        return $query->row();
+    }
     public function getTime(){
         date_default_timezone_set("America/Santiago");
 

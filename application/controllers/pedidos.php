@@ -282,6 +282,7 @@ public function guardarPedidoSala(){
     $this->load->view('general/cierre_bodypagina'); 
     $this->load->view('general/cierre_footer'); 
   } else{
+
    $fecha= $this->input->post('datepicker');
     $sala_pk=$this->input->post('sala'); 
     $periodo_pk=$this->input->post('sePeriodo'); 
@@ -289,7 +290,9 @@ public function guardarPedidoSala(){
     $asignatura_pk=$this->input->post('asignatura'); 
     $seccion=$this->input->post('seccion'); 
     if($fecha==null || $sala_pk==null || $periodo_pk==null || $docente_pk==null || $asignatura_pk==null || $seccion==null )
-      { redirect('pedidos/pedirSala');
+      { 
+        //  echo $docente_pk;
+        redirect('pedidos/pedirSala');
        }else{ 
         $date=$this->Clases_model->getDate(); 
         $listo=$this->Docente_model->hayProfesor($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion,$date);
@@ -323,7 +326,7 @@ public function guardarPedidoSala(){
          
         $pkDocente=$this->input->post('docente');
         $pkAsignatura=$this->input->post('asignatura');
-        echo "$pkDocente - $pkAsignatura";
+        //echo "$pkDocente - $pkAsignatura";
         $secciones=$this->Admin_model->getSeccionDeAsignaturaDocente($pkDocente,$pkAsignatura);
         
         foreach ($secciones as $sec) {

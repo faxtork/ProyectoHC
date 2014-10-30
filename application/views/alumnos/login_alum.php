@@ -3,7 +3,7 @@
       <div class="row-fluid">
           <div class="span12">
             <h2>Ingreso Alumnos</h2>
-            <h5>Entrar con USUARIO y PASSWORD de dirdoc!.</h5>
+            <h5>Entrar con USUARIO y PASSWORD de dirdoc, Incluye DV.</h5>
           </div>
       </div>
       <br>

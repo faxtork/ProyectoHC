@@ -40,7 +40,7 @@
     }
     public function getAcademicoXfacultad($codcarrera){
         $query=$this->db
-                ->query("select pk,nombres,apellidos from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk in(select pk from campus where pk in(select campus_fk from codigocarrera Where codigo='".$codcarrera."'))))");
+                ->query("select pk,nombres,apellidos from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk in(select pk from campus where pk in(select campus_fk from codigocarrera Where codigo='".$codcarrera."')))) order by pk asc");
         return $query->result();
     }
     public function getAcademico(){
@@ -107,7 +107,7 @@
 
   public function guardarPedidoSala($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion,$date)
    { 
-    $this->db ->query("INSERT INTO reservas (fecha,sala_fk,periodo_fk,curso_fk) values('$fecha','$sala_pk','$periodo_pk',(select pk FROM cursos WHERE asignatura_fk='$asignatura_pk' and docente_fk='$docente_pk' and seccion=$seccion));");
+    $this->db ->query("INSERT INTO reservas (fecha,sala_fk,periodo_fk,curso_fk) values('$fecha','$sala_pk','$periodo_pk',(select pk FROM cursos WHERE asignatura_fk='$asignatura_pk' and docente_fk='$docente_pk' and seccion='$seccion'));");
      return true; 
    }
      

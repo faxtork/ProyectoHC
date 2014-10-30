@@ -1628,8 +1628,8 @@ class Intranet extends CI_Controller {
         }
      }
      public function agregarDoc(){
-        $addDocName=strtolower($this->input->post('addDocName'));
-        $addDocApe=strtolower($this->input->post('addDocApe'));
+        $addDocName=ucwords(strtolower($this->input->post('addDocName')));
+        $addDocApe=ucwords(strtolower($this->input->post('addDocApe')));
         $addDocRut=$this->input->post('rut');
 
         $pkDpto=$this->input->post('pkDpto');
@@ -1853,9 +1853,9 @@ class Intranet extends CI_Controller {
         }
      }
     public function agregarAsig(){
-        $addAsigName=strtolower($this->input->post('addAsigName'));
+        $addAsigName=ucwords(strtolower($this->input->post('addAsigName')));
         $addAsigCod=strtoupper($this->input->post('addAsigCod'));//codigo a mayusculas
-        $addAsigDesc=strtolower($this->input->post('addAsigDesc'));
+        $addAsigDesc=ucwords(strtolower($this->input->post('addAsigDesc')));
 
         $pkDpto=$this->input->post('pkDpto');
         $btnEnviar=$this->input->post('enviarModificacion');

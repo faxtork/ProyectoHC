@@ -1,5 +1,9 @@
 <?php 
 class Asistencia_model extends CI_Model{
+	public function docen($dato){
+		$query=$this->db->query("select pk,nombres,apellidos from docentes where nombres LIKE '$dato%' OR apellidos LIKE '$dato%'");
+		return $query->result();
+	}
 	public function totalAsistencia($fecha){
 		$query=$this->db->query("select count(estado) as asistieron from reservas where estado=true and fecha='".$fecha."'");
 		return $query->row();
@@ -72,7 +76,7 @@ class Asistencia_model extends CI_Model{
 		return $query->result();
 	}
 	public function getDptoPk($pk){
-		$query=$this->db->query("select pk,departamento from departamentos WHERE facultad_fk='".$pk."' order by pk");
+		$query=$this->db->query("select pk,departamento from departamentos WHERE facultad_fk='".$pk."' order by pk asc");
 		return $query->result();
 	}
 	public function totalAsistenciaPorCampus($campusName,$fecha){//***************AFECTANO***************
@@ -326,6 +330,143 @@ class Asistencia_model extends CI_Model{
 		}
 		return $respuesta;	
 	}
+	public function totalAsistenciaPorDocenteDia($fecha,$rut){
+		$query=$this->db->query(" select count(estado) as cantidad from reservas where estado=true AND fecha='".$fecha."' AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+				return $query->row();
+	}
+		public function totalNoAsistenciaPorDocenteDia($fecha,$rut){
+		$query=$this->db->query(" select count(estado) as cantidad from reservas where estado=false AND fecha='".$fecha."' AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+				return $query->row();
+	}
+	public function totalAsistenciaPorDocMes($selectAnio,$rut){//***************AFECTANO***************
+             date_default_timezone_set("America/Santiago");
 
+		 	$month=date('m');
+		 	$yearHoy=date('Y');
+		 	if($selectAnio==$yearHoy){//si es este mismo año hasta este mes
+			 	for ($i=1; $i <$month ; $i++) { 
+				//$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=true AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND sala_fk in(select pk from salas where facultad_fk ='".$selectFacultad."')");
+				$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=true AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+				
+					$respuesta[]=$query[($i-1)]->result();
+				}
+		 	}else{
+		 		for ($i=1; $i <12 ; $i++) { 
+				//$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=true AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND sala_fk in(select pk from salas where facultad_fk ='".$selectFacultad."')");
+				$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=true AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+				
+					$respuesta[]=$query[($i-1)]->result();
+				}
+
+					$query[12]=$this->db->query("select count(estado) as cantidad from reservas where estado=true AND fecha>='".$selectAnio."-12-01' AND fecha<'".($selectAnio+1)."-01-01'   AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+					$respuesta[]=$query[12]->result();
+		 	}
+
+		
+		return $respuesta;
+	}
+	public function totalNoAsistenciaPorDocMes($selectAnio,$rut){//***************AFECTANO***************
+		 
+             date_default_timezone_set("America/Santiago");
+		
+		 	$month=date('m');
+		 	$yearHoy=date('Y');
+		 	if($selectAnio==$yearHoy){//si es este mismo año hasta este mes
+			 	for ($i=1; $i <$month ; $i++) { 
+				//$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=false AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND sala_fk in(select pk from salas where facultad_fk ='".$selectFacultad."')");
+				$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=false AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+				
+					$respuesta[]=$query[($i-1)]->result();
+				}
+		 	}else{
+		 		for ($i=1; $i <12 ; $i++) { 
+				//$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=false AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND sala_fk in(select pk from salas where facultad_fk ='".$selectFacultad."')");
+				$query[($i-1)]=$this->db->query("select count(estado) as cantidad from reservas where estado=false AND fecha>='".$selectAnio."-".$i."-01' AND fecha<'".$selectAnio."-".($i+1)."-01'  AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+				
+					$respuesta[]=$query[($i-1)]->result();
+				}
+
+					$query[12]=$this->db->query("select count(estado) as cantidad from reservas where estado=false AND fecha>='".$selectAnio."-12-01' AND fecha<'".($selectAnio+1)."-01-01'   AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+					$respuesta[]=$query[12]->result();
+		 	}
+		return $respuesta;
+	}
+	public function totalAsistenciaPorDocAnio($yearIni,$yearFin,$rut){//***************AFECTANO***************
+		$query=$this->db->query("select count(estado) as cantidad from reservas where estado=true AND fecha>='".$yearIni."' AND fecha<'".$yearFin."'  AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+		return $query->row();
+	}
+	public function totalNoAsistenciaPorDocAnio($yearIni,$yearFin,$rut){//***************AFECTANO***************
+		$query=$this->db->query("select count(estado) as cantidad from reservas where estado=false AND fecha>='".$yearIni."' AND fecha<'".$yearFin."'  AND curso_fk in (select pk from cursos where docente_fk in (select pk from docentes where rut='".$rut."'))");
+		return $query->row();
+	}
+	//**************aula***********
+	public function totalAulaOcupada($fecha){
+		$query=$this->db->query("select sala_fk from reservas where fecha='".$fecha."' and sala_fk in(select pk from salas where estado=true) group by sala_fk order by sala_fk asc");
+		return $query->result();
+	}
+	public function cantSalasUtem(){
+		$query=$this->db->query("select count(pk) as cantidad from salas where estado=true");
+		return $query->row();
+	}
+	public function cantSalasUtemBloqueada(){
+		$query=$this->db->query("select count(pk) as cantidad from salas where estado=false");
+		return $query->row();
+	}
+	public function cantSalasUtemAsignadas($pkCampus){
+		for ($i=0; $i <count($pkCampus) ; $i++) { 
+			$query[$i]=$this->db->query("select sala_fk from reservas where curso_fk in(select pk from cursos where docente_fk in(select pk from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk='".$pkCampus[$i]."')))) group by sala_fk");
+			$respuesta[]=$query[$i]->result();
+		}
+		return $respuesta;
+	}
+	public function cantSalasFaculAsignadas($pkFacultad){
+		for ($i=0; $i <count($pkFacultad) ; $i++) { 
+			$query[$i]=$this->db->query("select sala_fk from reservas where curso_fk in(select pk from cursos where docente_fk in(select pk from docentes where departamento_fk in(select pk from departamentos where facultad_fk ='".$pkFacultad[$i]."'))) group by sala_fk");
+			$respuesta[]=$query[$i]->result();
+		}
+		return $respuesta;
+	}
+	public function cantSalasCampus($pkCampus){
+		for ($i=0; $i <count($pkCampus) ; $i++) { 
+			$query[$i]=$this->db->query("select count(pk) as cantidad from salas where estado=true AND campus_fk ='".$pkCampus[$i]."'");
+			$respuesta[]=$query[$i]->row();
+		}
+		return $respuesta;
+	}
+	public function cantSalasCampusBloqueada($pkCampus){
+		for ($i=0; $i <count($pkCampus) ; $i++) { 
+			$query[$i]=$this->db->query("select count(pk) as cantidad from salas where estado=false AND campus_fk ='".$pkCampus[$i]."'");
+			$respuesta[]=$query[$i]->row();
+		}
+		return $respuesta;
+	}
+	public function cantSalasFacultad($pkFacultad){
+		for ($i=0; $i <count($pkFacultad) ; $i++) { 
+			$query[$i]=$this->db->query("select count(pk) as cantidad from salas where estado=true and campus_fk in (select campus_fk from facultades where pk='".$pkFacultad[$i]."')");
+			$respuesta[]=$query[$i]->row();
+		}
+		return $respuesta;
+	}
+	public function cantSalasFacultadBloqueada($pkFacultad){
+		for ($i=0; $i <count($pkFacultad) ; $i++) { 
+			$query[$i]=$this->db->query("select count(pk) as cantidad from salas where estado=false AND campus_fk in (select campus_fk from facultades where pk='".$pkFacultad[$i]."')");
+			$respuesta[]=$query[$i]->row();
+		}
+		return $respuesta;
+	}
+	public function cantSalasDptoAsignadas($pkDpto){
+		for ($i=0; $i <count($pkFacultad) ; $i++) { 
+			$query[$i]=$this->db->query("select sala_fk from reservas where curso_fk in(select pk from cursos where docente_fk in(select pk from docentes where departamento_fk ='".$pkDpto[$i]."')) group by sala_fk");
+			$respuesta[]=$query[$i]->result();
+		}
+		return $respuesta;
+	}
+	public function cantSalasDepartamento($pkDpto){
+		for ($i=0; $i <count($pkFacultad) ; $i++) { 
+			$query[$i]=$this->db->query("select count(pk) as cantidad from salas where estado=true and campus_fk in (select campus_fk from facultades where pk='".$pkFacultad[$i]."')");
+			$respuesta[]=$query[$i]->row();
+		}
+		return $respuesta;
+	}
 }
 ?>

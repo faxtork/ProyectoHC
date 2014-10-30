@@ -36,7 +36,8 @@
                 $this->load->view('general/abre_bodypagina');   
                 $this->load->view('estadistica/est_bienvenido');
                      $this->load->view('estadistica/data');
-                            $this->load->view('estadistica/aula');
+                     $facultades=$this->asistencia_model->getFacultadName();
+                            $this->load->view('estadistica/aula',compact('facultades'));
                      $this->load->view('adminGeneral/cierreData');
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
@@ -496,7 +497,83 @@
         } 
        }
        //***********************FIN DPTO******************
+      //*******************DOCENTE*********************
+       public function nivelDocenteDia(){
+        if($this->input->post('datepi')){
+                $fecha=$this->input->post('datepi');
+                $rut=$this->input->post('selectRut');
+            $total=$this->asistencia_model->totalAsistenciaPorDocenteDia($fecha,$rut);
+             $totalNo=$this->asistencia_model->totalNoAsistenciaPorDocenteDia($fecha,$rut);
 
+             if($total->cantidad==0 && $totalNo->cantidad==0)
+                echo false;
+            else{
+                    echo  $total->cantidad;
+                    echo "/";
+                    echo $totalNo->cantidad;
+            }
+        }
+       }
+       public function nivelDocenteMes(){
+        if($this->input->post('selectAnio')){
+                $selectAnio=$this->input->post('selectAnio');
+                $selectRut=$this->input->post('selectRut');
+            $sumSi=0;
+            $sumNo=0;
+            $asistenciaDoc=$this->asistencia_model->totalAsistenciaPorDocMes($selectAnio,$selectRut);
+            for ($i=0; $i <count($asistenciaDoc) ; $i++) { 
+                    foreach ($asistenciaDoc[$i] as $fila) {
+                       
+                       $totalAsist[]=$fila->cantidad;
+                       $sumSi=$sumSi+$fila->cantidad;
+                    }
+            }
+            $ausenciaDoc=$this->asistencia_model->totalNoAsistenciaPorDocMes($selectAnio,$selectRut);
+            for ($i=0; $i <count($ausenciaDoc) ; $i++) {         
+                    foreach ($ausenciaDoc[$i] as $fila) {
+                       $totalAsist[]=$fila->cantidad;
+                       $sumNo=$sumNo+$fila->cantidad;
+
+
+                    }
+            }        
+    
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else    
+         echo json_encode($totalAsist);
+        }
+       }
+       public function nivelDocenteYear(){
+           date_default_timezone_set("America/Santiago");
+        if($this->input->post('selectYear')){
+                $selectAnio=$this->input->post('selectYear');
+                $rut=$this->input->post('selectRut');
+            $añoHoy=date('Y');
+            if($selectAnio==$añoHoy){//si el que elije son iguales se toma la fecha final hoy menos un dia
+                    $fechaHoy=date('Y-m-j');//fecha de hoy
+                    $yearIni=$selectAnio."-01-01";  
+                        $nuevafecha = strtotime ( '-1 day' , strtotime ( $fechaHoy ) ) ;
+                        $fechaMenos = date ( 'm-j' , $nuevafecha );//hoy menos un dia
+                    $yearFin=$selectAnio."-".$fechaMenos;
+            }else{
+                $yearIni=$selectAnio."-01-01";  
+                $yearFin=($selectAnio+1)."-01-01";  
+
+            }
+            $asistenciaDoc=$this->asistencia_model->totalAsistenciaPorDocAnio($yearIni,$yearFin,$rut);
+            $ausenciaDoc=$this->asistencia_model->totalNoAsistenciaPorDocAnio($yearIni,$yearFin,$rut);
+
+        if($asistenciaDoc->cantidad==0 && $ausenciaDoc->cantidad==0)//si es asi es xq no hay nada
+            echo false;
+        else  {
+                    echo  $asistenciaDoc->cantidad;
+                    echo "/";
+                    echo $ausenciaDoc->cantidad;
+        } 
+
+       }}
+       //*******************FIN DOCENTE*********************
        public function descargar(){
         $tipo=$this->input->post("descargaHidden");
        $fecha=$this->input->post('datepicker');
@@ -509,10 +586,161 @@
                  $a1[0]=$total;
                  $a1[1]=$totalNo;
                 // $total2=array_merge($a1,$a2);
-
-print_r($a1);
+        print_r($a1);
          $this->excel->stream('prueba2.xls', $a1);
+       }
+       //****FIN info asistencia******
+       public function salasNivel(){
+        if($this->input->post("query")){
+            $consulta=$this->input->post("query");
+            switch ($consulta) {
+                case '1'://NIVEL UTEM
+                    $cantidadSalasUtem=$this->asistencia_model->cantSalasUtem();
+                    $cantidadSalasUtemBloqueadas=$this->asistencia_model->cantSalasUtemBloqueada();
+                $cantidadBloqueada=$cantidadSalasUtemBloqueadas->cantidad;
+                $cantidadHabiles=$cantidadSalasUtem->cantidad;
+                $cantidadTotaldeSalasUTEM=$cantidadHabiles+$cantidadBloqueada;
+                            $Campus=$this->asistencia_model->getCampusName();
+                            foreach ($Campus as $key) {
+                               $pkCampus[]=$key->pk;
+                            }
+                            $salasAsignadas=$this->asistencia_model->cantSalasUtemAsignadas($pkCampus);   //para toda la UTEM
+                                for ($i=0; $i <count($salasAsignadas) ; $i++) { 
+                                        foreach ($salasAsignadas[$i] as $key) {
+                                           if(isset($key->sala_fk))$salafk[]=$key->sala_fk;
 
+                                        }
+                                }
+                $cantidadSalasAsignadas=count($salafk);    
+                $cantidadSalasLibres=$cantidadHabiles-$cantidadSalasAsignadas;
+                        echo $cantidadBloqueada;
+                        echo "/";
+                        echo $cantidadSalasAsignadas;
+                        echo "/";
+                        echo $cantidadSalasLibres;
+                    break;
+                case '2'://NIVEL CAMPUS
+                    $Campus=$this->asistencia_model->getCampusName();
+                    foreach ($Campus as $key) {
+                       $totalAsist[]=$key->nombre;
+                       $pkCampus[]=$key->pk;
+                    }
+                    $sumSi=0;
+                    $sumNo=0;
+                    $cantidadSalasXCampus=$this->asistencia_model->cantSalasUtemAsignadas($pkCampus); 
+                        for ($i=0; $i <count($cantidadSalasXCampus) ; $i++) { 
+                                $cantAsignada[]=count($cantidadSalasXCampus[$i]);
+                        }
+                    $cantidadSalasCampus=$this->asistencia_model->cantSalasCampus($pkCampus);
+                        for ($i=0; $i <count($cantidadSalasCampus) ; $i++) { 
+                                        $cantHabiles[]=$cantidadSalasCampus[$i]->cantidad;
+                                   $sumSi=$sumSi+$cantidadSalasCampus[$i]->cantidad;
+                        }
+                        for ($i=0; $i <count($cantAsignada) ; $i++) { 
+                            $cantLibres[]=$cantHabiles[$i]-$cantAsignada[$i];
+                        }
+                    $cantidadSalasCampusBloqueadas=$this->asistencia_model->cantSalasCampusBloqueada($pkCampus);
+                        for ($i=0; $i <count($cantidadSalasCampusBloqueadas) ; $i++) { 
+                                        $cantBloqueada[]=$cantidadSalasCampusBloqueadas[$i]->cantidad;
+                                   $sumNo=$sumNo+$cantidadSalasCampusBloqueadas[$i]->cantidad;
+                        }
+                        $supra=array_merge(array_merge(array_merge($totalAsist,$cantAsignada),$cantBloqueada),$cantLibres);
+                    if($sumSi==0 && $sumNo==0) echo false;
+                    else{
+                        echo json_encode($supra);                      
+                    }
+                    break;
+                case '3'://NIVEL FACULTAD
+                    $facultad=$this->asistencia_model->getFacultadName();
+                    foreach ($facultad as $key) {
+                       $totalAsist[]=$key->facultad;
+                       $pkFacultad[]=$key->pk;
+                    }
+                    $sumSi=0;
+                    $sumNo=0; 
+                    $cantidadSalasXFacul=$this->asistencia_model->cantSalasFaculAsignadas($pkFacultad); 
+                        for ($i=0; $i <count($cantidadSalasXFacul) ; $i++) { 
+                                
+               /*-->*/               $cantAsignada[]=count($cantidadSalasXFacul[$i]);
+                                    foreach ($cantidadSalasXFacul[$i] as $key ) {
+                                        $pkSalas[]=$key->sala_fk;
+                                    }
+                        }
+                        //echo json_encode($pkSalas);
+                    $cantidadSalasFacultad=$this->asistencia_model->cantSalasFacultad($pkFacultad);
+                        for ($i=0; $i <count($cantidadSalasFacultad) ; $i++) { 
+                                   $cantHabiles[]=$cantidadSalasFacultad[$i]->cantidad;
+                                   $sumSi=$sumSi+$cantidadSalasFacultad[$i]->cantidad;
+                        }
+                        for ($i=0; $i <count($cantAsignada) ; $i++) { 
+                            $cantLibres[]=$cantHabiles[$i]-$cantAsignada[$i];
+                        }
+
+                    $cantidadSalasFacultadBloqueadas=$this->asistencia_model->cantSalasFacultadBloqueada($pkFacultad);
+                        for ($i=0; $i <count($cantidadSalasFacultadBloqueadas) ; $i++) { 
+                                   $cantBloqueada[]=$cantidadSalasFacultadBloqueadas[$i]->cantidad;
+                                   $sumNo=$sumNo+$cantidadSalasFacultadBloqueadas[$i]->cantidad;
+                        }
+                    $supra=array_merge(array_merge(array_merge($totalAsist,$cantAsignada),$cantBloqueada),$cantLibres);
+
+                    if($sumSi==0 && $sumNo==0) echo false;
+                    else{
+                        echo json_encode($supra);                      
+                    }
+                    break;
+                case '4'://NIVEL DPTO
+                     /*   $selectFacultad=$this->input->post('selectFacultad');
+                    $getDpto=$this->asistencia_model->getDptoPk($selectFacultad);
+                    foreach ($getDpto as $key) {
+                       $totalAsist[]=$key->departamento;
+                       $pkDpto[]=$key->pk;
+                    }
+                    $sumSi=0;
+                    $sumNo=0; 
+                    $cantidadSalaXDpto=$this->asistencia_model->cantSalasDptoAsignadas($pkDpto); 
+                        for ($i=0; $i <count($cantidadSalaXDpto) ; $i++) { 
+                          $cantAsignada[]=count($cantidadSalaXDpto[$i]);
+                        }
+                    $cantidadSalaDpto=$this->asistencia_model->cantSalasDepartamento($pkDpto);
+                        for ($i=0; $i <count($cantidadSalaDpto) ; $i++) { 
+                                   $cantHabiles[]=$cantidadSalaDpto[$i]->cantidad;
+                                   $sumSi=$sumSi+$cantidadSalaDpto[$i]->cantidad;
+                        }
+                        for ($i=0; $i <count($cantAsignada) ; $i++) { 
+                            $cantLibres[]=$cantHabiles[$i]-$cantAsignada[$i];
+                        }
+
+                    $cantidadSalasFacultadBloqueadas=$this->asistencia_model->cantSalasFacultadBloqueada($pkDpto);
+                        for ($i=0; $i <count($cantidadSalasFacultadBloqueadas) ; $i++) { 
+                                   $cantBloqueada[]=$cantidadSalasFacultadBloqueadas[$i]->cantidad;
+                                   $sumNo=$sumNo+$cantidadSalasFacultadBloqueadas[$i]->cantidad;
+                        }
+                    $supra=array_merge(array_merge(array_merge($totalAsist,$cantAsignada),$cantBloqueada),$cantLibres);
+
+                    if($sumSi==0 && $sumNo==0) echo false;
+                    else{
+                        echo json_encode($supra);                      
+                    }*/
+                    break;
+            }
+        }
+       }
+       public function test(){
+        $dato=ucwords($this->input->post('search'));
+        $consulta=$this->asistencia_model->docen($dato);
+        foreach ($consulta as $key) {
+        $dat=$key->nombres.' '.$key->apellidos;
+        $pk=$key->pk;
+        if($dat!=''){
+            //echo "<li>".$dat."</li>";
+            //echo "$".$pk."$";
+                   $country_name = str_replace($dato, '<b>'.$dato.'</b>', $dat);
+                    echo '<li onclick="set_item(\''.$dat.'\',\''.$pk.'\')">'.$country_name.'</li>';
+        }
+
+        }
+
+// add new option
        }
 }
 ?>
