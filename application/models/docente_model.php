@@ -51,6 +51,10 @@
                 ->get();
         return $query->result();
     }
+    public function getAcademicoXCampus($campusPk){
+        $query=$this->db->query("select pk,nombres,apellidos from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk = '".$campusPk."'))");
+        return $query->result();
+    }
     public function academicoSemana($pk,$time,$dateIni){
         $dateFin = strtotime ('next friday', strtotime ( $dateIni ) ) ;
         $dateFin = date ( 'Y-m-d' , $dateFin );

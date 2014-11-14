@@ -1,32 +1,26 @@
 
-<script type="text/javascript">
-        $(document).ready(function() {
-           
-                   periodo = $('#periodo').val();
-                   datepicker=$('#datepicker').val();
-                   aulafk=$('#aulafk').val();
-                    $.post("<?= base_url('/index.php/intranet/getSala2')?>", {
-                        periodo : periodo , datepicker : datepicker , aulafk : aulafk
-                    }, function(data) {
-                        $("#divSala").html(data);
-                    });
-               
-            
-        });
-</script>
 <input type="hidden" name="aulafk" id="aulafk" value="<?php echo $solicitudReserva->sala_fk; ?>">
+<input type="hidden" name="aula" id="aula" value="<?php echo $solicitudReserva->sala; ?>">
 <script type="text/javascript">
         $(document).ready(function() {
             $("#periodo").change(function() {
                 $("#periodo option:selected").each(function() { 
                    periodo = $('#periodo').val();
                    datepicker=$('#datepicker').val();
+                   aulafk=$('#aulafk').val();
+                   aula=$('#aula').val();
+
                     $.post("<?= base_url('/index.php/intranet/getSala')?>", {
-                        periodo : periodo , datepicker : datepicker
+                        periodo : periodo , datepicker : datepicker, aulafk:aulafk
                     }, function(data) {
+                        data='<option value='+aulafk+'>'+aula+'</option>'+data;
                         $("#divSala").html(data);
                     });
                 });
+            });
+            $("#datepicker").change(function() {
+            $('#periodo option[selected]').prop('selected', true);
+
             });
         });
 </script>
@@ -66,7 +60,6 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-<script src="jquery.ui.datepicker-es.js"></script>
 <script type="text/javascript">
 
 $(function () {
@@ -86,9 +79,17 @@ $(function () {
         isRTL: false,
         showMonthAfterYear: false,
         yearSuffix: ''
-    };    
+    };
+function noExcursion(date){
+//var date = new Date();
+var day = date.getDay();
+// aqui indicamos el numero correspondiente a los dias que ha de bloquearse (el 0 es Domingo, 1 Lunes, etc...) en el ejemplo bloqueo todos menos los lunes y jueves.
+//return [(day != 0 && day != 1 && day != 2 && day != 3 && day != 5 && day != 6), ''];
+return[(day!=0),'']
+};    
 $.datepicker.setDefaults($.datepicker.regional["es"]);
 $("#datepicker").datepicker({
+    beforeShowDay: noExcursion,
 minDate: "0D",
 maxDate: "+1M, 5D"
 });
@@ -96,7 +97,6 @@ maxDate: "+1M, 5D"
 </script>
 
 <?php
-
   $contenidoPeriodo[$periodoPk]=$solicitudReserva->periodo; 
  foreach ($periodos as $peri) {
                         $maximo = strlen($peri->inicio);
@@ -107,34 +107,81 @@ maxDate: "+1M, 5D"
     $contenidoPeriodo[$peri->pk] = $peri->pk.'  -  '.$inicio.' - '.$termino;
 
   }
-  
-
+    $contenidoSala[$solicitudReserva->sala_fk]=$solicitudReserva->sala;
+        foreach ($salasDisponibles as $aula) {
+            $contenidoSala[$aula->pk]=$aula->sala;
+          }
   $contenidoAsignatura[$asig[0]->pk]=$asig[0]->nombre;  
     foreach ($ramos as $ram) {
     $contenidoAsignatura[$ram->pk]=$ram->codigo.' '.$ram->nombre;  
   }
 
-  $contenidoDocentes[$docente->pk]=$docente->nombres." ".$docente->apellidos;
+  $contenidoDocentes[$docente->pk]=$docente->nombres." ".$docente->apellidos;//del que viene atras de la pag
   //$contenidoDocentes=array($pkdocente=>$nombredocente." ".$apellidodocente);
-  foreach ($academicos as $acade) {
+  foreach ($academicos as $acade) {//los demas docentes
     $contenidoDocentes[$acade->pk]=$acade->nombres." ".$acade->apellidos;  
   }
-  //$contenidoSala=
-  $attributes = array('class' => 'form-horizontal', 'role' => 'form'); 
+
+  $attributes = array('id'=>'form1','class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'return validaciones()'); 
 
 ?>
 
-    
+ <script>
+function validaciones(){
+    var seccion = document.getElementById("seccion").value;
+    if(seccion==""){
+            alert("Favor Rellene con una Seccion");
+            return false;
+    }else{
+    if(window.comp==0)return false;
+    else return true
+    }
+ 
+}
+ </script>
+
+ 
+ <script>
+ $(document).ready(function() {
+                                    window.comp=1;
+
+            $("#form1").change(function() {
+   var pkPedido = document.getElementById("pkPedido").value;
+    var seccion = document.getElementById("seccion").value;
+    var datepicker = document.getElementById("datepicker").value;
+    var periodo = document.getElementById("periodo").value;
+    var divSala = document.getElementById("divSala").value;
+                        $.ajax({
+                          type: "POST",
+                          url: "<?= base_url('/index.php/intranet/comprobarEditReserva')?>",
+                          data: {pkPedido : pkPedido,datepicker:datepicker,periodo:periodo,divSala:divSala},
+                          cache: false,
+                          success: function(data)
+                          {
+                                  if(data==0)
+                                  { 
+                                   alert("Estos datos ya se encuentran con este N° Pedido");
+                                       window.comp=0;//false
+                                  }else {
+                                    window.comp=1;
+                                  }
+                          }
+                          });
+            });
+        });
+ </script>
 <div class="row-fluid">
     <div class="span12 well">
-         <?=form_open('intranet/editarReservaFinal',$attributes)?> 
+         <?php echo form_open('intranet/editarReservaFinal',$attributes);?> 
                         <input type="hidden" name="semestre" value="<?php echo $semestre;?>">    
                           <input type="hidden" name="anio" value="<?php echo $anio;?>"> 
+                          <input type="hidden" id="cursofk" value="<?php echo $solicitudReserva->curso_fk;?>"> 
+
                 <h4>Editar Reserva</h4><br>
                 <div class="form-group">
                     <label  class="col-sm-4 control-label">N° Pedido:</label>
                     <div class="col-sm-5">
-                        <?= form_input(array('class'=>'form-control','name'=>'pkPedido','readonly'=>'readonly','value'=>$solicitudReserva->pk));?>
+                        <?= form_input(array('class'=>'form-control','id'=>'pkPedido','name'=>'pkPedido','readonly'=>'readonly','value'=>$solicitudReserva->pk));?>
                     </div>
                 </div>
                 <div class="form-group">
@@ -158,7 +205,7 @@ maxDate: "+1M, 5D"
                <div class="form-group">
                     <label  class="col-sm-4 control-label">Fecha:</label>
                     <div class="col-sm-5">
-                        <?= form_input(array('class'=>'form-control','name'=>'datepicker','id'=>'datepicker','value'=>$fecha));?>
+                        <?= form_input(array('class'=>'form-control','name'=>'datepicker','readonly'=>'readonly','id'=>'datepicker','value'=>$fecha));?>
                     </div>
                 </div>
                <div class="form-group">
@@ -170,65 +217,14 @@ maxDate: "+1M, 5D"
                 <div class="form-group">
                     <label  class="col-sm-4 control-label">Sala:</label>
                     <div class="col-sm-5">
-                     <?//=form_dropdown('sala','','','class="form-control" id="divSala"')?>
-                     <select name="sala" id="divSala" class="form-control">
-                         <option selected value="<?php echo $salaPk;?>"><?php echo $sala;?></option>
-                     </select>
+                     <? //= form_dropdown('sala',$contenidoSala,'','class="form-control" id="divSala"')?>
+                       <?=form_dropdown('sala',$contenidoSala,'','class="form-control" id="divSala"')?>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-12"><br>
                         <button class="btn btn-primary" type="submit" value="Enviar" name="btnEditarPedido">Enviar <span class="icon-ok icon-white"></span></button>
                     </div>
                 </div>
-         <?php form_close();?>
+         <?php echo form_close();?>
     </div>
 </div>
-<!--
-<div class="well">
-  
- <?=form_open('intranet/editarReservaFinal')?>
-  
-    <h4>Editar Reserva</h4><br>
-        <div class="form-group">
-            <label  class="col-sm-3 control-label">N° Pedido :</label>
-            <div class="col-sm-9">
-                <?= form_input(array('name'=>'pkPedido','readonly'=>'readonly','value'=>$pkPedido,'class'=>'form-control'))?>
-            </div>
-        </div>
-     <div class="row">
-        <div class="span2">N° Pedido :</div>
-        <div class="span3"><?= form_input(array('name'=>'pkPedido','readonly'=>'readonly','value'=>$pkPedido))?></div>
-    </div>   
-    <div class="row">
-         <div class="span2">Docente:</div> <div class="span3"><?=form_dropdown('docente',$contenidoDocentes,'',"id='docente'")?></div>
-        </div>
-        <div class="row">
-            <div class="span2">Asignatura:</div> <div class="span3" ><?=form_dropdown('asignatura',$contenidoAsignatura,'',"id='asignatura'")?>
-        </div>
-            
-        </div>
-    <div class="row">
-            <div class="span2">Seccion:</div> <div class="span3" id=""><?=form_dropdown('seccion',$contenidoSeccion,'',"id='seccion'")?>
-        </div>
-            
-        </div>
-        
-        <div class="row">
-            <div class="span2">Fecha:</div><div class="span3"><?= form_input(array('name'=>'datepicker','id'=>'datepicker','value'=>$fecha));?></div>
-        </div>
-        <div class="row">
-        <div class="span2">Periodo:</div><div class="span3"><?=form_dropdown('periodo',$contenidoPeriodo,'',"id='periodo'")?></div>
-        </div>
-        
-        <div class="row">
-        <div class="span2">Sala :</div> <div class="span3"><?=form_dropdown('sala',array($pksala=>$sala),'',"id='divSala'")?></div>
-        </div>
-    
-    <div class="row">
-        <div class="span2"><?= form_submit('btnEditarPedido','Enviar',"class='btn'");?></div>
-        
-    </div>
-     <?php form_close();?>
-    
-</div>
--->

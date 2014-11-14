@@ -13,7 +13,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Sistema de Asignación</a>
+      <a class="navbar-brand" href="<?= site_url('consulta');?>">Sistema de Asignación</a>
       <!--<img src="<?php echo base_url() ?>public/img/logo.jpg" height="52px">-->
     </div>
 

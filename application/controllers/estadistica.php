@@ -59,21 +59,25 @@
        }
         //***********************UTEM******************
        public function nivelUtemDia(){
-                               if($this->input->post('datepi'))
-        {
-            $fecha=$this->input->post('datepi');
-             $total=$this->asistencia_model->totalAsistencia($fecha);
-             $totalNo=$this->asistencia_model->totalNoAsistencia($fecha);
+           if($this->input->post('datepi'))
+            {
+                $fecha=$this->input->post('datepi');
+                 $total=$this->asistencia_model->totalAsistencia($fecha);
+                 $totalNo=$this->asistencia_model->totalNoAsistencia($fecha);
+                 $totalTotal=$total->asistieron+$totalNo->noasistieron;
+                 $siTotal=@round(($total->asistieron/$totalTotal)*100);
+                 $noTotal=@round(($totalNo->noasistieron/$totalTotal)*100);
 
-             if($total->asistieron==0 && $totalNo->noasistieron==0)
-                echo false;
-            else{
-                    echo  $total->asistieron;
-                    echo "/";
-                    echo $totalNo->noasistieron;
-            }
 
-       }
+                 if($total->asistieron==0 && $totalNo->noasistieron==0)
+                    echo false;
+                else{
+                        echo  $siTotal;
+                        echo "/";
+                        echo $noTotal;
+                }
+
+           }
    }
         public function nivelUtemMes(){
                                    if($this->input->post('selectAnio'))
@@ -99,11 +103,17 @@
 
                     }
             }
+            //
+            for ($i=0; $i <count($mesesAsistio) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($mesesAsistio[$i]/($mesesAsistio[$i]+$mesesAusente[$i]))*100);
+                $arrayTotalAusencia[]=@round(($mesesAusente[$i]/($mesesAsistio[$i]+$mesesAusente[$i]))*100);
 
+            }
+            //
              if($sumNo==0 && $sumSi==0)
                 echo false;
             else{
-            $merge=array_merge($mesesAsistio,$mesesAusente);
+            $merge=array_merge($arrayTotalAsistio,$arrayTotalAusencia);
                 echo  json_encode($merge);
 
             }
@@ -128,13 +138,19 @@
             }
              $totalYearSi=$this->asistencia_model->totalAsistenciaMes($yearIni,$yearFin);
              $totalYearNo=$this->asistencia_model->totalAusenciaMes($yearIni,$yearFin);
-             if($totalYearSi->asistieron==0 && $totalYearNo->noasistieron==0)
-                echo false;
-            else{
-                    echo  $totalYearSi->asistieron;
-                    echo "/";
-                    echo $totalYearNo->noasistieron;
-            }
+                 $totalTotal=$totalYearSi->asistieron+$totalYearNo->noasistieron;
+
+                 $siTotal=@round(($totalYearSi->asistieron/$totalTotal)*100);
+                 $noTotal=@round(($totalYearNo->noasistieron/$totalTotal)*100);
+
+
+                 if($totalYearSi->asistieron==0 && $totalYearNo->noasistieron==0)
+                    echo false;
+                else{
+                        echo  $siTotal;
+                        echo "/";
+                        echo $noTotal;
+                }
        }}
         //***********************FIN UTEM******************
         //***********************CAMPUS******************
@@ -148,7 +164,7 @@
 
             foreach ($campus as $key ) {
                 $nameCampus[]=$key->nombre;
-                $totalAsist[]=$key->nombre;
+                $name[]=$key->nombre;
             }
 
             $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorCampus($nameCampus,$fecha);
@@ -163,18 +179,26 @@
             for ($i=0; $i <count($NoasistenciaCampus) ; $i++) { 
                     foreach ($NoasistenciaCampus[$i] as $fila) {
                        
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
             }
+            //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            // 
         if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
             echo false;
-        else    
-         echo json_encode($totalAsist);
-            //echo $totalAsist;
-
+        else{
+                        $merge=array_merge($name,$arrayTotalAsistio);
+                        $merge2=array_merge($merge,$arrayTotalAusencia);
+                        echo json_encode($merge2);
+        }    
        }}
     public function nivelCampusMes(){
                 if($this->input->post('selectAnio'))
@@ -196,17 +220,27 @@
             $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorCampusMes($selectAnio,$selectCampusPk);
             for ($i=0; $i <count($NoasistenciaCampus) ; $i++) {         
                     foreach ($NoasistenciaCampus[$i] as $fila) {
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
-            }        
+            }
+            //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            //        
     
         if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
             echo false;
-        else    
-         echo json_encode($totalAsist);
+        else{
+            $merge=array_merge($arrayTotalAsistio,$arrayTotalAusencia);
+         echo json_encode($merge);
+
+        }    
             //echo $totalAsist;
 
        }}
@@ -233,14 +267,20 @@
             $asistenciaCampus=$this->asistencia_model->totalAsistenciaPorCampusAnio($yearIni,$yearFin,$selectCampusPk);
 
             $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorCampusAnio($yearIni,$yearFin,$selectCampusPk);
+                 $totalTotal=$asistenciaCampus->cantidad+$NoasistenciaCampus->cantidad;
+             
+                 $siTotal=@round(($asistenciaCampus->cantidad/$totalTotal)*100);
+                 $noTotal=@round(($NoasistenciaCampus->cantidad/$totalTotal)*100);
 
-        if($asistenciaCampus->cantidad==0 && $NoasistenciaCampus->cantidad==0)//si es asi es xq no hay nada
-            echo false;
-        else  {
-                    echo  $asistenciaCampus->cantidad;
-                    echo "/";
-                    echo $NoasistenciaCampus->cantidad;
-        }  
+
+                 if($asistenciaCampus->cantidad==0 && $NoasistenciaCampus->cantidad==0)
+                    echo false;
+                else{
+                        echo  $siTotal;
+                        echo "/";
+                        echo $noTotal;
+                }
+
 
             //echo $totalAsist;
 
@@ -257,7 +297,7 @@
 
             foreach ($facultad as $key ) {
                 $nameFacultad[]=$key->facultad;
-                $totalAsist[]=$key->facultad;
+                $name[]=$key->facultad;
             }
 
             $asistenciaFacul=$this->asistencia_model->totalAsistenciaPorFacul($nameFacultad,$fecha);
@@ -272,16 +312,26 @@
             for ($i=0; $i <count($ausenciaFacul) ; $i++) { 
                     foreach ($ausenciaFacul[$i] as $fila) {
                        
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
             }
-            if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
-                echo false;
-            else    
-         echo json_encode($totalAsist);
+            //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            // 
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else{
+                        $merge=array_merge($name,$arrayTotalAsistio);
+                        $merge2=array_merge($merge,$arrayTotalAusencia);
+                        echo json_encode($merge2);
+        } 
             //echo $totalAsist;
        }
    }
@@ -305,17 +355,25 @@
             $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorFacultadMes($selectAnio,$selectFacultad);
             for ($i=0; $i <count($NoasistenciaCampus) ; $i++) {         
                     foreach ($NoasistenciaCampus[$i] as $fila) {
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
             }        
-    
+            //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            //  
         if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
             echo false;
-        else    
-         echo json_encode($totalAsist);
+        else{
+                 $merge=array_merge($arrayTotalAsistio,$arrayTotalAusencia);
+                echo json_encode($merge);
+         }
        }
    }
        public function nivelFacultadYear(){
@@ -344,13 +402,19 @@
 
             $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorFacultadAnio($yearIni,$yearFin,$selectFacultad);
 
-        if($asistenciaCampus->cantidad==0 && $NoasistenciaCampus->cantidad==0)//si es asi es xq no hay nada
-            echo false;
-        else  {
-                    echo  $asistenciaCampus->cantidad;
-                    echo "/";
-                    echo $NoasistenciaCampus->cantidad;
-        }  
+                 $totalTotal=$asistenciaCampus->cantidad+$NoasistenciaCampus->cantidad;
+             
+                 $siTotal=@round(($asistenciaCampus->cantidad/$totalTotal)*100);
+                 $noTotal=@round(($NoasistenciaCampus->cantidad/$totalTotal)*100);
+
+
+                 if($asistenciaCampus->cantidad==0 && $NoasistenciaCampus->cantidad==0)
+                    echo false;
+                else{
+                        echo  $siTotal;
+                        echo "/";
+                        echo $noTotal;
+                } 
        }}
         //***********************FIN FACULTAD******************
 
@@ -387,7 +451,7 @@
 
             foreach ($dptoPkXFacul as $key ) {
                 $dptoPk[]=$key->pk;
-                $totalAsist[]=$key->departamento;
+                $name[]=$key->departamento;
             }
 
             $asistenciaDpto=$this->asistencia_model->totalAsistenciaPorDpto($dptoPk,$fecha);
@@ -403,16 +467,26 @@
             for ($i=0; $i <count($ausenciaDpto) ; $i++) { 
                     foreach ($ausenciaDpto[$i] as $fila) {
                        
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
             }
-            if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
-               echo false;
-        else    
-     echo json_encode($totalAsist);
+            //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            // 
+        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+            echo false;
+        else{
+                        $merge=array_merge($name,$arrayTotalAsistio);
+                        $merge2=array_merge($merge,$arrayTotalAusencia);
+                        echo json_encode($merge2);
+        } 
        }}
        public function nivelDepartamentoMes(){
                 if($this->input->post('selectAnio'))
@@ -433,17 +507,25 @@
             $NoasistenciaCampus=$this->asistencia_model->totalNoAsistenciaPorDptoMes($selectAnio,$selectDpto);
             for ($i=0; $i <count($NoasistenciaCampus) ; $i++) {         
                     foreach ($NoasistenciaCampus[$i] as $fila) {
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
             }        
-    
+            //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            //  
         if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
             echo false;
-        else    
-         echo json_encode($totalAsist);
+        else{
+            $merge=array_merge($arrayTotalAsistio,$arrayTotalAusencia);
+            echo json_encode($merge);
+        }    
        }}
        public function nivelDepartamentoYear(){
            date_default_timezone_set("America/Santiago");
@@ -454,7 +536,7 @@
             $dptoPkXFacul=$this->asistencia_model->getDptoPk($selectFacultad);
             foreach ($dptoPkXFacul as $key ) {
                 $dptoPk[]=$key->pk;
-                $totalAsist[]=$key->departamento;
+                $name[]=$key->departamento;
             }
              
             $añoHoy=date('Y');
@@ -483,17 +565,26 @@
             $ausenciaDpto=$this->asistencia_model->totalNoAsistenciaPorDptoAnio($yearIni,$yearFin,$dptoPk);
             for ($i=0; $i <count($ausenciaDpto) ; $i++) {         
                     foreach ($ausenciaDpto[$i] as $fila) {
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
             } 
+           //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            // 
         if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
             echo false;
-        else    
-         echo json_encode($totalAsist);
-       
+        else{
+                        $merge=array_merge($name,$arrayTotalAsistio);
+                        $merge2=array_merge($merge,$arrayTotalAusencia);
+                        echo json_encode($merge2);
+        } 
         } 
        }
        //***********************FIN DPTO******************
@@ -505,13 +596,20 @@
             $total=$this->asistencia_model->totalAsistenciaPorDocenteDia($fecha,$rut);
              $totalNo=$this->asistencia_model->totalNoAsistenciaPorDocenteDia($fecha,$rut);
 
-             if($total->cantidad==0 && $totalNo->cantidad==0)
-                echo false;
-            else{
-                    echo  $total->cantidad;
-                    echo "/";
-                    echo $totalNo->cantidad;
-            }
+           
+                 $totalTotal=$total->cantidad+$totalNo->cantidad;
+             
+                 $siTotal=@round(($total->cantidad/$totalTotal)*100);
+                 $noTotal=@round(($totalNo->cantidad/$totalTotal)*100);
+
+
+                 if($total->cantidad==0 && $totalNo->cantidad==0)
+                    echo false;
+                else{
+                        echo  $siTotal;
+                        echo "/";
+                        echo $noTotal;
+                } 
         }
        }
        public function nivelDocenteMes(){
@@ -531,17 +629,25 @@
             $ausenciaDoc=$this->asistencia_model->totalNoAsistenciaPorDocMes($selectAnio,$selectRut);
             for ($i=0; $i <count($ausenciaDoc) ; $i++) {         
                     foreach ($ausenciaDoc[$i] as $fila) {
-                       $totalAsist[]=$fila->cantidad;
+                       $totalNoAsist[]=$fila->cantidad;
                        $sumNo=$sumNo+$fila->cantidad;
 
 
                     }
             }        
-    
-        if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
-            echo false;
-        else    
-         echo json_encode($totalAsist);
+            //
+            for ($i=0; $i <count($totalAsist) ; $i++) { 
+                $arrayTotalAsistio[]=@round(($totalAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+                $arrayTotalAusencia[]=@round(($totalNoAsist[$i]/($totalAsist[$i]+$totalNoAsist[$i]))*100);
+
+            }
+            //     
+            if($sumNo==0 && $sumSi==0)//si es asi es xq no hay nada
+                echo false;
+            else{
+            $merge=array_merge($arrayTotalAsistio,$arrayTotalAusencia);
+             echo json_encode($merge);
+            }    
         }
        }
        public function nivelDocenteYear(){
@@ -563,14 +669,20 @@
             }
             $asistenciaDoc=$this->asistencia_model->totalAsistenciaPorDocAnio($yearIni,$yearFin,$rut);
             $ausenciaDoc=$this->asistencia_model->totalNoAsistenciaPorDocAnio($yearIni,$yearFin,$rut);
+           
+                 $totalTotal=$asistenciaDoc->cantidad+$ausenciaDoc->cantidad;
+             
+                 $siTotal=@round(($asistenciaDoc->cantidad/$totalTotal)*100);
+                 $noTotal=@round(($ausenciaDoc->cantidad/$totalTotal)*100);
 
-        if($asistenciaDoc->cantidad==0 && $ausenciaDoc->cantidad==0)//si es asi es xq no hay nada
-            echo false;
-        else  {
-                    echo  $asistenciaDoc->cantidad;
-                    echo "/";
-                    echo $ausenciaDoc->cantidad;
-        } 
+
+                 if($asistenciaDoc->cantidad==0 && $ausenciaDoc->cantidad==0)
+                    echo false;
+                else{
+                        echo  $siTotal;
+                        echo "/";
+                        echo $noTotal;}
+                    
 
        }}
        //*******************FIN DOCENTE*********************
@@ -599,7 +711,7 @@
                     $cantidadSalasUtemBloqueadas=$this->asistencia_model->cantSalasUtemBloqueada();
                 $cantidadBloqueada=$cantidadSalasUtemBloqueadas->cantidad;
                 $cantidadHabiles=$cantidadSalasUtem->cantidad;
-                $cantidadTotaldeSalasUTEM=$cantidadHabiles+$cantidadBloqueada;
+                $cantidadTotaldeSalasUTEM=$cantidadHabiles+$cantidadBloqueada;//=100%
                             $Campus=$this->asistencia_model->getCampusName();
                             foreach ($Campus as $key) {
                                $pkCampus[]=$key->pk;
@@ -613,11 +725,11 @@
                                 }
                 $cantidadSalasAsignadas=count($salafk);    
                 $cantidadSalasLibres=$cantidadHabiles-$cantidadSalasAsignadas;
-                        echo $cantidadBloqueada;
+                        echo @round(($cantidadBloqueada/$cantidadTotaldeSalasUTEM)*100);
                         echo "/";
-                        echo $cantidadSalasAsignadas;
+                        echo @round(($cantidadSalasAsignadas/$cantidadTotaldeSalasUTEM)*100);
                         echo "/";
-                        echo $cantidadSalasLibres;
+                        echo @round(($cantidadSalasLibres/$cantidadTotaldeSalasUTEM)*100);
                     break;
                 case '2'://NIVEL CAMPUS
                     $Campus=$this->asistencia_model->getCampusName();
@@ -644,7 +756,14 @@
                                         $cantBloqueada[]=$cantidadSalasCampusBloqueadas[$i]->cantidad;
                                    $sumNo=$sumNo+$cantidadSalasCampusBloqueadas[$i]->cantidad;
                         }
-                        $supra=array_merge(array_merge(array_merge($totalAsist,$cantAsignada),$cantBloqueada),$cantLibres);
+                        //
+                        for ($i=0; $i <count($totalAsist) ; $i++) { 
+                            $arrayTotalAsignada[]=@round(($cantAsignada[$i]/($cantAsignada[$i]+$cantBloqueada[$i]+$cantLibres[$i]))*100);
+                            $arrayTotalBloqueada[]=@round(($cantBloqueada[$i]/($cantAsignada[$i]+$cantBloqueada[$i]+$cantLibres[$i]))*100);
+                            $arrayTotalLibres[]=@round(($cantLibres[$i]/($cantAsignada[$i]+$cantBloqueada[$i]+$cantLibres[$i]))*100);
+                        }
+                        // 
+                        $supra=array_merge(array_merge(array_merge($totalAsist,$arrayTotalAsignada),$arrayTotalBloqueada),$arrayTotalLibres);
                     if($sumSi==0 && $sumNo==0) echo false;
                     else{
                         echo json_encode($supra);                      
@@ -681,7 +800,14 @@
                                    $cantBloqueada[]=$cantidadSalasFacultadBloqueadas[$i]->cantidad;
                                    $sumNo=$sumNo+$cantidadSalasFacultadBloqueadas[$i]->cantidad;
                         }
-                    $supra=array_merge(array_merge(array_merge($totalAsist,$cantAsignada),$cantBloqueada),$cantLibres);
+                        //
+                        for ($i=0; $i <count($totalAsist) ; $i++) { 
+                            $arrayTotalAsignada[]=@round(($cantAsignada[$i]/($cantAsignada[$i]+$cantBloqueada[$i]+$cantLibres[$i]))*100);
+                            $arrayTotalBloqueada[]=@round(($cantBloqueada[$i]/($cantAsignada[$i]+$cantBloqueada[$i]+$cantLibres[$i]))*100);
+                            $arrayTotalLibres[]=@round(($cantLibres[$i]/($cantAsignada[$i]+$cantBloqueada[$i]+$cantLibres[$i]))*100);
+                        }
+                        // 
+                        $supra=array_merge(array_merge(array_merge($totalAsist,$arrayTotalAsignada),$arrayTotalBloqueada),$arrayTotalLibres);
 
                     if($sumSi==0 && $sumNo==0) echo false;
                     else{

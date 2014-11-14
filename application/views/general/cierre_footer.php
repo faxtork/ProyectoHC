@@ -9,7 +9,7 @@
               $fecha= $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
 
               echo "Universidad Tecnologica Metropolitana del Estado de Chile - ";
-                echo "Son las $time, $fecha";
+                echo "Son las $time - $fecha";
   ?> 
         <br>
               <a href="http://www.utem.cl" target="_blank">UTEM</a> <span class="divider">/</span>

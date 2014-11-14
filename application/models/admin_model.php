@@ -31,6 +31,10 @@
                 ->get();
         return $query->result();
      }
+    public function getAsignaturaXCampus($campusPk){
+            $query=$this->db->query("select pk,nombre,codigo from asignaturas where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk ='".$campusPk."'))");
+        return $query->result();
+     }
      public function setAcademico($datos){
         $this->db->insert('docentes',$datos);
             return true;
@@ -157,8 +161,23 @@
                     ORDER BY pk DESC");
        return $query->result();
      }
-     
-     
+     public function comprobarReserva($pkPedido,$fecha,$periodo,$sala){
+        $query=$this->db->query("select * from reservas where  pk!='".$pkPedido."'and fecha='".$fecha."' and sala_fk='".$sala."' and periodo_fk='".$periodo."' ");
+        return $query->num_rows();
+     }
+    public function editarReserva($semestre,$anio,$pkPedido,$pkdocente,$pkAsignatura,$seccion,$fecha,$periodo,$pkSala) {
+        $this->db->query("update cursos set asignatura_fk='$pkAsignatura', docente_fk='$pkdocente',seccion='$seccion' where pk=(SELECT curso_fk FROM reservas WHERE pk='$pkPedido')");
+        //update de la tabla cursos y ahora reserva
+         $this->db->//falta adm_fk
+                 query("UPDATE reservas  SET "
+                       ."sala_fk='$pkSala', "
+                       ."periodo_fk=(SELECT pk FROM periodos WHERE periodo='$periodo'), "
+                       ."curso_fk= (SELECT pk FROM cursos WHERE pk=(select curso_fk from reservas where pk='$pkPedido')) ,"
+                       . "fecha='$fecha' "
+                       ." WHERE pk=$pkPedido");
+         return true;
+         
+     }
      public function aprobarReserva($pkPedido,$pkSala,$adm) {
          
          $query=  $this->db->query("UPDATE reservas "
@@ -196,19 +215,7 @@
      }
      
      
-     public function editarReserva($semestre,$anio,$pkPedido,$pkdocente,$pkAsignatura,$seccion,$fecha,$periodo,$pkSala) {
-        $this->db->query("update cursos set asignatura_fk='$pkAsignatura', docente_fk='$pkdocente',seccion='$seccion' where pk=(SELECT curso_fk FROM reservas WHERE pk='$pkPedido')");
-        //update de la tabla cursos y ahora reserva
-         $this->db->//falta adm_fk
-                 query("UPDATE reservas  SET "
-                       ."sala_fk='$pkSala', "
-                       ."periodo_fk=(SELECT pk FROM periodos WHERE periodo='$periodo'), "
-                       ."curso_fk= (SELECT pk FROM cursos WHERE pk=(select curso_fk from reservas where pk='$pkPedido')) ,"
-                       . "fecha='$fecha' "
-                       ." WHERE pk=$pkPedido");
-         return true;
-         
-     }
+
      
      public function getPkDocente($pkDocente) {
          $query=$this->db->query("SELECT * FROM docentes WHERE pk=$pkDocente ");

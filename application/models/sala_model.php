@@ -7,11 +7,11 @@
            parent::__construct();
        }
         
-        public function getSalasDisponibles($pkPeriodo,$fecha) {
+        public function getSalasDisponibles($pkPeriodo,$fecha,$campusPk) {
             
             $consul="select *
                    from salas 
-                   where pk not in (select sala_fk from reservas where periodo_fk=".$pkPeriodo." and fecha='$fecha') AND estado=true;";
+                   where pk not in (select sala_fk from reservas where periodo_fk='".$pkPeriodo."' and fecha='".$fecha."') AND estado=true AND campus_fk='".$campusPk."' order by pk asc";
             //SELECT pk,sala FROM salas WHERE facultad_fk='1' AND pk not in(select sala_fk from reservas where periodo_fk='1'  and fecha='2014-10-23')
             $query=  $this->db
            ->query($consul);

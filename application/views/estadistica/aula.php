@@ -277,22 +277,22 @@ window.myPie.destroy();
 							color:"#0b82e7",
               				lineColor: "#0b82e7", 
 							highlight: "#0c62ab",
-							label: "Inhabilitada",
+							label: "Inhabilitada (%)",
               				title:'Inhabilitada'},
 						{
 							value: var2,
 							color: "#e3e860",
               				lineColor: "#e3e860",
 							highlight: "#a9ad47",
-							label: "Asignadas",
-              				title:'Asignadas'
+							label: "Asignadas (%)",
+              				title:'Asignadas '
 						},
 						{
 							value: var3,
 							color:"#cc2e3b",
               				lineColor: "#cc2e3b", 
 							highlight: "#a9ad00",
-							label: "Desocupada",
+							label: "Desocupada (%)",
               				title:'Desocupada'},			
             ];
               var options = {
@@ -311,7 +311,7 @@ window.myPie.destroy();
                             highlightFill : "#ee7f49",
                             highlightStroke : "#000000",
                             data : bloqueda,
-                            label:"Inhabilitada"
+                            label:"Inhabilitada (%)"
                           },
                           {
                             fillColor : "#6b9dfa",
@@ -319,7 +319,7 @@ window.myPie.destroy();
                             highlightFill: "#1864f2",
                             highlightStroke: "#000000",
                             data : asignada,
-                            label:"Asigandas"
+                            label:"Asigandas (%)"
                           },
                                                     {
                             fillColor : "#cc2e3b",
@@ -327,7 +327,7 @@ window.myPie.destroy();
                             highlightFill : "#a9ad00",
                             highlightStroke : "#000000",
                             data : libres,
-                            label:"Desocupada"
+                            label:"Desocupada (%)"
                           }
                         ]
                       }   

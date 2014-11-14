@@ -635,7 +635,6 @@ maxDate: "0D"
                   $.post("<?= base_url('/index.php/estadistica/nivelDocenteYear')?>", {
                     selectYear : selectYear , selectRut : selectRut
                      },function(data) {
-                      alert(data);
                       if(data==false){//quiere decir que no hay registros
                                 var texto="Lo lamentamos No hay registros en nuestro sistema para esta fecha";
                                 dataFalse(texto);
@@ -861,14 +860,14 @@ function piechart(var1,var2){
 							color:"#0b82e7",
               lineColor: "#0b82e7", 
 							highlight: "#0c62ab",
-							label: "Asistieron",
+							label: "Asistieron (%)",
               title:'Asistieron'},
 						{
 							value: var2,
 							color: "#e3e860",
               lineColor: "#e3e860",
 							highlight: "#a9ad47",
-							label: "Ausencia",
+              label: "Ausencia (%)",
               title:'Ausencia'
 						},
             ];
@@ -893,7 +892,7 @@ function piechart(var1,var2){
                             highlightFill: "#1864f2",
                             highlightStroke: "#000000",
                             data : asisten,
-                            label:"Asistieron"
+                            label:"Asistieron (%)"
                           },
                           {
                             fillColor : "#e9e225",
@@ -901,7 +900,7 @@ function piechart(var1,var2){
                             highlightFill : "#ee7f49",
                             highlightStroke : "#000000",
                             data : ausente,
-                            label:"Ausencia"
+                            label:"Ausencia (%)"
                           }
                         ]
                       }   
@@ -924,7 +923,7 @@ function piechart(var1,var2){
                             pointHighlightFill : "#fff",
                             pointHighlightStroke : "rgba(220,220,220,1)",
                             data : asisten,
-                            label:"Asistieron"
+                            label:"Asistieron (%)"
                           },
                           {
                             fillColor : "rgba(151,187,205,0.2)",
@@ -934,7 +933,7 @@ function piechart(var1,var2){
                             pointHighlightFill : "#fff",
                             pointHighlightStroke : "rgba(151,187,205,1)",
                             data : ausente,
-                            label:"Ausencia"
+                            label:"Ausencia (%)"
                           }
                         ]
                       }   
@@ -955,7 +954,7 @@ function piechart(var1,var2){
                             pointColor : "rgba(52,152,219,1)",
                             pointStrokeColor : "rgba(255,255,255,1.00)",
                             data : asisten,
-                            label:"Asistieron"
+                            label:"Asistieron (%)"
                           },
                           {
                             fillColor :"rgba(46,204,112,0.49)",
@@ -963,7 +962,7 @@ function piechart(var1,var2){
                             pointColor : "rgba(46,204,113,1)",
                             pointStrokeColor : "rgba(255,255,255,1)",
                             data : ausente,
-                            label:"Ausencia"
+                            label:"Ausencia (%)"
                           }
                         ]
                       }   

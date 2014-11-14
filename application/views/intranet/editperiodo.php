@@ -76,7 +76,9 @@ var inicio = JSON.stringify(perio);
         dataType: 'html',
         cache:false,
        // url: "https://tesis.informatica.utem.cl/~sesparza/ProyectoHC/application/views/intranet/xd2.php",
-        url: 'https://146.83.181.9/~sesparza/ProyectoHC/index.php/json/verifyUser', //error link si se cambia de servidor :(
+       // url: 'https://146.83.181.9/~sesparza/ProyectoHC/index.php/json/verifyUser', //error link si se cambia de servidor :(
+        url: "<?= base_url('/index.php/json/verifyUser')?>",
+        
         //data: "u="+ini[1]+"&d="+ter[1]+"&desf="+desfase,
         data: "ini="+inicio+"&desf="+desfase,
         success: function(resp){

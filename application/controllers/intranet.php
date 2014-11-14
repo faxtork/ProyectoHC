@@ -8,6 +8,7 @@ class Intranet extends CI_Controller {
         parent::__construct();
         session_start();   
         $this->load->model('docente_model');
+        $this->load->model('sala_model');
         $this->load->model('admin_model');
         $this->load->model('admingeneral_model');
         $this->load->model('clases_model');
@@ -463,8 +464,12 @@ class Intranet extends CI_Controller {
         
        $pkPeriodo=$this->input->post('periodo');
        $fecha=$this->input->post('datepicker');
-       $salasDisponibles=$this->Sala_model->getSalasDisponibles($pkPeriodo,$fecha);
+       $salaPk=$this->input->post('aulafk');
+
+       $campusPk=$_SESSION['campus'];
+       $salasDisponibles=$this->Sala_model->getSalasDisponibles($pkPeriodo,$fecha,$campusPk);
         foreach ($salasDisponibles as $aula) {
+            //if($aula->pk!=$salaPk)
            echo '<option value="'.$aula->pk.'">'.$aula->sala.'</option>';
         } 
        
@@ -708,30 +713,28 @@ class Intranet extends CI_Controller {
 
             }else{  
                 if($this->input->post('editar')=='Editar'){
-                        $pkdocente=$this->input->post('pkdocente');
-                        $docente=$this->admin_model->getPkDocente($pkdocente); //todos los datos de un docente
-                        $academicos=$this->Docente_model->getAcademico();//todos los academicos
-
-                        $asig=$this->Docente_model->getPkAsignatura($docente->pk);//saco la asignatura que tiene el docente
-                        $ramos=$this->admin_model->getAsignatura();//extrae todas las asignaturas
-
+                        $pkdocente=$this->input->post('pkdocente');//PK DEL DOCENTE
+                        $campus=$_SESSION['campus'];
                         $pk=$this->input->post('pkReserva');
                         $solicitudReserva=$this->admin_model->getReservas($pk);
-                        
+
 
                         $fecha=$this->input->post('fecha');
-                        
+                                                $docente=$this->admin_model->getPkDocente($pkdocente); //todos los datos de un docente
+                        $academicos=$this->Docente_model->getAcademicoXCampus($campus);//todos los academicos
+
+                        $asig=$this->Docente_model->getPkAsignatura($docente->pk);//saco la asignatura que tiene el docente
+                        $ramos=$this->admin_model->getAsignaturaXCampus($campus);//extrae todas las asignaturas
+
 
                         $seccion=$this->input->post('seccion');
                         $sala=$this->input->post('sala');
                         $salaPk=$this->input->post('salaPk');
                         $periodoPk=$this->input->post('periodoPk');
-                       // $aula=$this->admin_model->getSalaExcp($salaPk);
-                       /* $periodo=$this->input->post('periodo');
-                        $asignatura=$this->input->post('asignatura');
+       $salasDisponibles=$this->Sala_model->getSalasDisponibles($periodoPk,$fecha,$campus);
 
 
-                        $pkPedido=$pk; */ 
+                        $pkPedido=$pk; 
                         $periodos= $this->Admin_model->getPeriodo();    
                         $semestre=$this->input->post('semestre');
                         $anio=$this->input->post('anio');
@@ -741,9 +744,10 @@ class Intranet extends CI_Controller {
                         $this->load->view('general/menu_principal');
                         $this->load->view('general/abre_bodypagina');
                         $this->load->view('intranet/header_menu');
-                        $this->load->view('intranet/editarReserva',compact('semestre','anio','periodoPk','sala','salaPk','seccion','fecha','asig','ramos','docente','periodos','academicos','solicitudReserva'));
+                        $this->load->view('intranet/editarReserva',compact('salasDisponibles','semestre','anio','periodoPk','sala','salaPk','seccion','fecha','asig','ramos','docente','periodos','academicos','solicitudReserva'));
                       
-                        
+            //$this->load->view('intranet/editarReserva');
+
                         $this->load->view('general/cierre_bodypagina');
                         $this->load->view('general/cierre_footer');
                 }else{
@@ -779,6 +783,17 @@ class Intranet extends CI_Controller {
         
             }
         
+    }
+    public function comprobarEditReserva(){
+        $pkPedido=$this->input->post('pkPedido');
+        $fecha=$this->input->post('datepicker');
+        $periodo=$this->input->post('periodo');
+        $sala=$this->input->post('divSala');
+        if($pkPedido!=null){
+            $estado=$this->admin_model->comprobarReserva($pkPedido,$fecha,$periodo,$sala);
+            if($estado>=1) echo 0;//0=false
+            else echo 1;
+        }
     }
     
      public function getSeccionDeAsignatura(){
