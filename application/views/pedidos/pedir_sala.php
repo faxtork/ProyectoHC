@@ -12,19 +12,31 @@
                     });
                 });
             });
+            $("#datepicker").change(function() {$('#periodo option[selected]').prop('selected', true);});
         });
 </script>
 <script type="text/javascript">
         $(document).ready(function() {
-            $("#asignatura").change(function() {
+            $("#asignatura").change(function() {  $('#seccion option[selected]').prop('selected', true);
                 $("#asignatura option:selected").each(function() { 
                    asignatura=$('#asignatura').val();
                    docente = $('#docente').val();
-                  $.post("<?= base_url('/index.php/pedidos/getSeccionDeAsignatura')?>", {
-                        asignatura : asignatura , docente : docente
-                    }, function(data) {
-                        $("#seccion").html(data);
-                    });
+                   if(asignatura==''){  $("#seccion").html('');var x = document.createElement("OPTION");
+                     x.setAttribute("value", "");
+                         var t = document.createTextNode("Seleccionar Seccion");
+                        x.appendChild(t);
+                        document.getElementById("seccion").appendChild(x)
+                        }
+                   else{
+                          $.post("<?= base_url('/index.php/pedidos/getSeccionDeAsignatura')?>", {
+                                asignatura : asignatura , docente : docente
+                            }, function(data) {
+                                if(data==false){$('#seccion option[selected]').prop('selected', true);
+                                   
+                                    }else $("#seccion").html(data);
+                            });
+                   }
+
                 });
             });
         });
@@ -51,9 +63,17 @@ $(function () {
         isRTL: false,
         showMonthAfterYear: false,
         yearSuffix: ''
-    };    
+    };
+    function noExcursion(date){
+//var date = new Date();
+var day = date.getDay();
+// aqui indicamos el numero correspondiente a los dias que ha de bloquearse (el 0 es Domingo, 1 Lunes, etc...) en el ejemplo bloqueo todos menos los lunes y jueves.
+//return [(day != 0 && day != 1 && day != 2 && day != 3 && day != 5 && day != 6), ''];
+return[(day!=0),'']
+};    
 $.datepicker.setDefaults($.datepicker.regional["es"]);
 $("#datepicker").datepicker({
+    beforeShowDay: noExcursion,
 minDate: "0D",
 maxDate: "+1M, 5D"
 });
@@ -121,9 +141,26 @@ $atributos_Apellido=array('name'=>'Apellido');
                 }
                 ?>            
         </div>
+        <?php  if(count($asignaturas)!=0){
+            
+            ?>
+            <script>
+            function validacion(){
+                var asignatura = document.getElementById("asignatura").value;
+                var seccion = document.getElementById("seccion").value;
+                var datepicker = document.getElementById("datepicker").value;
+                var periodo = document.getElementById("periodo").value;
+                var divSala = document.getElementById("divSala").value;
+                if(asignatura=='' || seccion=='' || datepicker=='' || periodo=='' || divSala==''){
+                    alert("Favor Completar todos los Campos");
+                    return false;
+                }
+
+            }
+            </script>
         <div class="span6">
             <h4>Pedir Sala</h4>
-            <?php $attributes = array('class' => 'form-horizontal', 'role' => 'form'); 
+            <?php $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'return validacion()'); 
                  echo form_open('pedidos/guardarPedidoSala',$attributes); 
                  echo form_input(array('name'=>'docente','type'=>'hidden','id'=>'docente','value'=>$docente->pk));?>
                 <div class="form-group">
@@ -132,10 +169,10 @@ $atributos_Apellido=array('name'=>'Apellido');
                         <select name="asignatura" class="form-control" id="asignatura">
                         <option value="">Seleccionar Asignatura</option>
                             <?php 
-                               for ($i=0; $i <count($pkAsignatura) ; $i++) { 
-                                echo'<option value='.$pkAsignatura[$i].'>'.$nombreAsignatura[$i].'</option>';
 
-                               }
+                            foreach ($asignaturas as $key) {
+                                echo'<option value='.$key->pk.'>'.$key->nombre.'</option>';
+                                }
                             ?>
                         </select>
                     </div>
@@ -144,7 +181,7 @@ $atributos_Apellido=array('name'=>'Apellido');
                     <label  class="col-lg-6 control-label" id="c">Seccion: </label>
                     <div class="col-lg-6"> 
                         <select name="seccion" class="form-control" id="seccion">
-                            <option value="">Seleccionar Seccion</option>
+                            <option selected="selected" value="">Seleccionar Seccion</option>
                         </select>
                     </div>
                 </div>
@@ -158,7 +195,7 @@ $atributos_Apellido=array('name'=>'Apellido');
                     <label  class="col-lg-6 control-label" id="c">Periodo: </label>
                     <div class="col-lg-6"> 
                             <?php 
-                                echo form_dropdown('sePeriodo',$atributos_OptionPeriodo,'','class="form-control" id="periodo"');
+                                echo form_dropdown('periodo',$atributos_OptionPeriodo,'','class="form-control" id="periodo"');
                              ?>
                     </div>
                 </div>
@@ -173,6 +210,7 @@ $atributos_Apellido=array('name'=>'Apellido');
             <button type="submit" class="btn btn-primary btn-lg">Enviar</button>     
             <?php echo form_close(); ?>
         </div>
+        <?php }else echo'<script>alert("Aun no tienes Asignaturas Asignadas.")</script>'; ?>
     </div>    
    
   

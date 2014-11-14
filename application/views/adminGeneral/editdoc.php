@@ -14,14 +14,13 @@ $( window ).resize(function() {
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#facu").change(function() {
-                $("#facu option:selected").each(function() { 
-                   facu=$('#facu').val();
-                  $.post("<?= base_url('/index.php/intranet/llena_docDptoGral')?>", {
-                        facu : facu
+            $("#dpto").change(function() {
+                $("#dpto option:selected").each(function() { 
+                   dpto=$('#dpto').val();
+                  $.post("<?= base_url('/index.php/intranet/llena_docDptoGral2')?>", {
+                        dpto : dpto
                     }, function(data) {
                      	  $("#doc").html(data);
-
                      		if(data==false)
                      		{ 
                      			 $("#doc").html("Selecciona otro Dpto o Agrega uno nuevo Seleccionando el Dpto.");
@@ -32,7 +31,7 @@ $( window ).resize(function() {
         });
 </script>
 		<div class="span9">	<div class="well">
-			<div class="row-fluid"><div class="span12"><h3>Lista de Docentes por Facultad de la UTEM</h3></div></div>
+			<div class="row-fluid"><div class="span12"><h3>Lista de Docentes por Dptos. de la UTEM</h3></div></div>
 			<?php $attributes = array('class' => 'form-horizontal', 'role' => 'form');
 				echo form_open('intranet/modificarDoc',$attributes);  ?>
 			<div class="row-fluid">
@@ -43,12 +42,12 @@ $( window ).resize(function() {
 						echo'	<div class="form-group">
 							    	<label  class="col-sm-3 control-label" id="c">Facultad.</label>
 							    	<div class="col-sm-8">
-										<select name="facu" class="form-control" id="facu" >
-										<option value="">Selececione un Dpto</option>
+										<select name="dpto" class="form-control" id="dpto" >
+										<option value="">Selececione una Dptos.</option>
 											';
-											    foreach ($facultad as $fila) {
+											    foreach ($getDptos as $fila) {
 
-											    		echo'<option value='.$fila->pk.'>'.$fila->facultad.'</option>';
+											    		echo'<option value='.$fila->pk.'>'.$fila->departamento.'</option>';
 											    												
 											    	    }
 											echo'

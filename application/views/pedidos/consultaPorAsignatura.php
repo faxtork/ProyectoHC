@@ -1,3 +1,4 @@
+<?php  if(count($asignaturas)!=0){?>
 <script type="text/javascript">
         $(document).ready(function() {
             $("#asignatura").change(function() {
@@ -17,7 +18,6 @@
 <?php
 
  
-  
    if (isset($asignaturas)) {
       
          $atributos_OptionSeccion=array(''=>'->Seleccionar seccion',);
@@ -59,3 +59,4 @@
        
     
 </div>
+<?php }else echo'<script>alert("Aun no tienes Asignaturas Asignadas.")</script>'; ?>

@@ -32,7 +32,9 @@ class Login extends CI_Controller {
           $docenteNombres=$docente->nombres;
           $docenteApellidos=$docente->apellidoPaterno." ".$docente->apellidoMaterno;
             if($resultado==true && $tipo=="PROF"){//pasa cuando evalua todas las posibilidaddes
-                  $_SESSION['usuarioProfesor']=  $this->input->post('rut',true);
+                //  $_SESSION['usuarioProfesor']=  $this->input->post('rut',true);
+                      $_SESSION['usuarioProfesor']="8.727.547-7";//BORRAR DESPUES************************************************
+
                     $_SESSION['bnv'] = $docenteName;
                     //si es un profesor que por primera ves entra al sistema se debe almacenar su rut y datos
                     //pregunto si el profesor que se logeo existe en nuestra BD

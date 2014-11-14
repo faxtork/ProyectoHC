@@ -64,21 +64,13 @@ class Pedidos extends CI_Controller {
     $this->load->view('general/headers');
     $this->load->view('general/menu_principal');
     $this->load->view('general/abre_bodypagina');
-    $_SESSION['usuarioProfesor']="8.727.547-7";//BORRAR DESPUES************************************************
-    $docente=$this->Docente_model->getDocenteRut($_SESSION['usuarioProfesor']); 
-    $asignaturas=$this->Docente_model->getAsignaturaDoc($docente->pk);
-foreach ($asignaturas as $key) {
-  $pk[]=$key->pk;
-  $nombre[]=$key->nombre;
-  //$seccion[]=$key->seccion;
-
-}
-$pkAsignatura=array_keys(array_count_values($pk));
-$nombreAsignatura=array_keys(array_count_values($nombre));
+    $rut=$_SESSION['usuarioProfesor']; 
+    $docente=$this->Docente_model->getDocenteRut($rut);
+    $asignaturas=$this->Docente_model->getAsignaturaDoc($rut);
 
     $periodos= $this->Admin_model->getPeriodo();
     $this->load->view('pedidos/selecionar_opcionPedidos');
-    $this->load->view('pedidos/pedir_sala',compact("pkAsignatura","nombreAsignatura","docente","periodos"));     
+    $this->load->view('pedidos/pedir_sala',compact("asignaturas","nombreAsignatura","docente","periodos"));     
     $this->load->view('general/cierre_bodypagina');
     $this->load->view('general/cierre_footer');  
   }
@@ -264,7 +256,9 @@ public function salaDisponible() {
   else{  
     $pkPeriodo= $this->input->post('periodo');
     $fecha=$this->input->post('datepicker');
-    $salasDisponibles=$this->Sala_model->getSalasDisponibles($pkPeriodo,$fecha);
+    $rut=$_SESSION['usuarioProfesor'];
+    $campusDoc=$this->docente_model->queCampusDoc($rut);
+    $salasDisponibles=$this->Sala_model->getSalasDisponibles($pkPeriodo,$fecha,$campusDoc->pk);
     foreach ($salasDisponibles as $sala) {
      echo '<option value="'.$sala->pk.'">'.$sala->sala.'</option>';
    }     
@@ -285,7 +279,7 @@ public function guardarPedidoSala(){
 
    $fecha= $this->input->post('datepicker');
     $sala_pk=$this->input->post('sala'); 
-    $periodo_pk=$this->input->post('sePeriodo'); 
+    $periodo_pk=$this->input->post('periodo'); 
     $docente_pk=$this->input->post('docente'); 
     $asignatura_pk=$this->input->post('asignatura'); 
     $seccion=$this->input->post('seccion'); 
@@ -294,19 +288,13 @@ public function guardarPedidoSala(){
         //  echo $docente_pk;
         redirect('pedidos/pedirSala');
        }else{ 
-        $date=$this->Clases_model->getDate(); 
-        $listo=$this->Docente_model->hayProfesor($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion,$date);
-         if ($listo->cantidad==0) { 
-          $pedidoSala=$this->Docente_model->guardarPedidoSala($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion,$date); 
-        } else{ 
-          echo '<script>alert("El profesor ya esta asignado a esa hora y en esa fecha"); </script>'; 
-          redirect('pedidos', 'refresh'); 
-        } if($pedidoSala==true){
-         echo '<script>alert("Se ha guardado Exitosamente!"); </script>'; 
-         redirect('pedidos', 'refresh');
-          } else{ echo '<script>alert("Ha ocurrido un error !"); </script>';
-           redirect('pedidos', 'refresh'); 
-         } 
+          $pedidoSala=$this->Docente_model->guardarPedidoSala($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion); 
+           if($pedidoSala==true){
+             echo '<script>alert("Se ha guardado Exitosamente!"); </script>'; 
+             redirect('pedidos', 'refresh');
+              } else{ echo '<script>alert("Ha ocurrido un error !"); </script>';
+               redirect('pedidos', 'refresh'); 
+             } 
        } 
      } 
     }
@@ -328,13 +316,37 @@ public function guardarPedidoSala(){
         $pkAsignatura=$this->input->post('asignatura');
         //echo "$pkDocente - $pkAsignatura";
         $secciones=$this->Admin_model->getSeccionDeAsignaturaDocente($pkDocente,$pkAsignatura);
-        
+        $option="";
+        $option="<option selected='selected' value=''>Seleccionar Seccion</option>";
         foreach ($secciones as $sec) {
      
-            echo "<option value='".$sec->seccion."'>".$sec->seccion."</option>";
+            $option=$option."<option value='".$sec->seccion."'>".$sec->seccion."</option>";
             
            
         }
+        echo $option;
+            }
+    }
+    public function miHorario(){
+      if(!isset($_SESSION['usuarioProfesor']))
+            {
+                $this->load->view('general/headers');
+                $this->load->view('general/menu_principal');
+                $this->load->view('general/abre_bodypagina');
+                $this->load->view('intranet/nosesion');
+                $this->load->view('general/cierre_bodypagina');
+                $this->load->view('general/cierre_footer');
+
+            }else{
+              $rut=$_SESSION['usuarioProfesor'];
+              $clasesDoc=$this->docente_model->miSchedule($rut);
+                  $this->load->view('general/headers');
+                  $this->load->view('general/menu_principal');
+                  $this->load->view('general/abre_bodypagina');
+                  $this->load->view('pedidos/selecionar_opcionPedidos',compact('clasesDoc'));
+                    $this->load->view('pedidos/horario');
+                  $this->load->view('general/cierre_bodypagina');
+                  $this->load->view('general/cierre_footer');
             }
     }
 

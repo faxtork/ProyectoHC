@@ -1471,9 +1471,9 @@ class Intranet extends CI_Controller {
                             $this->load->view('general/abre_bodypagina');   
                             $this->load->view('adminGeneral/header_menuGeneral');
                             //$facultad=2;///VEER MAAAS TAAARDEEEE!!!!!!!!!!!***********************
-                            //$facultad=$this->admin_model->getFacultad();
+                            $getDptos=$this->admin_model->getdptoAll();//bien xq es el admingeneral :D                       
                                 $this->load->view('adminGeneral/data2');
-                                     $this->load->view('adminGeneral/editdoc');
+                                     $this->load->view('adminGeneral/editdoc',compact('getDptos'));
                                  $this->load->view('adminGeneral/cierreData');          
                             $this->load->view('general/cierre_bodypagina');
                             $this->load->view('general/cierre_footer');
@@ -1539,6 +1539,29 @@ class Intranet extends CI_Controller {
             
             }
      }
+         public function llena_docDptoGral2(){
+            if($this->input->post('dpto'))
+            {
+                $pkDpto = $this->input->post('dpto');//id
+                $getDoc = $this->admin_model->getDocPorDpto($pkDpto);
+                foreach($getDoc as $fila)
+                {
+                    
+                                echo'   <div class="form-group">
+                                            <label  class="col-sm-2 control-label" id="c">Docente</label>
+                                            <div class="col-lg-8">
+                                                <div class="input-group">  
+                                                    <span class="input-group-addon"><input type="checkbox" name="accion[]" id="'.$fila->pk.'" value="'.$fila->pk.'"></span>
+                                                        <input class="form-control" readonly="readonly" type="text" value="'.$fila->nombres." ".$fila->apellidos.'">
+                                                   
+                                                </div>
+                                            </div>  
+                                        </div>';
+                }
+
+            
+            }
+     }
      public function modificarDoc(){
         $btnEditar=$this->input->post('editarDoc');
         $btnEliminar=$this->input->post('eliminarDoc');
@@ -1561,13 +1584,13 @@ class Intranet extends CI_Controller {
                             $this->load->view('general/cierre_bodypagina');
                             $this->load->view('general/cierre_footer');
                     }else{
-                            $docOtorgado=$this->admin_model->getNameDpto($dptoSeleccionada);                        
+                    $docOtorgado=$this->admin_model->getNameDpto($dptoSeleccionada);                                              
                             $this->load->view('general/headers');
                             $this->load->view('general/menu_principal');
                             $this->load->view('general/abre_bodypagina');   
                             $this->load->view('adminGeneral/header_menuGeneral');
                                  $this->load->view('adminGeneral/data2');  
-                                     $this->load->view('intranet/agregarDoc',compact('docOtorgado'));
+                                     $this->load->view('adminGeneral/agregarDoc',compact('docOtorgado'));
                                   $this->load->view('adminGeneral/cierreData');       
                             $this->load->view('general/cierre_bodypagina');
                             $this->load->view('general/cierre_footer');
@@ -1649,7 +1672,11 @@ class Intranet extends CI_Controller {
 
         $pkDpto=$this->input->post('pkDpto');
         $btnEnviar=$this->input->post('enviarModificacion');
-        $docServer=$this->admin_model->getDocPorDpto($pkDpto);
+
+ 
+        $docServer=$this->admin_model->getdocAll();
+
+        //////////
 
         for ($i=0; $i <count($docServer) ; $i++) { 
                 if($docServer[$i]->rut==$addDocRut){

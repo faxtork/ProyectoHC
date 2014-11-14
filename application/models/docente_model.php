@@ -60,9 +60,10 @@
         $dateFin = date ( 'Y-m-d' , $dateFin );
         $condicion=array('d.pk'=>$pk,
                          'r.fecha >='=>$dateIni,
-                         'r.fecha <='=>$dateFin
+                         'r.fecha <='=>$dateFin,
+                         'r.adm_fk '=>'is not null'
           );
-              $query=$this->db
+             /* $query=$this->db
                 ->select('r.pk,p.periodo,p.inicio,p.termino, r.fecha,d.apellidos, a.nombre,s.sala,c.seccion')
                 ->from('reservas as r')
                 ->join('cursos as c','r.curso_fk=c.pk','inner')
@@ -72,7 +73,10 @@
                 ->join('periodos as p','p.pk=r.periodo_fk','inner')
                 ->where($condicion)
                 ->order_by('r.fecha','asc')
-                ->get();
+                ->get();*/
+                $query=$this->db->query("select r.pk,p.periodo,p.inicio,p.termino, r.fecha,d.apellidos, a.nombre,s.sala,c.seccion from reservas as r,cursos as c,docentes as d,
+                          salas as s,asignaturas as a,periodos as p WHERE r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND
+                          c.asignatura_fk=a.pk AND p.pk=r.periodo_fk AND r.fecha >='".$dateIni."'AND r.fecha <='".$dateFin."' AND d.pk='".$pk."' AND r.adm_fk is not null order by r.fecha asc");
         return $query->result();
        }
 
@@ -92,11 +96,14 @@
                                  WHERE  c.docente_fk='$pk_docente' AND a.pk=c.asignatura_fk;");
         return $query->result();
      }
-     public function getAsignaturaDoc($pk){ 
-      $query=$this->db->query("select  a.pk,a.nombre,cu.seccion from asignaturas a,cursos cu where cu.docente_fk='".$pk."' AND a.pk=cu.asignatura_fk ");
+     public function getAsignaturaDoc($rut){ 
+      $query=$this->db->query("select pk,nombre from asignaturas where pk in(select asignatura_fk from cursos where docente_fk in(select pk from docentes where rut='".$rut."'))");
       return $query->result();
      }
-     
+      public function queCampusDoc($rut){ 
+      $query=$this->db->query("select pk from campus where pk in(select campus_fk from facultades where  pk in(select facultad_fk from departamentos where pk in(select departamento_fk from docentes where rut='".$rut."')))");
+      return $query->row();
+     }
  public function hayProfesor($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion,$date){ 
   $query=$this->db->query("SELECT count (*) AS cantidad 
     From reservas as r, docentes as d, cursos as c, periodos as p 
@@ -109,7 +116,7 @@
   return $query->row(); 
 } 
 
-  public function guardarPedidoSala($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion,$date)
+  public function guardarPedidoSala($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion)
    { 
     $this->db ->query("INSERT INTO reservas (fecha,sala_fk,periodo_fk,curso_fk) values('$fecha','$sala_pk','$periodo_pk',(select pk FROM cursos WHERE asignatura_fk='$asignatura_pk' and docente_fk='$docente_pk' and seccion='$seccion'));");
      return true; 
@@ -178,7 +185,25 @@
               ->get ();
         return $query->row();
       }
+      public function miSchedule($rut){
+         date_default_timezone_set("America/Santiago");
+          $fechaHoy=date("Y-m-d");//solo muestra los datos de aqui en adelante
+        $query=$this->db->query("SELECT c.seccion,r.fecha,s.sala,a.nombre AS asignatura,p.periodo
+                     FROM reservas as r,salas as s,docentes as d,cursos as c,asignaturas as a,periodos as p WHERE
+                    r.adm_fk is not NULL and
+                    s.pk=r.sala_fk and
+                    c.pk=r.curso_fk and
+                    p.pk=r.periodo_fk and
+                    d.pk=c.docente_fk and
+                    a.pk=c.asignatura_fk and
+d.rut='".$rut."'
 
+
+                    AND  r.fecha>='".$fechaHoy."'
+                    ORDER BY r.fecha asc");
+        return $query->result();
+      }
      
+
    }
 ?>

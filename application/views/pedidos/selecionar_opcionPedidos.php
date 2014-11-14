@@ -8,7 +8,7 @@
         <div class="btn-group">
            <a class="btn btn-default btn-lg" href="<?= site_url('pedidos/pedirSala');?>">Pedir Sala</a>
            <a class="btn btn-default btn-lg" href="<?= site_url('pedidos/verPedidos');?>">Ver Pedido</a>
-           <a class="btn btn-default btn-lg" href="<?= site_url('pedidos/');?>">Mi Horario</a> <!--TU PARTE NAVIA-->
+           <a class="btn btn-default btn-lg" href="<?= site_url('pedidos/miHorario');?>">Mi Horario</a> <!--TU PARTE NAVIA-->
 
         </div><br><br>
   <!-- <a href="<?= site_url('login/desconectar');?>" class="btn btn-warning">desconectar</a> -->

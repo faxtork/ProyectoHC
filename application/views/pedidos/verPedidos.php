@@ -1,5 +1,4 @@
 <div class="well">
-    
    <div class="mygrid-wrapper-div">
   <table class='table table-hover-striped'border="0" style="text-align:left;">
                    <thead >
@@ -19,6 +18,7 @@
                 <tbody>
                     
                     <?php
+
                     foreach ($pedidos as $pedi) {
                         echo '<tr>';
                         echo '<td>'.form_label($pedi->pk).'</td>';

@@ -109,73 +109,8 @@ class Clases_model extends CI_Model{
             $date = date ( 'Y-m-d' , $nuevafecha );
         }
 
-       /* $condicion=array(
-            
-            'p.inicio <='=>$time,
-            'p.termino >='=>$time,
-            'r.fecha ='=>$date,
-          );
-        $query=$this->db
-                ->select('p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion')
-                ->from('reservas as r')
-                ->join('cursos as c','r.curso_fk=c.pk','inner')
-                ->join('docentes as d','c.docente_fk=d.pk','inner')
-                ->join('salas as s','r.sala_fk=s.pk','inner')
-                ->join('asignaturas as a','c.asignatura_fk=a.pk','inner')
-                ->join('periodos as p','p.pk=r.periodo_fk','inner')
-                ->where($condicion)
-                ->order_by('c.seccion','asc')
-                ->get();*/
-        $query=$this->db->query("SELECT p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk AND p.inicio<='".$time."' AND p.termino>='".$time."' AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by c.seccion asc");        
+        $query=$this->db->query("SELECT p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.adm_fk is not null and r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk AND p.inicio<='".$time."' AND p.termino>='".$time."' AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by c.seccion asc");        
 //arreglar para la wa del isnot null
-
-        /*//INI
-        date_default_timezone_set("America/Santiago");
-        $year=date("Y");
-        $month=date("n");
-        $day=date("j");
-        if (strlen($month)==1) {
-            $month="0$month";   //una forma de concadenar
-        }
-        if (strlen($day)==1) {
-            $day="0".$day;      //otra forma de concadenar
-        }
-        $date=$year."-".$month."-".$day;
-        while($date<"2014-02-13"){
-            for ($conta=1; $conta<=7 ; $conta++) { 
-                if ($day=="31" && ($month=="01"||$month=="03"||$month=="05"||$month=="07"||$month=="08"||$month=="10"||$month=="12")){
-                    if ($month=="12") {
-                        $day="01";
-                        $month="01";
-                        $year=$year+"0001";
-                    }
-                    else{
-                        $day="01";
-                        $month=$month+"01";
-                    }
-                }
-                elseif ($day=="30" && ($month=="04"||$month=="06"||$month=="09"||$month=="11")) {
-                    $day="01";
-                    $month=$month+"01";
-                }
-                else{
-                    $day=$day+"01";
-                }
-                if (strlen($month)==1) {
-                    $month="0$month";   //una forma de concadenar
-                }
-                if (strlen($day)==1) {
-                    $day="0".$day;      //otra forma de concadenar
-                }
-            }
-            $date=$year."-".$month."-".$day;
-            //echo "$date<br>";
-        }
-        //FIN*/
-
-
-
-
 
         return $query->result();
     }
@@ -190,27 +125,9 @@ class Clases_model extends CI_Model{
             $nuevafecha = strtotime ('next monday', strtotime ( $date ) ) ;
             $date = date ( 'Y-m-d' , $nuevafecha );
         }
-       /* $condicion=array(
-                'r.fecha ='=>$date,
-              );     
-      $query=$this->db
-                ->select('p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion')
-                ->from('reservas as r')
-                ->join('cursos as c','r.curso_fk=c.pk','inner')
-                ->join('docentes as d','c.docente_fk=d.pk','inner')
-                ->join('salas as s','r.sala_fk=s.pk','inner')
-                ->join('asignaturas as a','c.asignatura_fk=a.pk','inner')
-                ->join('periodos as p','p.pk=r.periodo_fk','inner')
-                ->where ($condicion)
-                ->order_by('p.periodo','asc')
-                ->get();*/
-        $query=$this->db->query("SELECT p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk  AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by p.periodo asc");       
+        $query=$this->db->query("SELECT p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.adm_fk is not NULL  AND r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk  AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by p.periodo asc");       
         return $query->result();
       
-           
-       
-
-
     }
         public function getHoy2($time, $date,$cantPer){
             $campus=$_SESSION['campus'];
