@@ -20,7 +20,7 @@
  
    if (isset($asignaturas)) {
       
-         $atributos_OptionSeccion=array(''=>'->Seleccionar seccion',);
+         $atributos_OptionSeccion=array(''=>'Seleccionar Sección',);
      //  $atributos_OptionAsig=array(''=>'->Seleccionar Asignatura',);
        foreach ($asignaturas as $asig) {
            
@@ -43,16 +43,16 @@
         <?= form_label('Asignatura :')?>
         </div>
         <div class="span6">
-        <?= form_dropdown('asignatura',$atributos_OptionAsig,'',"id='asignatura' style='width:250px'") ?>     
+        <?= form_dropdown('asignatura',$atributos_OptionAsig,'',"id='asignatura' style='width:250px' class='form-control'") ?>     
         </div>
     </div>   
     <div class="row-fluid">
-        <div class="span6"><?= form_label('Seccion :')?></div>
+        <div class="span6"><?= form_label('Sección :')?></div>
         <div class="span6">
-        <?= form_dropdown('seccion',$atributos_OptionSeccion,'',"id='seccion' style='width:250px'")?>    
+        <?= form_dropdown('seccion',$atributos_OptionSeccion,'',"id='seccion' style='width:250px'  class='form-control'")?>    
         </div>
     </div>
-    <div class="row"><div class="span6"></div>
+    <div class="row"><div class="span4"></div>
        <div class="span2"><button type="submit" class="btn btn-primary">Consultar Pedido</button></div>  
       <div class="span4"></div>
     </div>   

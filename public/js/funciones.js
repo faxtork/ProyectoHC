@@ -1,5 +1,11 @@
 function eliminar(url) {
-    if (confirm("¿Realmente desea eliminar este registro?")) {
+    if (confirm("¿Realmente desea Eliminar este Registro?")) {
+        window.location = url;
+        redirect('/intranet', 'refresh');
+    }
+}
+function aprobar(url) {
+    if (confirm("¿Realmente desea Aprobar este Registro?")) {
         window.location = url;
         redirect('/intranet', 'refresh');
     }

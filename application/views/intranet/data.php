@@ -7,7 +7,7 @@
 									<li><a href="<?= site_url('intranet/editSalas');?>">Salas</a></li>
 									<li><a href="<?= site_url('intranet/editAsignaturas');?>">Asignaturas</a></li>
 									<li><a href="<?= site_url('intranet/editDocentes');?>">Docentes</a></li>
-									<!--<li><a href="<?= site_url('intranet/reportes');?>">Reportes</a></li>-->
+									<li><a href="<?= site_url('intranet/reportes');?>">Reportes</a></li>
 								</ul>		
 				</div> </div>
 

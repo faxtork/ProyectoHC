@@ -124,7 +124,8 @@
      
      public function getPedidoSalaDocente($asignatura_pk,$docente_pk,$seccion){
 //$query=$this->db->query("SELECT * FROM reservas WHERE curso_fk=(SELECT pk FROM cursos WHERE asignatura_fk='$asignatura_pk' AND docente_fk='$docente_pk') ");
-         
+           date_default_timezone_set("America/Santiago");
+          $fechaHoy=date("Y-m-d");//solo muestra los datos de aqui en adelante
       $query=$this->db->query("SELECT r.*,s.sala,s.pk AS pksala,p.periodo,d.pk AS pkdocente,d.nombres AS nombredocente,"
               . "d.apellidos AS apellidodocente,a.pk AS pkasignatura,a.nombre AS nombreasignatura "
               . "FROM reservas as r,salas as s,periodos as p,docentes as d ,asignaturas as a "
@@ -133,7 +134,8 @@
               . "AND s.pk=r.sala_fk "
               . "AND p.pk=r.periodo_fk "
               . "AND d.pk=(SELECT docente_fk FROM cursos WHERE pk=r.curso_fk ) "
-              . "AND a.pk=(SELECT asignatura_fk FROM cursos WHERE pk=r.curso_fk )");
+              . "AND a.pk=(SELECT asignatura_fk FROM cursos WHERE pk=r.curso_fk )"
+              . "AND r.fecha>='$fechaHoy'");
          
       return $query->result();
      }

@@ -317,7 +317,7 @@ public function guardarPedidoSala(){
         //echo "$pkDocente - $pkAsignatura";
         $secciones=$this->Admin_model->getSeccionDeAsignaturaDocente($pkDocente,$pkAsignatura);
         $option="";
-        $option="<option selected='selected' value=''>Seleccionar Seccion</option>";
+        $option="<option selected='selected' value=''>Seleccionar Sección</option>";
         foreach ($secciones as $sec) {
      
             $option=$option."<option value='".$sec->seccion."'>".$sec->seccion."</option>";

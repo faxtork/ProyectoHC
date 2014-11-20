@@ -42,8 +42,9 @@ $( window ).resize(function() {
                         echo '<td>'.$pedi->asignatura.'</td>';
                         echo '<td>'.$pedi->periodo.'</td>';
                         echo '<td>'.$pedi->sala.'</td>'; 
-                        echo "<td><a href='".base_url()."index.php/intranet/aprobarPedido/$pedi->pk/$pedi->fecha/$pedi->sala/$pedi->pksala/$pedi->nombredocente/$pedi->apellidodocente/$pedi->pkdocente/$pedi->asignatura/$pedi->pkasignatura/$pedi->periodo' onclick='return confirm('¿Desea editar este Contenido?')' class='btn btn-success' >Aprobar</a></td>";
+                        //echo "<td><a href='".base_url()."index.php/intranet/aprobarPedido/$pedi->pk/$pedi->fecha/$pedi->sala/$pedi->pksala/$pedi->nombredocente/$pedi->apellidodocente/$pedi->pkdocente/$pedi->asignatura/$pedi->pkasignatura/$pedi->periodo' onclick='return confirm('¿Desea editar este Contenido?')' class='btn btn-success' >Aprobar</a></td>";
                         ?>
+                        <td><a class="btn btn-success" href="javascript:void(0);"onclick="aprobar('<?php base_url()?>aprobarFinal/<?php echo $pedi->pk; ?>')">Aprobar</a></td>
                         <td><a class="btn btn-danger" href="javascript:void(0);"onclick="eliminar('<?php base_url()?>eliminarPedido/<?php echo $pedi->pk; ?>')">Rechazar</a></td>
                         <?php
 

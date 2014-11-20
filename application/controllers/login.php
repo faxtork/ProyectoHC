@@ -71,6 +71,7 @@ class Login extends CI_Controller {
             if($respuestaLogin1!=null){ //hay respuesta del usuario administrador
                   
                   $_SESSION['usuarioAdmin']=$this->input->post('rut',true);
+                  $_SESSION['rutAdmin']=$respuestaLogin1->rut;
                   $_SESSION['campus']=$respuestaLogin1->campus_fk;//para saber de que campus es el usuarioadmin
                   redirect('intranet/acceso',301); 
 

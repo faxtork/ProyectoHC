@@ -1,4 +1,4 @@
-<?php 
-$x=round(1/0)*100;
+<?php
+
+$x=round(1/5)*100;
 var_dump($x);
- ?>

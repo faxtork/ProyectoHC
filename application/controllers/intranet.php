@@ -327,10 +327,25 @@ class Intranet extends CI_Controller {
                 $periodo=$this->admin_model->getPeriodo();
                 $this->load->view('general/headers');
                 $this->load->view('general/menu_principal');
-                $this->load->view('general/abre_bodypagina');  
-                $pedidos=$this->admin_model->getTodosPedidos();
+                $this->load->view('general/abre_bodypagina');
+                       $campusPk=$_SESSION['campus']; 
+                $pedidos=$this->admin_model->getTodosPedidos($campusPk);
                 $this->load->view('intranet/header_menu');
-                $this->load->view('intranet/pedidosDocentes',compact('pedidos'));
+                  /*  if(count($pedidos)==0)//si es 0 quiere decir que lo aprobo o lo elimino
+                    {
+                        $fkadmin=$this->Admin_model->fkAdminn($_SESSION['rutAdmin']);
+                        $getPedidoEstado=$this->Admin_model->pedidoEstado($fkadmin->pk);//si lo encuentra aqui es xq lo aprobo
+                        foreach ($getPedidoEstado as $key) {
+                            $pkPedidos[]=$key->pk;
+                        }
+                        $extraePedi=$this->Admin_model->extraePediXPk($pkPedidos,$campusPk);
+                        $this->load->view('intranet/pedidosDocentes',compact('pedidos'));
+                        
+                    }else{*/
+                        $this->load->view('intranet/pedidosDocentes',compact('pedidos'));
+                  //  } 
+                
+                
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
             }
@@ -643,7 +658,7 @@ class Intranet extends CI_Controller {
         
     }
     
-    public function aprobarFinal() {
+    public function aprobarFinal($pkPedido=NULL) {
         
         if(!isset($_SESSION['usuarioAdmin']))
             {
@@ -655,20 +670,19 @@ class Intranet extends CI_Controller {
                 $this->load->view('general/cierre_footer');
 
             }else{
-        
-        $pkPedido=$this->input->post('pkPedido');
-        $sala=$this->input->post('sala');
-        
-        $updateReserva=$this->admin_model->aprobarReserva($pkPedido,$sala,$_SESSION['usuarioAdmin']);
-        
-         if($updateReserva==true){
-               echo '<script>alert("Reserva Aprobada"); </script>';
-               redirect('intranet', 'refresh');
-          } 
-          else{
-               echo '<script>alert("A ocurrido un error al aprobar la reserva"); </script>';
-               redirect('intranet', 'refresh');
-         } 
+        $fkadmin=$this->Admin_model->fkAdminn($_SESSION['rutAdmin']);
+           // $pkPedido=$this->input->post('pkPedido');
+            $updateReserva=$this->admin_model->aprobarReserva($pkPedido,$fkadmin->pk);
+                
+            $bita=$this->Admin_model->registrar($pkPedido,$fkadmin->pk);
+             if($updateReserva==true){
+                   echo '<script>alert("Reserva Aprobada"); </script>';
+                   redirect('intranet', 'refresh');
+              } 
+              else{
+                   echo '<script>alert("A ocurrido un error al aprobar la reserva"); </script>';
+                   redirect('intranet', 'refresh');
+             } 
            
           }    
         
@@ -697,7 +711,7 @@ class Intranet extends CI_Controller {
                redirect('intranet', 'refresh');
          } 
             }
-    }
+    }    
     
     
     public function editarReser() {
@@ -899,6 +913,7 @@ class Intranet extends CI_Controller {
                 $this->load->view('general/cierre_footer');
             }
     }
+
     public function editFacultades(){//solo el admin general modifica facultades
             if(!isset($_SESSION['adminGeneral'])){
             $this->load->view('general/headers');
@@ -2309,5 +2324,41 @@ class Intranet extends CI_Controller {
                 redirect('intranet/editEscuelas', 'refresh');
             } 
         }        
+     }
+     public function reportes(){
+            if(!isset($_SESSION['usuarioAdmin']))
+            {
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');
+                    $this->load->view('intranet/nosesion');
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+            }else{
+                 //$facultades=$this->admin_model->getFacultad();
+                $this->load->view('general/headers');
+                $this->load->view('general/menu_principal');
+                $this->load->view('general/abre_bodypagina');   
+                $this->load->view('intranet/header_menu');
+                     $this->load->view('intranet/data');
+                            $this->load->view('intranet/infoReportes');
+                     $this->load->view('intranet/cierreData');
+                $this->load->view('general/cierre_bodypagina');
+                $this->load->view('general/cierre_footer');
+            }
+     }
+     public function descargaReporte(){
+        $btn=$this->input->post('btnEnviar');
+        $fechaIni=$this->input->post('datepickerInicio');
+        $fechaFin=$this->input->post('datepickerTermino');
+        if($btn=="Enviar"){
+            $this->excel->setActiveSheetIndex(0);
+            $data=$this->admin_model->save2($fechaIni,$fechaFin);
+           // var_dump($data);
+            $this->excel->stream2('prueba2.xls', $data);
+
+        }
+
+
      }       
 }
