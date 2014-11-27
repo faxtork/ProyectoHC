@@ -120,7 +120,8 @@ class Intranet extends CI_Controller {
            // $aulaCancelada=$this->admin_model->bloqueadaAula($facultadPk);
             foreach ($todasSalas as $value) {
                 $salaHabil[]=$value->sala;
-                $pk[]=$value->pk;
+                $pk[]=$value->pk."/".$value->descripcion;
+               // $titles[]=$value->descripcion;
             }
 
             $salasInhabil = $this->admin_model->salasAsignacion($semestre,$ano,$campusPk,$periodo,$datepickerInicio,$datepickerTermino,$dia);//trae todas las salas inhabilitadas excepto las bloqueadas
@@ -140,6 +141,8 @@ class Intranet extends CI_Controller {
             }
             $pkOcupada =@array_values(array_unique($pkOcupada));
             $pk =@array_values(array_unique($pk));
+          //  $title =@array_values(array_unique($title));
+
             $aulaOcupada =@array_values(array_unique($aulaOcupada));
 
             for ($i=0; $i <count($salaHabil) ; $i++) { 
@@ -147,17 +150,36 @@ class Intranet extends CI_Controller {
                    if($salaHabil[$i]==$aulaOcupada[$j]){
                     unset($salaHabil[$i]);
                     unset($pk[$i]);
+                  //  unset($title[$i]);
+
                                 $salaHabil=array_values($salaHabil);
                                 $pk=array_values($pk);
+                              //  $title=array_values($title);
+
                    }
                }
             }    
             $salaHabil=array_values($salaHabil);
             $pk=array_values($pk);
+          //  $title=array_values($title);
+
+
+for($i=0;$i<count($pk);$i++){
+$resultados[]=explode("/",$pk[$i]);
+}
+
+for($i=0;$i<count($resultados);$i++){
+    $pk2[]=$resultados[$i][0];
+    $title[]=$resultados[$i][1];
+}
+
+
+
+
             $options="";
             $options='<option selected="selected" value="">Selecione una sala</option>';
             for ($i=0; $i <count($salaHabil) ; $i++) { 
-               $options.='<option value="'.$pk[$i].'">'.$salaHabil[$i].'</option>';
+               $options.='<option title="'.$title[$i].'" value="'.$pk2[$i].'">'.$salaHabil[$i].'</option>';
             }
             echo $options;
             

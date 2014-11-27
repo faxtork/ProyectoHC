@@ -1,4 +1,4 @@
- <?php
+<?php
 
    class Admin_model extends CI_Model{
 
@@ -304,7 +304,7 @@
                             for ($z=0; $z <count($periodo) ; $z++) { 
                                 //$query[$j]=$this->db->query("SELECT pk,sala FROM salas WHERE facultad_fk='".$facultadPk."' AND pk in (select sala_fk from reservas where periodo_fk='".$periodo[$z]."'  and fecha='".$fecha."') order by pk asc;");
    //retorna solamente las salas ocupadas
-                                $query[$j]=$this->db->query("SELECT pk,sala FROM salas WHERE campus_fk='".$campusPk."' AND pk in (select sala_fk from reservas where periodo_fk='".$periodo[$z]."'  and fecha='".$fecha."'  AND curso_fk in( SELECT pk FROM cursos WHERE anio='".$ano."' AND semestre='".$semestre."')) order by pk asc;");
+                                $query[$j]=$this->db->query("SELECT pk,sala,descripcion FROM salas WHERE campus_fk='".$campusPk."' AND pk in (select sala_fk from reservas where periodo_fk='".$periodo[$z]."'  and fecha='".$fecha."'  AND curso_fk in( SELECT pk FROM cursos WHERE anio='".$ano."' AND semestre='".$semestre."')) order by pk asc;");
                                 $query[$j]=$query[$j]->result();
                             }       
                         }
@@ -331,7 +331,7 @@
     }//***************AFECTA***************NO
     public function getSalaCampus($campusPk){//todas las salas menos las bloqueadas
         $query=$this->db
-            ->query("SELECT pk,sala FROM salas WHERE campus_fk='".$campusPk."' AND estado=true order by pk asc;");
+            ->query("SELECT pk,sala,descripcion FROM salas WHERE campus_fk='".$campusPk."' AND estado=true order by pk asc;");
          return $query->result();
     }
     public function getSalaCampus2($campusPk){//todas las salas menos las bloqueadas
