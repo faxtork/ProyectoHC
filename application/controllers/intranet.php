@@ -1449,7 +1449,10 @@ for($i=0;$i<count($resultados);$i++){
         if($descargar=="Descargar"){
            $this->excel->setActiveSheetIndex(0);
             $data=$this->admin_model->save($periodo,$date);
-         $this->excel->stream('prueba1.xls', $data);
+            //var_dump($data);
+          //  print_r($data);
+       
+        $this->excel->stream('prueba1.xls', $data);
         }
     }
     public function suspencion(){

@@ -25,7 +25,7 @@ class Excel {
     }
 
  public function stream($filename, $data = null) {
-        $styleArray = array(
+       $styleArray = array(
                  'font' => array(
                     'name' => 'Arial',
                     'size' => '11',
@@ -88,7 +88,7 @@ class Excel {
         $objWriter->save("export/$filename");
         header("location: " . base_url() . "export/$filename");
         unlink(base_url() . "export/$filename");
-    }
+}
  public function stream2($filename, $data = null) {
         $styleArray = array(
                  'font' => array(
@@ -129,6 +129,7 @@ class Excel {
             foreach ($data as $row) {
                 $col = 'A';
                 foreach ($row as $cell) {
+                    if($cell=='t') $cell="Asistio"; elseif($cell=='f') $cell="Ausente";
                     $this->excel->getActiveSheet()->setCellValue($col . $rowNumber, str_replace(')','',str_replace('(','',str_replace('"','',$cell))));
                     $this->excel->getActiveSheet()->getStyle('A' . $rowNumber, $cell)->getFont()->setBold(true);
                     

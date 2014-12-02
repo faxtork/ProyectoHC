@@ -470,7 +470,7 @@
         return $query->result();
          }
         public function save2($fechaIni,$fechaFin){
-        $query=$this->db->query("SELECT r.fecha,s.sala,(d.nombres,d.apellidos)as Profesor,  a.nombre as asignatura,c.seccion,depa.departamento,p.periodo
+        $query=$this->db->query("SELECT r.fecha,s.sala,(d.nombres,d.apellidos)as Profesor, a.nombre as asignatura,c.seccion,depa.departamento,p.periodo,r.estado as Asistencia
                 FROM departamentos as depa, reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
                 WHERE r.curso_fk=c.pk AND a.departamento_fk=depa.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk 
                 AND p.pk=r.periodo_fk AND r.fecha>='".$fechaIni."' AND r.fecha<='".$fechaFin."'  order by r.pk asc"); 
