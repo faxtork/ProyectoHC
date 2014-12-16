@@ -41,6 +41,7 @@
                             <th>Asignatura</th>
                             <th>Sala</th>
                             <th>Seccion</th>
+                            <th>Asistencia</th>
                         </tr> 
                       </thead><tbody>";
                   
@@ -53,6 +54,8 @@
                         <td><?= $aula->nombre ;?></td>
                         <td><?= $aula->sala ;?></td>
                         <td><?= $aula->seccion ;?></td>
+                        <td><?php if($aula->estado=='t'){echo "<span class='label label-success'>Presente</span>";}else{echo"<span class='label label-danger'>Ausente</span";} ;?></td>
+
                     </tr>
                     <?php 
                 }

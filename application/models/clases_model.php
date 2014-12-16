@@ -109,7 +109,7 @@ class Clases_model extends CI_Model{
             $date = date ( 'Y-m-d' , $nuevafecha );
         }
 
-        $query=$this->db->query("SELECT p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.adm_fk is not null and r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk AND p.inicio<='".$time."' AND p.termino>='".$time."' AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by c.seccion asc");        
+        $query=$this->db->query("SELECT r.estado,p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.adm_fk is not null and r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk AND p.inicio<='".$time."' AND p.termino>='".$time."' AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by c.seccion asc");        
 //arreglar para la wa del isnot null
 
         return $query->result();
@@ -125,7 +125,7 @@ class Clases_model extends CI_Model{
             $nuevafecha = strtotime ('next monday', strtotime ( $date ) ) ;
             $date = date ( 'Y-m-d' , $nuevafecha );
         }
-        $query=$this->db->query("SELECT p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.adm_fk is not NULL  AND r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk  AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by p.periodo asc");       
+        $query=$this->db->query("SELECT r.estado, p.periodo,p.inicio,p.termino, d.nombres,d.apellidos, a.nombre,s.sala,c.seccion FROM campus as cam,facultades as fa,departamentos as de,codigocarrera as co,reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p WHERE r.adm_fk is not NULL  AND r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk AND p.pk=r.periodo_fk  AND r.fecha ='".$date."' AND a.departamento_fk=de.pk AND de.facultad_fk=fa.pk AND fa.campus_fk=cam.pk AND cam.pk=co.campus_fk AND co.codigo='".$codCarrera."' order by p.periodo asc");       
         return $query->result();
       
     }

@@ -74,7 +74,7 @@
                 ->where($condicion)
                 ->order_by('r.fecha','asc')
                 ->get();*/
-                $query=$this->db->query("select r.pk,p.periodo,p.inicio,p.termino, r.fecha,d.apellidos, a.nombre,s.sala,c.seccion from reservas as r,cursos as c,docentes as d,
+                $query=$this->db->query("select r.estado,r.pk,p.periodo,p.inicio,p.termino, r.fecha,d.apellidos, a.nombre,s.sala,c.seccion from reservas as r,cursos as c,docentes as d,
                           salas as s,asignaturas as a,periodos as p WHERE r.curso_fk=c.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND
                           c.asignatura_fk=a.pk AND p.pk=r.periodo_fk AND r.fecha >='".$dateIni."'AND r.fecha <='".$dateFin."' AND d.pk='".$pk."' AND r.adm_fk is not null order by r.fecha asc");
         return $query->result();
