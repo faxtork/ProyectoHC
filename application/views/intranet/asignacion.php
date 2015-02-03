@@ -41,7 +41,7 @@ return[(day!=0),'']
 $.datepicker.setDefaults($.datepicker.regional["es"]);
 $("#datepicker").datepicker({
 beforeShowDay: noExcursion,
-minDate: "0D",
+minDate: "-1D",//COLOCAR 0D
 maxDate: "+7M, 6D",
 	onClose: function (selectedDate) {
 	$("#datepicker2").datepicker("option", "minDate", selectedDate);
@@ -106,16 +106,32 @@ maxDate: "+7M, 6D",
 	                    }, function(data) {
 	                        $("#asig").html(data);
 	                    });
-	               $.post("<?= base_url('/index.php/intranet/llena_doc')?>", {
+	              /* $.post("<?= base_url('/index.php/intranet/llena_doc')?>", {
 	                    semestre : semestre, ano : ano, facultad : facultad, perioArray : perioArray, datepickerInicio : datepickerInicio, datepickerTermino:datepickerTermino, diaArray:diaArray
 
 	                    }, function(data) {
 	                        $("#docente").html(data);
-	                    });    	
+	                    });    	*/
                 });
             });
         });
 </script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#depa").change(function() {
+            $("#depa option:selected").each(function() {
+                   depa=$('#depa').val();
+
+	               $.post("<?= base_url('/index.php/intranet/llena_doc2')?>", {
+	                   // semestre : semestre, ano : ano, facultad : facultad, perioArray : perioArray, datepickerInicio : datepickerInicio, datepickerTermino:datepickerTermino, diaArray:diaArray
+	                   depa : depa
+	                    }, function(data) {
+	                        $("#docente").html(data);
+	                    }); 
+                });
+            });
+        });               
+</script>                   
 <script>
 $(document).ready(function() {
     $("#dia1").change(function() {$.reset();});

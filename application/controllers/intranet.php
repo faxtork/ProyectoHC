@@ -232,13 +232,15 @@ for($i=0;$i<count($resultados);$i++){
          $options = "";
         if($this->input->post('facultad'))
         {
-            $facultadPk = $this->input->post('facultad');
-            $asig = $this->admin_model->asig($facultadPk);
+            //$facultadPk = $this->input->post('facultad');
+                        $campusPk=$_SESSION['campus']; 
+            $asig = $this->admin_model->asig($campusPk);
+
             $options='<option selected="selected" value="">Selecione una asignatura</option>';
             foreach($asig as $fila)
             {
           
-                $options .='<option value='.$fila->pk.'>'.$fila->codigo.' '.$fila->nombre.'</option>';
+                $options .='<option value='.$fila->pk.'>'.$fila->nombre.' '.$fila->codigo.'</option>';
            
             }
             echo $options;
@@ -303,7 +305,24 @@ for($i=0;$i<count($resultados);$i++){
             }
             echo $options;
         }
-    }   
+    }
+    public function llena_doc2(){
+                     $options = "";
+        if($this->input->post('depa'))
+        {
+            $depaFk = $this->input->post('depa');
+                $decenteXdepa = $this->admin_model->docXdepa($depaFk);
+
+                $options='<option value="" selected="selected">Selececione un docente</option>';
+            foreach($decenteXdepa as $fila)
+            {
+          
+                $options .='<option value='.$fila->pk.'>'.$fila->nombres.' '.$fila->apellidos.'</option>';
+           
+            }
+            echo $options;
+        }   
+    }
    /* public function setAcademico(){
             $datos=array(
                 'nombres'=>$this->input->post('nombre'),
@@ -1447,8 +1466,9 @@ for($i=0;$i<count($resultados);$i++){
         $periodo=$this->input->post('periodoHidden');
         $date=$this->clases_model->getDate();
         if($descargar=="Descargar"){
+             $pkAdm=$this->admin_model->pkadmin($_SESSION['usuarioAdmin']);
            $this->excel->setActiveSheetIndex(0);
-            $data=$this->admin_model->save($periodo,$date);
+            $data=$this->admin_model->save($periodo,$date,$pkAdm->pk);
             //var_dump($data);
           //  print_r($data);
        
@@ -2377,8 +2397,10 @@ for($i=0;$i<count($resultados);$i++){
         $fechaIni=$this->input->post('datepickerInicio');
         $fechaFin=$this->input->post('datepickerTermino');
         if($btn=="Enviar"){
+            $pkAdm=$this->admin_model->pkadmin($_SESSION['usuarioAdmin']);
+
             $this->excel->setActiveSheetIndex(0);
-            $data=$this->admin_model->save2($fechaIni,$fechaFin);
+            $data=$this->admin_model->save2($fechaIni,$fechaFin,$pkAdm->pk);
            // var_dump($data);
             $this->excel->stream2('prueba2.xls', $data);
 

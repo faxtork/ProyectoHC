@@ -344,17 +344,22 @@
                  ->query("SELECT pk,departamento FROM departamentos WHERE facultad_fk=$facultadPk order by pk asc;");
          return $query->result();
     }
-    public function asig($facultadPk){
+    public function asig($campusPk){
             $query=$this->db
-                 ->query("SELECT a.pk, a.codigo,a.nombre FROM asignaturas a,departamentos d, facultades f WHERE $facultadPk=d.facultad_fk AND d.pk=a.departamento_fk group by a.pk;");
+                 ->query("SELECT pk, codigo, nombre FROM asignaturas WHERE departamento_fk in(SELECT pk FROM departamentos where facultad_fk in (SELECT pk from facultades where campus_fk='".$campusPk."')) order by nombre asc");
                   //  ->query("SELECT pk,codigo FROM asignaturas order by pk asc");
          return $query->result();
     }
     public function doc($facultadPk){
             $query=$this->db
-                 ->query("select pk,nombres,apellidos from docentes where departamento_fk in (select pk from departamentos where facultad_fk in (select pk from facultades where pk='".$facultadPk."')) order by pk asc");
+                 ->query("select pk,nombres,apellidos from docentes where departamento_fk in (select pk from departamentos where facultad_fk in (select pk from facultades where pk='".$facultadPk."')) order by nombres asc");
             return $query->result();
-    }         
+    }
+        public function docXdepa($depaFk){
+            $query=$this->db
+                 ->query("select pk,nombres,apellidos from docentes where departamento_fk='".$depaFk."' order by nombres asc");
+            return $query->result();
+    }          
     public function pkAdmin($nombreAdm){
             $query=$this->db
                 ->query("SELECT pk FROM administrador WHERE nombre='$nombreAdm';");
@@ -462,22 +467,22 @@
                 }
                 return $query; 
          }
-         public function save($periodo,$date){
+         public function save($periodo,$date,$pkAdm){
         $query=$this->db->query("SELECT s.sala, (d.nombres,d.apellidos)as Profesor , a.nombre as asignatura,c.seccion,depa.departamento,p.periodo
                 FROM departamentos as depa, reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
                 WHERE r.curso_fk=c.pk AND a.departamento_fk=depa.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk 
-                AND p.pk=r.periodo_fk AND r.fecha='".$date."' AND p.periodo='".$periodo."' order by s.pk asc"); 
+                AND p.pk=r.periodo_fk AND r.fecha='".$date."' AND p.periodo='".$periodo."' AND r.adm_fk='".$pkAdm."' order by s.pk asc"); 
         return $query->result();
          }
-        public function save2($fechaIni,$fechaFin){
+        public function save2($fechaIni,$fechaFin,$pkAdm){
         $query=$this->db->query("SELECT r.fecha,s.sala,(d.nombres,d.apellidos)as Profesor, a.nombre as asignatura,c.seccion,depa.departamento,p.periodo,r.estado as Asistencia
                 FROM departamentos as depa, reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
                 WHERE r.curso_fk=c.pk AND a.departamento_fk=depa.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk 
-                AND p.pk=r.periodo_fk AND r.fecha>='".$fechaIni."' AND r.fecha<='".$fechaFin."'  order by r.pk asc"); 
+                AND p.pk=r.periodo_fk AND r.fecha>='".$fechaIni."' AND r.fecha<='".$fechaFin."' AND r.adm_fk='".$pkAdm."' order by r.pk asc"); 
         return $query->result();
          }
          public function getdpto($campus_fk){
-            $query=$this->db->query("select pk,departamento from departamentos where facultad_fk in(select pk FROM facultades WHERE campus_fk='".$campus_fk."') order by pk asc;");
+            $query=$this->db->query("select pk,departamento from departamentos where facultad_fk in(select pk FROM facultades WHERE campus_fk='".$campus_fk."') order by departamento asc;");
             return $query->result();
          }
          public function getDocPorFacu($pk){
@@ -489,7 +494,7 @@
             return $query->result();
          }
         public function getDocPorDpto($pk){
-            $query=$this->db->query("select pk,nombres,apellidos,rut from docentes where departamento_fk='".$pk."' order by pk asc;");
+            $query=$this->db->query("select pk,nombres,apellidos,rut from docentes where departamento_fk='".$pk."' order by nombres asc;");
             return $query->result();
          }
         public function getAsigPorDpto($pk){
@@ -559,7 +564,7 @@
             return $query;
          }
          public function getdptoAll(){
-            $query=$this->db->query("select pk,departamento from departamentos order by pk asc;");
+            $query=$this->db->query("select pk,departamento from departamentos order by departamento asc;");
             return $query->result();
          }
           public function getdocAll(){

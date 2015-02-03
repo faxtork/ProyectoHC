@@ -24,7 +24,7 @@ $( window ).resize(function() {
 
                      		if(data==false)
                      		{ 
-                     			 $("#doc").html("Selecciona otra facultad o Agrega uno nuevo Seleccionando una facultad.");
+                     			 $("#doc").html("Selecciona otro departamento o Agrega uno nuevo Seleccionando una Dpto.");
                      		}
                     });
                 });
