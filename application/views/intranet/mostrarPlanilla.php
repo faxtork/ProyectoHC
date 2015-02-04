@@ -9,7 +9,9 @@ if (!$pagina) {
 else {
     $inicio = ($pagina - 1) * $TAMANO_PAGINA;
 }
+
  ?>
+
 <div class="well">
 <div class="row-fluid">
 	<div class="span12"><br>
@@ -89,7 +91,7 @@ else {
                                //si el índice no corresponde con la página mostrada actualmente, coloco el enlace para ir a esa página
 
                            }
-                        }        
+                       }
                 echo "</tbody></table>";
 
             } 
@@ -97,7 +99,7 @@ else {
                 echo "No hay clases hoy día ";
 
             }
-            if ($bool==true) {
+            if (@$bool==true) {
                   echo "<p>Descargar Planilla Excel</p>";
                   echo form_open('intranet/descargar');
                   echo '<input type="submit" class="btn btn-success" name="Descargar" value="Descargar">';

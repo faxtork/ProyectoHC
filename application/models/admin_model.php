@@ -249,8 +249,8 @@
                     r.adm_fk=ad.pk and
                     ad.campus_fk='$campus'
 
-                    AND  r.fecha>='$fechaHoy'
-                    ORDER BY r.fecha asc");
+                    AND  r.fecha>='$fechaHoy' 
+                    ORDER BY r.fecha asc");//BOORRAR EL LIMIT 10
         return $query->result();
      }
      

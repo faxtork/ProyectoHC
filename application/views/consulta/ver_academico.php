@@ -26,7 +26,7 @@ function extraerFecha($fech){
 
  ?>
 <?php 
-echo $salida = shell_exec('pg_dump -U sesparza -W -h 146.83.181.9 sesparzadb > basename.sql');
+//echo $salida = shell_exec('pg_dump -U sesparza -W -h 146.83.181.9 sesparzadb > basename.sql');
  ?>
 <div class="row-fluid"><br>
   <div class="span12">
