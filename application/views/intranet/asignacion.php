@@ -41,7 +41,7 @@ return[(day!=0),'']
 $.datepicker.setDefaults($.datepicker.regional["es"]);
 $("#datepicker").datepicker({
 beforeShowDay: noExcursion,
-minDate: "-1D",//COLOCAR 0D
+minDate: "0D",//COLOCAR 0D
 maxDate: "+7M, 6D",
 	onClose: function (selectedDate) {
 	$("#datepicker2").datepicker("option", "minDate", selectedDate);
@@ -182,19 +182,19 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 		<div class="span7">
 			<div class="row-fluid">
 				<div class="span12">
-					<h4>Asignacion de Horario semanal</h4>
+					<h4>Asignación de Horario semanal</h4>
 				</div>
 			</div>
 				<div class="form-group">
-				    <label  class="col-sm-2 control-label" id="c">Periodo</label>
+				    <label  class="col-sm-2 control-label" id="c">Periódo</label>
 				    <div class="col-sm-4"><!--algo php para las fechas del la semana-->
 			     		<select name="dia1" class="form-control" id="dia1"><!--onChange="this.form.facultad.selectedIndex=0;"-->
 			     			<option value="1">Lunes</option>
 			     			<option value="2">Martes</option>
-			     			<option value="3">Miercoles</option>
+			     			<option value="3">Miércoles</option>
 			     			<option value="4">Jueves</option>
 			     			<option value="5">Viernes</option>
-			     			<option value="6">Sabado</option>
+			     			<option value="6">Sábado</option>
 			     		</select>
 				    </div>
 				    <label  class="col-sm-2 control-label" id="c">Al</label> 
@@ -262,18 +262,18 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Depto.</label>
 				    <div class="col-sm-9">
-				     	<select name="depa" class="form-control" id="depa"><option selected="selected" value="">Selecione un departamento</option></select>
+				     	<select name="depa" class="form-control" id="depa"><option selected="selected" value="">Selecione un Departamento</option></select>
 				    </div>
 				</div>
 			  	<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Asignatura</label>
 				    <div class="col-sm-9">
-				      	<select name="asig" class="form-control" id="asig"><option selected="selected" value="">Selecione una asignatura</option></select>
+				      	<select name="asig" class="form-control" id="asig"><option selected="selected" value="">Selecione una Asignatura</option></select>
 				    </div>
 				</div>
 
 			  	<div class="form-group">
-				    <label  class="col-sm-3 control-label" id="c">Seccion</label>
+				    <label  class="col-sm-3 control-label" id="c">Sección</label>
 				    <div class="col-sm-9">
 			     	 	<input name="seccion" class="form-control" type="text" id="seccion" >
 				    </div>
@@ -281,14 +281,14 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Sala</label>
 				    <div class="col-sm-9">
-				     	<select name="salas" class="form-control" id="salas"><option selected="selected" value="">Selecione una sala</option></select>
+				     	<select name="salas" class="form-control" id="salas"><option selected="selected" value="">Selecione una Sala</option></select>
 				    </div>
 				</div>  
 				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Docente</label>
 				    <div class="col-sm-9">
 				      	<select name="docente" class="form-control" id="docente" >
-						<option value="" selected="selected">Selececione un docente</option>
+						<option value="" selected="selected">Selececione un Docente</option>
 							<?php 
 							    foreach ($academico as $doc) {
 							 		//echo'<option value='.$doc->pk.'>'.$doc->nombres.' '.$doc->apellidos.'</option>';
@@ -299,7 +299,7 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 				</div>  
 		</div>
 					
-					<button class="btn btn-primary" type="submit" value="Enviar" name="btnEnviar">Enviar <span class="icon-ok icon-white"></span></button>
+					<button class="btn btn-primary btn-lg" type="submit" value="Enviar" name="btnEnviar">Enviar <span class="icon-ok icon-white"></span></button>
 					<input type="hidden" value="1" id="cantidadPer" name="cantidadPer">
 					     		
 		</div>

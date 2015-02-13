@@ -11,7 +11,8 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		//redirect('consulta');
-	/*	$rut="15.997.886-9";
+	/*	$rut="6.897.604-9";
+		$pass='0685c94db7b73564b6d9b1c2f98ea88f5be4c449611d7a73d70d9783de6205b3';
 		$resultado = $this->ws_dirdoc->consultarDocente($rut);
 		print_r($resultado);
 */

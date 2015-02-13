@@ -52,7 +52,7 @@
         return $query->result();
     }
     public function getAcademicoXCampus($campusPk){
-        $query=$this->db->query("select pk,nombres,apellidos from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk = '".$campusPk."'))");
+        $query=$this->db->query("select pk,nombres,apellidos from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk = '".$campusPk."')) order by nombres asc");
         return $query->result();
     }
     public function academicoSemana($pk,$time,$dateIni){
@@ -135,7 +135,7 @@
               . "AND p.pk=r.periodo_fk "
               . "AND d.pk=(SELECT docente_fk FROM cursos WHERE pk=r.curso_fk ) "
               . "AND a.pk=(SELECT asignatura_fk FROM cursos WHERE pk=r.curso_fk )"
-              . "AND r.fecha>='$fechaHoy'");
+              . "AND r.fecha>='$fechaHoy' order by r.fecha");
          
       return $query->result();
      }

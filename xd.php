@@ -1,93 +1,22 @@
-
 <?php 
-$a_emp = array("0"=>"9",
-			"1"=>"6",
-			"2"=>"7",
-			"3"=>"8",
-			"4"=>"9",
-			"5"=>"1",
-			"6"=>"2",
-			"7"=>"3");
+            $parametros = array();
+            $parametros['rut'] = '17.680.010-0';
+            $parametros['password'] = '0685c94db7b73564b6d9b1c2f98ea88f5be4c449611d7a73d70d9783de6205b3';
 
-$TAMANO_PAGINA = 2;
+            // usuario de webService
+            $autenticacion = array('login' => '17.680.010-0',
+                'password' => '3e6866191180ee47202970f0518db0e1778d0c6c');
 
-$pagina = $_GET["pagina"];
-if (!$pagina) {
-    $inicio = 0;
-    $pagina=1;
-}
-else {
-    $inicio = ($pagina - 1) * $TAMANO_PAGINA;
-}
+            $cliente = new SoapClient("https://sepa.utem.cl/saap-rest/api?_wadl", $autenticacion);
+            var_dump($cliente);
+            $parametros['rut'] = '17.680.010-0';
+            $parametros['password'] = '0685c94db7b73564b6d9b1c2f98ea88f5be4c449611d7a73d70d9783de6205b3';
 
-$num_total_registros=count($a_emp);
+            // usuario de webService
+            $autenticacion = array('login' => 'sesparza',
+                'password' => '54d6b211811cf8a22a735d3d071299ad94419900');
 
-		    $total_paginas = ceil($num_total_registros / $TAMANO_PAGINA);
-
-    if ($total_paginas > 1)
-    {
-
-		    //$num = ($pagina + $TAMANO_PAGINA);
-    			//$paginas = ($num_ele / #num_elementos_a_mostrar_por_pagina);
-		    $num = (($pagina * 3)-1);
-		    //$ini = ($num - 2);
-		    for($a=$inicio; $a<$num; $a++)
-		    {
-//		    echo $a_emp[$a];
-		    }
-		    echo "<br/>";
-
-
-		    if ($total_paginas > 1){
-			    for ($i=1;$i<=$total_paginas;$i++){
-			       if ($pagina == $i){
-			          //echo $pagina . " ";
-
-			       }else{
-			         // echo "<a href='?pagina=" . $i . "'>" . $i . "</a>";
-			       }
-			    }
-			}
-	}
- ?>
-
-<?php 
-
-
-$filas = array("0"=>"9",
-			"1"=>"6",
-			"2"=>"7",
-			"3"=>"8",
-			"4"=>"9",
-			"5"=>"1",
-			"6"=>"2",
-			"7"=>"3");
-$pagina = $_GET["pagina"];
-
-$por_pagina = 3; // resultados por página
-$num_filas = count($filas);// total de resultados ( 30 )
-$total_pag = ceil(($num_filas/$por_pagina));//número de páginas ( 3 )    
-$filas_chunked = array_chunk($filas,$por_pagina); //3 arrays devueltos
-var_dump($filas_chunked);
-$pagina = $_GET["pagina"];
-if (!$pagina) {
-    $pagina=1;
-}
-
-//hago el bucle para mostrar los resultados
-for ($i = 0; $i < count($filas_chunked[$pagina-1]); $i++ )
-{
-       echo $filas_chunked[$pagina-1][$i]." "; //etc
-}  
-echo "<br/>";
-		    if ($total_pag > 1){
-			    for ($i=1;$i<=$total_pag;$i++){
-			       if ($pagina == $i){
-			          echo $pagina . " ";
-
-			       }else{
-			          echo "<a href='?pagina=" . $i . "'>" . $i . "</a>";
-			       }
-			    }
-			}
+            $cliente = new SoapClient("http://informatica.utem.cl:8011/dirdoc-auth/ws/auth?wsdl", $autenticacion);
+        $objeto = $cliente->autenticar($parametros);
+            var_dump($objeto);
  ?>

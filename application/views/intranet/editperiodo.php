@@ -22,10 +22,10 @@
                             echo'<div class="form-group" >
                                         <label  class="col-sm-2 control-label" id="c">'.$peri->pk.'</label>
                                                     <div class="col-sm-5" id="">
-                                                        <input name="inicio[]" readonly="readonly" id="uno'.($peri->pk-1).'" type="text" class="form-control" value="'.$inicio.'">
+                                                        <input name="inicio[]"  id="uno'.($peri->pk-1).'" type="text" class="form-control" value="'.$inicio.'">
                                                     </div>
                                                     <div class="col-sm-5" id="">
-                                                        <input name="termino[]" readonly="readonly" id="dos'.($peri->pk-1).'" type="text" class="form-control" value="'.$termino.'">
+                                                        <input name="termino[]"  id="dos'.($peri->pk-1).'" type="text" class="form-control" value="'.$termino.'">
                                                     </div>
                                 </div>';
                             echo'<input type="hidden" name="pks[]" value="'.$peri->pk.'">';    
@@ -41,7 +41,7 @@
                 </div>
                 <div class="span5">
                     <h4>Desfasar</h4><br /><br />
-                    <p>Puedes desfasar los periodos en minutos,<br> si quieres disminuir el desfase coloca un '-' antes de tu numero</p>
+                    <p>Puedes desfasar los periodos en minutos,<br> si quieres disminuir el desfase coloca un '-' antes de tu número</p>
                 <br>
                     
                             <div class="input-group">

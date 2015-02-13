@@ -8,6 +8,14 @@
                 echo "Las proximas clases para el dia lunes son:";
 
             }
+            function cortarPeri($ini){
+    
+                        $maximo = strlen($ini);
+                        $inicio = substr(strrev($ini),3,$maximo);
+                        $inicio=strrev($inicio);
+                        return $inicio;
+   
+}
             if ($hoy != null) {
                 echo "<h3></h3>";
                 echo "<table class='table table-hover-striped' style='text-align:left;' >
@@ -27,8 +35,8 @@
                 foreach ($hoy as $aula) { ?>
                     <tr>
                         <td><?= $aula->periodo;  ?></td>
-                        <td><?= $aula->inicio; ?></td>
-                        <td><?= $aula->termino ;?></td>
+                        <td><?= cortarPeri($aula->inicio); ?></td>
+                        <td><?= cortarPeri($aula->termino) ;?></td>
                         <td><?= $aula->nombres." ".$aula->apellidos;?></td>
                         <td><?= $aula->nombre ;?></td>
                         <td><?= $aula->sala ;?></td>

@@ -20,7 +20,7 @@
 												</div>
 												<label  class="col-sm-1 control-label" id="c">Rut</label> 
 						 						<div class="col-sm-3">
-						 							<input readonly="readonly" class="form-control" id="newRut[]" name="newRut[]" type="text" value="'.$docPk[$i][0]->rut.'"><br>	
+						 							<input  class="form-control" readonly="readonly" placeholder="Ej: 12.345.678-9" id="newRut[]" name="newRut[]" type="text" value="'.$docPk[$i][0]->rut.'"><br>	
 												</div>    
 											</div>
 										';

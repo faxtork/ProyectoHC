@@ -65,12 +65,12 @@ if($num_total_registros>0){
                     <tr>
                         <th>Reserva</th>
                         <th >Profesor</th>
-                        <th>Apellido</th>
+                        <th>Apellidos</th>
                         <th>Fecha</th>   
-                        <th>Codigo</th>                               
+                        <th>Código</th>                               
                         <th>Asignatura</th>
                         <th>Sec.</th>
-                        <th>Periodo</th>
+                        <th>Periódo</th>
                         <th>Sala</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -111,7 +111,7 @@ if($num_total_registros>0){
                                           <button class="btn btn-info" name="editar" value="Editar">Editar <span class="icon-edit icon-white"></span></button>
                                       
                                           </td>                        
-                                          <td><a class="btn btn-danger" href="javascript:void(0);"onclick="eliminar('<?php base_url()?>eliminarreservasdo/<?php echo $filas_chunked[$pagina-1][$i]->pk; ?>')">Eliminar <span class="icon-remove icon-white"></span></a></td>
+                                          <td><a class="btn btn-danger" href="javascript:void(0);"onclick="eliminar('<?php base_url()?>eliminarreserva/<?php echo $filas_chunked[$pagina-1][$i]->pk; ?>')">Eliminar <span class="icon-remove icon-white"></span></a></td>
                                           <?php
 
                                           echo "</tr></form>";
@@ -127,12 +127,13 @@ if($num_total_registros>0){
                       for ($i=1;$i<=$total_paginas;$i++){
                          if ($pagina == $i){
                                         echo'<ul class="pagination">';
-                                        echo "<li><a href='?pagina=" . $i . "'>" . $i . "</a></li>";
+                                        echo "<li><a style='background-color: #13a0aa;' href='?pagina=" . $i . "'>" . $i . "</a></li>";
                                         echo'</ul>';
                          }else{
                                         echo'<ul class="pagination">';
                                         echo "<li><a href='?pagina=" . $i . "'>" . $i . "</a></li>";
                                         echo'</ul>';
+                                        
                          }
                       }
                     }

@@ -15,7 +15,11 @@
 			$this->load->view('general/headers');
             $this->load->view('general/menu_principal');
             $this->load->view('general/abre_bodypagina');
-            
+            //*****************BORRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR*****************
+                $_SESSION['usuarioAlumno']='17.680.010-0';
+                $_SESSION['codigoCarrera'] = '21030';
+                $_SESSION['nombreAlum'] = 'SEBA';
+            //*****************
             if(!isset($_SESSION['usuarioAlumno'])){
                 redirect('', 'refresh');//si no esta creada
             }else{

@@ -12,7 +12,7 @@
                 else{
                     if ($time>"22:15:00" && $time<"23:59:59") {
                         if ($day=date("j")==5) {//pregunta si es viernes
-                            echo "Las proximas clases para el dia lunes son: ";
+                            echo "Las proximas clases para el día lunes son: ";
                         }
                         else{
                             echo "La clases para mañana son:";
@@ -25,9 +25,17 @@
             elseif ($day=date("N")==7) {//por domingo
                echo "La clases para mañana son: ";
             }else{
-                echo "Las proximas clases para el dia lunes son: ";
+                echo "Las proximas clases para el día lunes son: ";
 
             }
+function cortarPeri($ini){
+    
+                        $maximo = strlen($ini);
+                        $inicio = substr(strrev($ini),3,$maximo);
+                        $inicio=strrev($inicio);
+                        return $inicio;
+   
+}
 
             if ($clases != null) {
                 echo "<h3></h3>";
@@ -48,8 +56,8 @@
                 foreach ($clases as $aula) { ?>
                     <tr>
                         <td><?= $aula->periodo;  ?></td>
-                        <td><?= $aula->inicio; ?></td>
-                        <td><?= $aula->termino ;?></td>
+                        <td><?= cortarPeri($aula->inicio); ?></td>
+                        <td><?= cortarPeri($aula->termino) ;?></td>
                         <td><?= $aula->nombres." ".$aula->apellidos;?></td>
                         <td><?= $aula->nombre ;?></td>
                         <td><?= $aula->sala ;?></td>
@@ -61,7 +69,7 @@
                 }
                 echo "</tbody></table>";
             } 
-            else echo "No hay clases, recomendamos consultar por dia o profesor";
+            else echo "No hay clases, recomendamos consultar por día o profesor";
         ?>
 	</div>
 </div>

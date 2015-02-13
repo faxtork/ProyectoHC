@@ -80,19 +80,27 @@ maxDate: "+1M, 5D"
 </script>
 
 <?php
+function cortarPeri($ini){
+    
+                        $maximo = strlen($ini);
+                        $inicio = substr(strrev($ini),3,$maximo);
+                        $inicio=strrev($inicio);
+                        return $inicio;
+   
+}
 
    $contenidoPeriodo=array($periodo=>$periodo,);
  foreach ($periodos as $peri) {
-    $contenidoPeriodo[$peri->pk]=$peri->periodo;
+    $contenidoPeriodo[$peri->pk]=$peri->periodo." - ".cortarPeri($peri->inicio)." - ".cortarPeri($peri->termino);
   }
-  
   $contenidoAsignatura=array($pkasignatura=>$nombreasignatura,);
  
   foreach ($asignaturas as $asig) {
     $contenidoAsignatura[$asig->pk]=$asig->nombre;
  }
  
- $contenidoSeccion=array($seccion=>$seccion,);
+ //$contenidoSeccion=array($seccion=>$seccion);
+
  foreach ($secciones as $secc) {
     $contenidoSeccion[$secc->seccion]=$secc->seccion;
 }
@@ -101,39 +109,57 @@ maxDate: "+1M, 5D"
 ?>
 
     
-
 <div class="well">
-  
+<div class="row-fluid">
+<div class="span12">
  <?=form_open(base_url('index.php/pedidos/updatePedido'))?>
+                  <h4>Editar Pedido</h4><br>
     <?=  form_input(array('type'=>'hidden','name'=>'docente','id'=>'docente','value'=>$pkdocente))?>
-     <div class="row">
-        <div class="span2">N° Pedido :</div>
-        <div class="span3"><?= form_input(array('name'=>'pkPedido','readonly'=>'readonly','value'=>$pkPedido))?></div>
-    </div>   
-    <div class="row">
-        <div class="span2">Asignatura :</div>
-        <div class="span3"><?= form_dropdown('asignatura',$contenidoAsignatura,'',"id='asignatura'")?></div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">N° Pedido:</label>
+                    <div class="col-sm-5">
+                        <?= form_input(array('class'=>'form-control','id'=>'pkPedido','name'=>'pkPedido','readonly'=>'readonly','value'=>$pkPedido));?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Asignatura:</label>
+                    <div class="col-sm-5">
+                        <?= form_dropdown('asignatura',$contenidoAsignatura,'',"id='asignatura' class='form-control'")?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Seccion:</label>
+                    <div class="col-sm-5">
+                        <?= form_dropdown('seccion',$contenidoSeccion,'',"id='seccion' class='form-control'")?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Fecha:</label>
+                    <div class="col-sm-5">
+                        <?= form_input(array('name'=>'fecha','value'=>$fecha),'',"id='datepicker' class='form-control'")?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Periodo:</label>
+                    <div class="col-sm-5">
+                        <?= form_dropdown('periodo',$contenidoPeriodo,'',"id='periodo' class='form-control'")?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Sala:</label>
+                    <div class="col-sm-5">
+                        <?= form_dropdown('sala',array($pksala=>$sala),'',"id='divSala' class='form-control'");?>
+                    </div>
+                </div><br> 
+                <div class="form-group">
+                    <div class="col-sm-12">
+                    <?= form_submit('btnEditarPedido','Enviar',"class='btn btn-primary btn-lg'");?>
+                    </div>
+                </div>
+<?php form_close();?>
+
+     
     </div>
-    <div class="row">
-        <div class="span2">Seccion :</div>
-        <div class="span3"><?= form_dropdown('seccion',$contenidoSeccion,'',"id='seccion'")?></div>
-    </div>
-    <div class="row">
-         <div class="span2">Fecha :</div>
-         <div class="span3"><?= form_input(array('name'=>'fecha','value'=>$fecha),'',"id='datepicker'")?></div>
-    </div>
-    <div class="row">
-         <div class="span2">Periodo :</div>
-         <div class="span3"><?= form_dropdown('periodo',$contenidoPeriodo,'',"id='periodo'")?></div>
-    </div>
-    <div class="row">
-        <div class="span2">Sala :</div>
-        <div class="span3"><?= form_dropdown('sala',array($pksala=>$sala),'',"id='divSala'");?></div>
-    </div>
-    <div class="row">
-        <div class="span2"><?= form_submit('btnEditarPedido','Enviar',"class='btn btn-primary btn-lg'");?></div>
-        
-    </div>
-     <?php form_close();?>
-    
+</div>
 </div>

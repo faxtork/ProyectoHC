@@ -113,7 +113,7 @@ maxDate: "+1M, 5D"
           }
   $contenidoAsignatura[$asig[0]->pk]=$asig[0]->nombre;  
     foreach ($ramos as $ram) {
-    $contenidoAsignatura[$ram->pk]=$ram->codigo.' '.$ram->nombre;  
+    $contenidoAsignatura[$ram->pk]=$ram->nombre.' '.$ram->codigo;  
   }
 
   $contenidoDocentes[$docente->pk]=$docente->nombres." ".$docente->apellidos;//del que viene atras de la pag
@@ -222,7 +222,7 @@ function validaciones(){
                 </div>
                 <div class="form-group">
                     <div class="col-sm-12"><br>
-                        <button class="btn btn-primary" type="submit" value="Enviar" name="btnEditarPedido">Enviar <span class="icon-ok icon-white"></span></button>
+                        <button class="btn btn-primary btn-lg" type="submit" value="Enviar" name="btnEditarPedido">Enviar <span class="icon-ok icon-white"></span></button>
                     </div>
                 </div>
          <?php echo form_close();?>

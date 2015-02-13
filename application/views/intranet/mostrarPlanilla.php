@@ -24,15 +24,15 @@ else {
 
             }
             if ($hoy != null) {
-                echo "<h3>Paginas por Periodos de hoy día</h3>";
+                echo "<h3>Páginas por Periódos de hoy día</h3>";
                 echo "<table class='table table-hover-striped' style='text-align:left;' >
                        <thead>
                         <tr>
-                            <th>Periodo</th>
+                            <th>Periódo</th>
                             <th>Sala</th>
                             <th>Profesor</th>
                             <th>Asignatura</th>
-                            <th>Seccion</th>
+                            <th>Sección</th>
                             <th>Dpto.</th>
                             <th>Estado</th>
                             <th colspan='2'>Asiste</th>
@@ -61,7 +61,7 @@ else {
                     <?php 
                       if($aula->estado=='t'){//t de true
                          ?>
-                         <td><span class='col-sm-10 label label-success'>Habil</span></td>
+                         <td><span class='col-sm-10 label label-success'>Hábil</span></td>
                          <td >Si <br><input type="radio" checked name="asiste_<?php echo $aula->pk;?>"></td>
                         <td>No <br><input type="radio" name="asiste_<?php echo $aula->pk; ?>"  pkr="<?php echo $aula->pk; ?>" secc="<?php echo $sec; ?>" asig="<?php echo $asig; ?>" nam="<?php echo $nam; ?>" sala="<?php echo $aula->sala; ?>" periodo="<?php echo $aula->periodo; ?>" rel="abrir" data-toggle="modal" data-target="#myModal" ></td>
 
@@ -78,8 +78,8 @@ else {
                       </tr>
                           <?php 
                                         }
-                                          echo'<ul class="pagination">';
-                                        echo "<li><a href='?pagina=" . $i . "'>" . $i . "</a></li>";
+                                          echo'<ul class="pagination" >';
+                                        echo "<li><a style='background-color: #13a0aa;' href='?pagina=" . $i . "'>" . $i . "</a></li>";
                                           echo'</ul>';
                               }
                               else{
@@ -102,7 +102,9 @@ else {
             if (@$bool==true) {
                   echo "<p>Descargar Planilla Excel</p>";
                   echo form_open('intranet/descargar');
-                  echo '<input type="submit" class="btn btn-success" name="Descargar" value="Descargar">';
+                 // echo '<input type="submit" class="btn btn-success" name="Descargar" value="Descargar"><span class="icon-download-alt icon-white"></span>';
+                  echo '<button class="btn btn-primary btn-lg" type="submit" value="Descargar" name="Descargar">Enviar <span class="icon-download-alt icon-white"></span></button>';
+
                   echo '<input type="hidden" value="'.$_SESSION['per'].'" name="periodoHidden">';
                   echo form_close();
             }

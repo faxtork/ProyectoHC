@@ -15,8 +15,8 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="btn-group">
-			    <a class="btn btn-default btn-lg" href="<?= site_url('intranet/academico');?>">Asignacion Semestre</a>
-			    <a class="btn btn-default btn-lg" href="<?= site_url('intranet/salas');?>">Peticion Docentes</a>
+			    <a class="btn btn-default btn-lg" href="<?= site_url('intranet/academico');?>">Asignación Semestre</a>
+			    <a class="btn btn-default btn-lg" href="<?= site_url('intranet/salas');?>">Petición Docentes</a>
 			   <a class="btn btn-default btn-lg" href="<?= site_url('intranet/reservas');?>">Reservas</a>
 			   <a class="btn btn-default btn-lg" href="<?= site_url('intranet/planilla');?>">Planilla</a>
 			   <a class="btn btn-default btn-lg" href="<?= site_url('intranet/config');?>">Configuraciones</a>

@@ -9,8 +9,8 @@
                         <th>Sala</th>
                         <th>Profesor</th>
                         <th>Asignatura</th>
-                        <th>Seccion</th>
-                        <th>Periodo</th>
+                        <th>Sección</th>
+                        <th>Periódo</th>
                         <th>Rango</th>
                         <th colspan='2'>Opciones</th>
                         

@@ -105,7 +105,7 @@ $atributos_Apellido=array('name'=>'Apellido');
     ''=>'->Seleccione el Dia',
     'optDia1'=>'Lunes',
     'optDia2'=>'Martes',
-    'optDia3'=>'Miercoles',
+    'optDia3'=>'Miércoles',
     'optDia4'=>'Jueves',
     'optDia5'=>'Viernes');
  
@@ -207,7 +207,7 @@ $atributos_Apellido=array('name'=>'Apellido');
                         </select> 
                     </div>
                 </div>
-            <button type="submit" class="btn btn-primary btn-lg">Enviar</button>     
+            <button type="submit" class="btn btn-primary btn-lg">Enviar <span class="icon-ok icon-white"></span></button>     
             <?php echo form_close(); ?>
         </div>
         <?php }else echo'<script>alert("Aun no tienes Asignaturas Asignadas.")</script>'; ?>

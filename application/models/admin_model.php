@@ -32,7 +32,7 @@
         return $query->result();
      }
     public function getAsignaturaXCampus($campusPk){
-            $query=$this->db->query("select pk,nombre,codigo from asignaturas where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk ='".$campusPk."'))");
+            $query=$this->db->query("select pk,nombre,codigo from asignaturas where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk ='".$campusPk."')) order by nombre asc");
         return $query->result();
      }
      public function setAcademico($datos){
@@ -168,16 +168,21 @@
         $query=$this->db->query("select * from reservas where  pk!='".$pkPedido."'and fecha='".$fecha."' and sala_fk='".$sala."' and periodo_fk='".$periodo."' ");
         return $query->num_rows();
      }
-    public function editarReserva($semestre,$anio,$pkPedido,$pkdocente,$pkAsignatura,$seccion,$fecha,$periodo,$pkSala) {
-        $this->db->query("update cursos set asignatura_fk='$pkAsignatura', docente_fk='$pkdocente',seccion='$seccion' where pk=(SELECT curso_fk FROM reservas WHERE pk='$pkPedido')");
+     public function newCurso($semestre,$anio,$pkdocente,$pkAsignatura,$seccion){
+        $query=$this->db->query("INSERT INTO cursos VALUES(DEFAULT,'".$semestre."','".$anio."','".$pkAsignatura."','".$pkdocente."','".$seccion."')");//se crea un nuevo curso
+        $query0=$this->db->query("SELECT pk from cursos order by pk desc limit 1");//el ultimo pk creado
+        return $query0->row();
+     }
+    public function editarReserva($pkPedido,$fecha,$periodo,$pkSala,$pkCurso) {
+       // $this->db->query("update cursos set asignatura_fk='$pkAsignatura', docente_fk='$pkdocente',seccion='$seccion' where pk=(SELECT curso_fk FROM reservas WHERE pk='$pkPedido')");
         //update de la tabla cursos y ahora reserva
          $this->db->//falta adm_fk
                  query("UPDATE reservas  SET "
                        ."sala_fk='$pkSala', "
                        ."periodo_fk=(SELECT pk FROM periodos WHERE periodo='$periodo'), "
-                       ."curso_fk= (SELECT pk FROM cursos WHERE pk=(select curso_fk from reservas where pk='$pkPedido')) ,"
+                       ."curso_fk='$pkCurso' ,"
                        . "fecha='$fecha' "
-                       ." WHERE pk=$pkPedido");
+                       ." WHERE pk=".$pkPedido."");
          return true;
          
      }
@@ -341,7 +346,7 @@
     }
     public function depa($facultadPk){
             $query=$this->db
-                 ->query("SELECT pk,departamento FROM departamentos WHERE facultad_fk=$facultadPk order by pk asc;");
+                 ->query("SELECT pk,departamento FROM departamentos WHERE facultad_fk=$facultadPk order by departamento asc;");
          return $query->result();
     }
     public function asig($campusPk){
@@ -363,6 +368,11 @@
     public function pkAdmin($nombreAdm){
             $query=$this->db
                 ->query("SELECT pk FROM administrador WHERE nombre='$nombreAdm';");
+            return $query->row();    
+    }
+    public function pkAdminGral($nombreAdm){
+            $query=$this->db
+                ->query("SELECT pk FROM administradorgeneral WHERE nombre='$nombreAdm';");
             return $query->row();    
     }
     public function maxPkCurso(){
@@ -478,7 +488,13 @@
         $query=$this->db->query("SELECT r.fecha,s.sala,(d.nombres,d.apellidos)as Profesor, a.nombre as asignatura,c.seccion,depa.departamento,p.periodo,r.estado as Asistencia
                 FROM departamentos as depa, reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
                 WHERE r.curso_fk=c.pk AND a.departamento_fk=depa.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk 
-                AND p.pk=r.periodo_fk AND r.fecha>='".$fechaIni."' AND r.fecha<='".$fechaFin."' AND r.adm_fk='".$pkAdm."' order by r.pk asc"); 
+                AND p.pk=r.periodo_fk AND r.fecha>='".$fechaIni."' AND r.fecha<='".$fechaFin."' AND r.adm_fk='".$pkAdm."' order by r.fecha asc"); 
+        return $query->result();
+         }
+         public function save3($fechaIni,$fechaFin,$pkAdm){
+            $query=$this->db->query("SELECT r.fecha,s.sala,(d.nombres,d.apellidos)as Profesor, a.nombre as asignatura,c.seccion,depa.departamento,p.periodo,r.estado as Asistencia, facu.facultad, cam.nombre as Campus FROM campus as cam, facultades as facu, departamentos as depa, reservas as r,cursos as c,docentes as d,salas as s,asignaturas as a,periodos as p
+                WHERE r.curso_fk=c.pk AND a.departamento_fk=depa.pk AND c.docente_fk=d.pk AND r.sala_fk=s.pk AND c.asignatura_fk=a.pk 
+                AND p.pk=r.periodo_fk AND r.fecha>='".$fechaIni."' AND r.fecha<='".$fechaFin."' AND depa.facultad_fk=facu.pk AND facu.campus_fk=cam.pk order by r.fecha asc");
         return $query->result();
          }
          public function getdpto($campus_fk){
@@ -498,7 +514,7 @@
             return $query->result();
          }
         public function getAsigPorDpto($pk){
-            $query=$this->db->query("select pk,codigo,nombre from asignaturas where departamento_fk='".$pk."' order by pk asc;");
+            $query=$this->db->query("select pk,codigo,nombre from asignaturas where departamento_fk='".$pk."' order by nombre asc;");
             return $query->result();
         } 
          public function getNameDpto($pk){
@@ -526,8 +542,12 @@
                 $query[$i]=$query[$i]->result();
             }
              return $query; 
+        }
+        public function rutXcampus($campusPk){
+            $query=$this->db->query("select rut from docentes where departamento_fk in(select pk from departamentos where facultad_fk in(select pk from facultades where campus_fk='".$campusPk."'))");
+            return $query->result();
         } 
-         public function updateDocentes($pk,$newName,$newApellidos){
+         public function updateDocentes($pk,$newName,$newApellidos,$newRut){
                 function quitar_tildes($cadena) {
                 $no_permitidas= array ("Ñ","á","é","í","ó","ú","Á","É","Í","Ó","Ú","À","Ã","Ì","Ò","Ù","Ã™","Ã ","Ã¨","Ã¬","Ã²","Ã¹","ç","Ç","Ã¢","ê","Ã®","Ã´","Ã»","Ã‚","ÃŠ","ÃŽ","Ã”","Ã›","ü","Ã¶","Ã–","Ã¯","Ã¤","«","Ò","Ã","Ã„","Ã‹");
                 $permitidas= array ("ñ","a","e","i","o","u","A","E","I","O","U","N","A","E","I","O","U","a","e","i","o","u","c","C","a","e","i","o","u","A","E","I","O","U","u","o","O","i","a","e","U","I","A","E");
@@ -535,7 +555,7 @@
                 return $texto;
                 }
             for ($i=0; $i <count($pk) ; $i++) { 
-                    $query[]=$this->db->query("UPDATE docentes SET nombres='".ucwords(strtolower(quitar_tildes($newName[$i])))."', apellidos='".ucwords(strtolower(quitar_tildes($newApellidos[$i])))."' WHERE pk='".$pk[$i]."'"); 
+                    $query[]=$this->db->query("UPDATE docentes SET rut='".$newRut[$i]."',nombres='".ucwords(strtolower(quitar_tildes($newName[$i])))."', apellidos='".ucwords(strtolower(quitar_tildes($newApellidos[$i])))."' WHERE pk='".$pk[$i]."'"); 
             }
                 return $query; 
          }

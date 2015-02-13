@@ -177,7 +177,7 @@ for($i=0;$i<count($resultados);$i++){
 
 
             $options="";
-            $options='<option selected="selected" value="">Selecione una sala</option>';
+            $options='<option selected="selected" value="">Selecione una Sala</option>';
             for ($i=0; $i <count($salaHabil) ; $i++) { 
                $options.='<option title="'.$title[$i].'" value="'.$pk2[$i].'">'.$salaHabil[$i].'</option>';
             }
@@ -218,7 +218,7 @@ for($i=0;$i<count($resultados);$i++){
         {
             $facultadPk = $this->input->post('facultad');
             $depa = $this->admin_model->depa($facultadPk);
-            $options='<option selected="selected" value="">Selecione un departamento</option>';
+            $options='<option selected="selected" value="">Selecione un Departamento</option>';
             foreach($depa as $fila)
             {
           
@@ -236,7 +236,7 @@ for($i=0;$i<count($resultados);$i++){
                         $campusPk=$_SESSION['campus']; 
             $asig = $this->admin_model->asig($campusPk);
 
-            $options='<option selected="selected" value="">Selecione una asignatura</option>';
+            $options='<option selected="selected" value="">Selecione una Asignatura</option>';
             foreach($asig as $fila)
             {
           
@@ -901,8 +901,9 @@ for($i=0;$i<count($resultados);$i++){
                 $semestre=$this->input->post('semestre');
                 $anio=$this->input->post('anio');
 
-                
-                $esEditado=$this->admin_model->editarReserva($semestre,$anio,$pkPedido,$pkdocente,$pkAsignatura,$seccion,$fecha,$periodo,$pkSala);
+                $creaCurso=$this->Admin_model->newCurso($semestre,$anio,$pkdocente,$pkAsignatura,$seccion);
+
+                $esEditado=$this->admin_model->editarReserva($pkPedido,$fecha,$periodo,$pkSala,$creaCurso->pk);
                 if($esEditado==true){
                     echo '<script>alert("Reserva Editada"); </script>';
                     redirect('intranet', 'refresh');
@@ -1764,17 +1765,38 @@ for($i=0;$i<count($resultados);$i++){
         $pk=$this->input->post('pk');//el pk a cambiar los datos
         $newName=$this->input->post('newName');//array
         $newApellidos=$this->input->post('newApellidos');//array
+        $newRut=$this->input->post('newRut');//array
+
         for ($i=0; $i <count($newName) ; $i++) { 
-            if($newName[$i]=="" || $newApellidos[$i]==""){
+            if($newName[$i]=="" || $newApellidos[$i]=="" || $newRut[$i]==""){
                         echo '<script>alert("Favor Rellene todos los campos"); </script>';
                          redirect('intranet/editDocentes', 'refresh');
             }
 
         }
+//verifico si no esta ingresado antes
+      /*  $campusPk=$_SESSION['campus'];
+        $ruts=$this->admin_model->rutXcampus($campusPk);
+        for ($i=0; $i <count($ruts) ; $i++) { 
+                for ($j=0; $j <count($newRut) ; $j++) { 
+                    if($ruts[$i]->rut==$newRut[$j]){
+                        ?>
+                        <script>
+                        var variablejs = "<?php echo $ruts[$i]->rut; ?>" ;
+                        </script>
+                        <?php
+                        //unset($addSala[$j]);//elimina ese reguistro
+                        //$salaServer = array_values($salaServer);//reordena el array
+                         echo '<script>alert("El registo > "+variablejs+" < ya esta ingresado en el sistema");</script>';//agregar que facultad es
+                        redirect('intranet/editDocentes', 'refresh');
+                    }
+                }
 
+        }*/
+//fin verificacion  
         if($btn==null)redirect('intranet/config');
         else{
-            $estado=$this->admin_model->updateDocentes($pk,$newName,$newApellidos);
+            $estado=$this->admin_model->updateDocentes($pk,$newName,$newApellidos,$newRut);
              
               $true=0;
               for ($i=0; $i <count($estado) ; $i++) { 
@@ -2373,14 +2395,14 @@ for($i=0;$i<count($resultados);$i++){
      public function reportes(){
             if(!isset($_SESSION['usuarioAdmin']))
             {
+                if(!isset($_SESSION['adminGeneral'])){
                     $this->load->view('general/headers');
                     $this->load->view('general/menu_principal');
                     $this->load->view('general/abre_bodypagina');
                     $this->load->view('intranet/nosesion');
                     $this->load->view('general/cierre_bodypagina');
                     $this->load->view('general/cierre_footer');
-            }else{
-                 //$facultades=$this->admin_model->getFacultad();
+                }else{
                 $this->load->view('general/headers');
                 $this->load->view('general/menu_principal');
                 $this->load->view('general/abre_bodypagina');   
@@ -2390,20 +2412,38 @@ for($i=0;$i<count($resultados);$i++){
                      $this->load->view('intranet/cierreData');
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
-            }
+                }
+            }else{
+
+                $this->load->view('general/headers');
+                $this->load->view('general/menu_principal');
+                $this->load->view('general/abre_bodypagina');   
+                $this->load->view('intranet/header_menu');
+                     $this->load->view('intranet/data');
+                            $this->load->view('intranet/infoReportes');
+                     $this->load->view('intranet/cierreData');
+                $this->load->view('general/cierre_bodypagina');
+                $this->load->view('general/cierre_footer');
+            
+        }
      }
      public function descargaReporte(){
+
         $btn=$this->input->post('btnEnviar');
         $fechaIni=$this->input->post('datepickerInicio');
         $fechaFin=$this->input->post('datepickerTermino');
         if($btn=="Enviar"){
-            $pkAdm=$this->admin_model->pkadmin($_SESSION['usuarioAdmin']);
-
-            $this->excel->setActiveSheetIndex(0);
-            $data=$this->admin_model->save2($fechaIni,$fechaFin,$pkAdm->pk);
-           // var_dump($data);
-            $this->excel->stream2('prueba2.xls', $data);
-
+                if(isset($_SESSION['usuarioAdmin'])){
+                            $pkAdm=$this->admin_model->pkadmin($_SESSION['usuarioAdmin']);
+                                        $this->excel->setActiveSheetIndex(0);
+                                        $data=$this->admin_model->save2($fechaIni,$fechaFin,$pkAdm->pk);
+                                        $this->excel->stream2('prueba2.xls', $data);
+                }elseif(isset($_SESSION['adminGeneral'])){
+                            //$pkAdm=$this->admin_model->pkAdminGral($_SESSION['adminGeneral']);
+                                        $this->excel->setActiveSheetIndex(0);
+                                        $data=$this->admin_model->save3($fechaIni,$fechaFin);
+                                        $this->excel->stream3('prueba3.xls', $data);
+                }
         }
 
 

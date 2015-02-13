@@ -53,10 +53,10 @@
         </div>
     </div>
     <div class="row"><div class="span4"></div>
-       <div class="span2"><button type="submit" class="btn btn-primary">Consultar Pedido</button></div>  
+       <div class="span2"><button type="submit" class="btn btn-primary">Consultar Pedido <span class="icon-ok icon-white"></span></button></div>  
       <div class="span4"></div>
     </div>   
        
-    
+    </form>
 </div>
 <?php }else echo'<script>alert("Aun no tienes Asignaturas Asignadas.")</script>'; ?>

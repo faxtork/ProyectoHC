@@ -27,6 +27,15 @@ function extraerFecha($fech){
  ?>
 <?php 
 //echo $salida = shell_exec('pg_dump -U sesparza -W -h 146.83.181.9 sesparzadb > basename.sql');
+function cortarPeri($ini){
+    
+                        $maximo = strlen($ini);
+                        $inicio = substr(strrev($ini),3,$maximo);
+                        $inicio=strrev($inicio);
+                        return $inicio;
+   
+}
+
  ?>
 <div class="row-fluid"><br>
   <div class="span12">
@@ -51,8 +60,8 @@ function extraerFecha($fech){
                 foreach ($result as $profesor) { ?>
                 <tr>
                     <td><?= $profesor->periodo;  ?></td>
-                    <td><?= $profesor->inicio; ?></td>
-                    <td><?= $profesor->termino ;?></td>
+                    <td><?= cortarPeri($profesor->inicio); ?></td>
+                    <td><?= cortarPeri($profesor->termino) ;?></td>
                     <td><?php  echo extraerFecha($profesor->fecha);?></td>
                     <td><?= $profesor->nombre ;?></td>
                     <td><?= $profesor->sala ;?></td>
