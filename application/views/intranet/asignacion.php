@@ -245,7 +245,7 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 			    	<label  class="col-sm-3 control-label" id="c">Facultad</label>
 			    	<div class="col-sm-9">
 						<select name="facultad" class="form-control" id="facultad" >
-						<option value="" selected="selected">Selececione una Facultad</option>
+						<option value="" selected="selected">Seleccione una Facultad</option>
 							<?php 
 							    foreach ($facultades as $facu) {
 							    	
@@ -262,13 +262,13 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Depto.</label>
 				    <div class="col-sm-9">
-				     	<select name="depa" class="form-control" id="depa"><option selected="selected" value="">Selecione un Departamento</option></select>
+				     	<select name="depa" class="form-control" id="depa"><option selected="selected" value="">Seleccione un Departamento</option></select>
 				    </div>
 				</div>
 			  	<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Asignatura</label>
 				    <div class="col-sm-9">
-				      	<select name="asig" class="form-control" id="asig"><option selected="selected" value="">Selecione una Asignatura</option></select>
+				      	<select name="asig" class="form-control" id="asig"><option selected="selected" value="">Seleccione una Asignatura</option></select>
 				    </div>
 				</div>
 
@@ -281,14 +281,14 @@ $attributes = array('class' => 'form-horizontal', 'role' => 'form','onsubmit'=>'
 				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Sala</label>
 				    <div class="col-sm-9">
-				     	<select name="salas" class="form-control" id="salas"><option selected="selected" value="">Selecione una Sala</option></select>
+				     	<select name="salas" class="form-control" id="salas"><option selected="selected" value="">Seleccione una Sala</option></select>
 				    </div>
 				</div>  
 				<div class="form-group">
 				    <label  class="col-sm-3 control-label" id="c">Docente</label>
 				    <div class="col-sm-9">
 				      	<select name="docente" class="form-control" id="docente" >
-						<option value="" selected="selected">Selececione un Docente</option>
+						<option value="" selected="selected">Seleccione un Docente</option>
 							<?php 
 							    foreach ($academico as $doc) {
 							 		//echo'<option value='.$doc->pk.'>'.$doc->nombres.' '.$doc->apellidos.'</option>';

@@ -147,8 +147,8 @@ else {
       <div class="modal-content">
 
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-          <h3 class="modal-title" id="myModalLabel">Suspencion de Clase</h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cerrar</span></button>
+          <h3 class="modal-title" id="myModalLabel">Suspension de Clase</h3>
         </div>
         <div class="modal-body">          <h4>Esta seguro cancelar clase:</h4>
        <!-- <form action="" role="form" class="form-horizontal">-->
@@ -183,7 +183,7 @@ else {
             
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
               <input type="hidden"  name="pkReserva" id="pkr">
               <button type="submit" name="suspender" value="suspender" class="btn btn-primary">Suspender</button>
             <?php echo form_close(); ?>  

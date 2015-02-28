@@ -146,12 +146,24 @@
                     }
                 }
             return true;
-        }        
+        }       
         public function getTodosPedidos($campus) {
                   date_default_timezone_set("America/Santiago");
           $fechaHoy=date("Y-m-d");//solo muestra los datos de aqui en adelante
          $query=$this->db
-              ->query("SELECT r.pk,r.fecha,s.sala,s.pk AS pksala,d.nombres AS nombredocente,d.apellidos AS apellidodocente,d.pk AS pkdocente,a.nombre AS asignatura,a.pk AS pkasignatura,p.periodo,p.pk AS pkperiodo 
+         ->query("SELECT r.pk,r.fecha,s.sala,s.pk AS pksala,d.nombres AS nombredocente,d.apellidos AS apellidodocente,d.pk AS pkdocente,a.nombre AS asignatura,a.pk AS pkasignatura,p.periodo,p.pk AS pkperiodo 
+                    FROM campus as camp, reservas as r,salas as s,docentes as d,cursos as c,asignaturas as a,periodos as p WHERE 
+                    r.adm_fk is NULL and
+                    c.pk=r.curso_fk and 
+                    a.pk=c.asignatura_fk AND
+                    d.pk=c.docente_fk and 
+                    p.pk=r.periodo_fk and 
+                    s.pk=r.sala_fk and 
+                    s.campus_fk=camp.pk and
+                     camp.pk='$campus' and
+                   r.fecha>='$fechaHoy'
+                    ORDER BY r.pk DESC");
+             /* ->query("SELECT r.pk,r.fecha,s.sala,s.pk AS pksala,d.nombres AS nombredocente,d.apellidos AS apellidodocente,d.pk AS pkdocente,a.nombre AS asignatura,a.pk AS pkasignatura,p.periodo,p.pk AS pkperiodo 
                     FROM administrador as ad,reservas as r,salas as s,docentes as d,cursos as c,asignaturas as a,periodos as p WHERE 
                     r.adm_fk is NULL and
                     s.pk=r.sala_fk and 
@@ -161,7 +173,7 @@
                     a.pk=c.asignatura_fk  and
                     ad.campus_fk='$campus'
                     AND  r.fecha>='$fechaHoy'
-                    ORDER BY pk DESC");
+                    ORDER BY pk DESC");*/
        return $query->result();
      }
      public function comprobarReserva($pkPedido,$fecha,$periodo,$sala){
@@ -288,7 +300,8 @@
         ->order_by('pk','asc')
         ->get();
     return $query->result();
-     }     
+     }
+
           /*public function salas($facultadPk){//***************AFECTA***************
             $query=$this->db
             ->query("SELECT pk,sala,estado,descripcion FROM salas WHERE facultad_fk=$facultadPk order by pk asc;");
@@ -397,9 +410,24 @@
         }
         return $query;
     }
+    public function eliminarCampus($accion){
+        for ($i=0; $i <count($accion) ; $i++) { 
+            $query[]=$this->db->query("DELETE FROM campus WHERE pk=".$accion[$i]."");
+            
+        }
+        return $query;
+    }
     public function getFacultadPk($pk){
         for ($i=0; $i <count($pk) ; $i++) { 
              $query[$i]=$this->db->query("SELECT pk,facultad,descripcion FROM facultades where pk=".$pk[$i]."");
+            $query[$i]=$query[$i]->result();
+        }
+        
+             return $query;   
+    }
+    public function getCampusPk($pk){
+        for ($i=0; $i <count($pk) ; $i++) { 
+             $query[$i]=$this->db->query("SELECT pk,nombre,descripcion FROM campus where pk=".$pk[$i]."");
             $query[$i]=$query[$i]->result();
         }
         
@@ -416,7 +444,14 @@
     }
     public function updateFacultades($pk,$newFacultad,$newDescripcion){
         for ($i=0; $i <count($pk) ; $i++) { 
-            $query[]=$this->db->query("UPDATE facultades SET facultad='".$newFacultad[$i]."', descripcion='".$newDescripcion[$i]."' WHERE pk='".$pk[$i]."'");
+            $query[]=$this->db->query("UPDATE campus SET facultad='".$newFacultad[$i]."', descripcion='".$newDescripcion[$i]."' WHERE pk='".$pk[$i]."'");
+            
+        }
+        return $query; 
+    }
+    public function updateCampus($pk,$newCampus,$newDescripcion){
+        for ($i=0; $i <count($pk) ; $i++) { 
+            $query[]=$this->db->query("UPDATE campus SET nombre='".$newCampus[$i]."', descripcion='".$newDescripcion[$i]."' WHERE pk='".$pk[$i]."'");
             
         }
         return $query; 
@@ -428,6 +463,10 @@
         }
         return $query;
     }
+     public function addCampus($addCampus,$addDesc){
+        $query=$this->db->query("INSERT INTO campus VALUES(DEFAULT,'".$addCampus."','".$addDesc."')");
+        return $query;
+     } 
     public function addSalas($addSala,$pkCampus){
         for ($i=0; $i <count($addSala) ; $i++) { 
             $query[]=$this->db->query("INSERT INTO salas VALUES(DEFAULT,'".$pkCampus."','".$addSala[$i]."')");

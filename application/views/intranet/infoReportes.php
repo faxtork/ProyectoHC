@@ -72,8 +72,6 @@ function validacion(){
 	<div class="well">
 		<div class="row-fluid"><div class="span12"><h3>Unidad de Reportes</h3></div></div>
 
-			<br>	
-			<p>Usted puede descargar distintos tipos de Reportes (reservas que usted a hecho)</p>
 	<br><br>
 	<h4>Elija un rango de fecha para generar su reporte</h4><br>
 		<?= form_open('intranet/descargaReporte',$attributes);?> 

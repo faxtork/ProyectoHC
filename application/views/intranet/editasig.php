@@ -44,7 +44,7 @@ $( window ).resize(function() {
 							    	<label  class="col-sm-3 control-label" id="c">Dpto.</label>
 							    	<div class="col-sm-8">
 										<select name="dpto" class="form-control" id="dpto" >
-										<option value="">Selececione un Dpto</option>
+										<option value="">Seleccione un Dpto</option>
 											';
 											    foreach ($getDptos as $depa) {
 

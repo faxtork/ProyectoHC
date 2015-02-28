@@ -44,11 +44,11 @@ function cortarPeri($ini){
                         <tr>
                             <th>Periodo</th>
                             <th>Inicio</th>  
-                            <th>Termino</th>
+                            <th>Término</th>
                             <th>Nombre</th>
                             <th>Asignatura</th>
                             <th>Sala</th>
-                            <th>Seccion</th>
+                            <th>Sección</th>
                             <th>Asistencia</th>
                         </tr> 
                       </thead><tbody>";

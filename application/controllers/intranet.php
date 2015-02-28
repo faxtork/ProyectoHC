@@ -2406,10 +2406,10 @@ for($i=0;$i<count($resultados);$i++){
                 $this->load->view('general/headers');
                 $this->load->view('general/menu_principal');
                 $this->load->view('general/abre_bodypagina');   
-                $this->load->view('intranet/header_menu');
-                     $this->load->view('intranet/data');
+                $this->load->view('adminGeneral/header_menuGeneral');
+                     $this->load->view('adminGeneral/data2');
                             $this->load->view('intranet/infoReportes');
-                     $this->load->view('intranet/cierreData');
+                     $this->load->view('adminGeneral/cierreData');
                 $this->load->view('general/cierre_bodypagina');
                 $this->load->view('general/cierre_footer');
                 }
@@ -2447,5 +2447,169 @@ for($i=0;$i<count($resultados);$i++){
         }
 
 
-     }       
+     }
+         public function editCampus(){//solo el admin general modifica campus
+            if(!isset($_SESSION['adminGeneral'])){
+            $this->load->view('general/headers');
+            $this->load->view('general/menu_principal');
+            $this->load->view('general/abre_bodypagina');
+            $this->load->view('intranet/nosesion');
+            $this->load->view('general/cierre_bodypagina');
+            $this->load->view('general/cierre_footer');
+            }else{
+            $this->load->view('general/headers');
+            $this->load->view('general/menu_principal');
+            $this->load->view('general/abre_bodypagina');   
+            $this->load->view('adminGeneral/header_menuGeneral');
+            $camp=$this->admin_model->getcampus();
+                 $this->load->view('adminGeneral/data2');    
+                     $this->load->view('adminGeneral/editCampus',compact('camp'));
+                 $this->load->view('adminGeneral/cierreData');    
+            $this->load->view('general/cierre_bodypagina');
+            $this->load->view('general/cierre_footer');
+            }
+
+
+    }
+    public function modificarCampus(){
+            $btnEditar=$this->input->post('editarModificacion');
+        $btnEliminar=$this->input->post('eliminarModificacion');
+        $accion=$this->input->post('accion');//array
+        $btnAgregar=$this->input->post('agregarModificacion');
+        
+   
+        if($btnAgregar=='Agregar'){
+            if(!isset($_SESSION['adminGeneral']))
+                {
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');
+                    $this->load->view('intranet/nosesion');
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+
+                }else{
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');   
+                    $this->load->view('adminGeneral/header_menuGeneral');
+                         $this->load->view('adminGeneral/data2');    
+                             $this->load->view('adminGeneral/agregarCampus');
+                          $this->load->view('adminGeneral/cierreData');       
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+                }
+        }else{
+        if ($btnEditar=='Editar' && $accion!=null) {
+               if(!isset($_SESSION['adminGeneral']))
+                {
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');
+                    $this->load->view('intranet/nosesion');
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+
+                }else{
+                    $this->load->view('general/headers');
+                    $this->load->view('general/menu_principal');
+                    $this->load->view('general/abre_bodypagina');   
+                    $this->load->view('adminGeneral/header_menuGeneral');
+                    $campusPk=$this->admin_model->getCampusPk($accion);
+                   // var_dump($facultadesPk);
+                        $this->load->view('adminGeneral/data2');    
+                              $this->load->view('adminGeneral/editEditCampus',compact("campusPk"));
+                          $this->load->view('adminGeneral/cierreData');         
+                    $this->load->view('general/cierre_bodypagina');
+                    $this->load->view('general/cierre_footer');
+                }
+            }
+
+        elseif ($btnEliminar=='Eliminar' && $accion!=null) {
+            # code...
+        //entra a eliminar
+           $estado=$this->admin_model->eliminarCampus($accion);
+          // var_dump($estado);
+           $true=0;
+              for ($i=0; $i <count($estado) ; $i++) { 
+                if($estado[$i]==true)
+                    $true++;
+            }
+            if($true==count($estado))
+                $bool=true;
+            else $bool=false;
+            if($bool==true){
+                echo '<script>alert("Registro Eliminado exitosamente"); </script>';
+                redirect('intranet/editCampus', 'refresh');
+            }else{
+                echo '<script>alert("Algunos elementos no fueron eliminados"); </script>';
+                redirect('intranet/editCampus', 'refresh');
+            } 
+        }else redirect('intranet/editCampus');
+     }
+    }
+    public function agregarCamp(){
+
+        $addCampName=$this->input->post('addCampName');
+        $addDesc=$this->input->post('addDesc');
+
+        $btnEnviar=$this->input->post('enviarModificacion');
+
+        $CampusServer=$this->admin_model->getCampus();
+            for ($i=0; $i <count($CampusServer) ; $i++) { 
+                    if($CampusServer[$i]->nombre==$addCampName){
+                        ?>
+                        <script>
+                        var variablejs = "<?php echo $addCampName[$j]; ?>" ;
+                        </script>
+                        <?php
+                       // unset($addFacultad[$j]);//elimina ese reguistro
+                        //$addFacultad = array_values($addFacultad);//reordena el array
+                         echo '<script>alert("El registo >"+variablejs+"< ya esta ingresado en el sistema");</script>';//agregar que facultad es
+                        redirect('intranet/editFacultades', 'refresh');
+                    }
+     
+            }
+        if($btnEnviar=='Enviar')
+        {
+            $estado=$this->admin_model->addCampus($addCampName,$addDesc);
+            if($estado==true){
+                echo '<script>alert("Registro Agregado exitosamente"); </script>';
+                 redirect('intranet/editcampus', 'refresh');
+            }
+        }else redirect('intranet/editcampus');
+    }
+    public function updateCampus(){
+         $btn=$this->input->post('editarModificacion'); //el boton
+        $pk=$this->input->post('pk');//el pk a cambiar los datos
+        $newCampus=$this->input->post('newCampus');//array
+        $newDescripcion=$this->input->post('newDescripcion');//array
+        for ($i=0; $i <count($newCampus) ; $i++) { 
+            if($newCampus[$i]=="" || $newDescripcion[$i]==""){
+                        echo '<script>alert("Favor Rellene todos los campos"); </script>';
+                         redirect('intranet/editCampus', 'refresh');
+            }
+
+        }
+        if($btn==null)redirect('intranet/config');
+        else{
+            $estado=$this->admin_model->updateCampus($pk,$newCampus,$newDescripcion);
+             
+              $true=0;
+              for ($i=0; $i <count($estado) ; $i++) { 
+                if($estado[$i]==true)
+                    $true++;
+            }
+            if($true==count($estado))
+                $bool=true;
+            else $bool=false;
+            if($bool==true){
+                echo '<script>alert("Registro Actualizado exitosamente"); </script>';
+                redirect('intranet/editCampus', 'refresh');
+            }else{
+                echo '<script>alert("Algunos elementos no fueron actualizados"); </script>';
+                redirect('intranet/editCampus', 'refresh');
+            } 
+        }
+    }
 }

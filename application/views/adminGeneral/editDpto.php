@@ -44,7 +44,7 @@ $( window ).resize(function() {
 							    	<label  class="col-sm-3 control-label" id="c">Facultad.</label>
 							    	<div class="col-sm-8">
 										<select name="facu" class="form-control" id="facu" >
-										<option value="">Selececione un Facultad</option>
+										<option value="">Seleccione un Facultad</option>
 											';
 											    foreach ($facultades as $facu) {
 											    		echo'<option value='.$facu->pk.'>'.$facu->facultad.'</option>';										

@@ -42,7 +42,7 @@ $( window ).resize(function() {
 									<label class="col-sm-3 control-label" id="c">Facultad</label>
 									<div class="col-sm-9">
 										<select name="campus" class="form-control" id="campus" >
-										<option value="">Selececione un Campus</option>
+										<option value="">Seleccione un Campus</option>
 										';
 										foreach ($campusName as $fila) {
 										

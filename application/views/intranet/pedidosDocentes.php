@@ -36,6 +36,7 @@ function extraerFecha($fech){
             echo $fecha=$dias[$diaSemana]." ".$x[2]." de ".$meses[$x[1]-1]. " del ".date('Y') ;
 }
  ?>
+
 <div class="well">
     <h4 class="">Pedidos de Profesores</h4>
     <div class="mygrid-wrapper-div">
