@@ -91,9 +91,11 @@
          return $query->row();
     }     
      function getPkAsignatura($pk_docente) {
+                         date_default_timezone_set("America/Santiago");
+                   $anio=date("Y");//solo muestra los datos de aqui en adelante
         $query=$this->db->query("SELECT a.pk as pk, a.nombre as nombre, c.seccion as seccion 
                                  FROM cursos as c,asignaturas as a 
-                                 WHERE  c.docente_fk='$pk_docente' AND a.pk=c.asignatura_fk;");
+                                 WHERE  c.docente_fk='$pk_docente' AND a.pk=c.asignatura_fk AND c.anio='$anio';");
         return $query->result();
      }
      public function getAsignaturaDoc($rut){ 
@@ -118,7 +120,7 @@
 
   public function guardarPedidoSala($fecha,$sala_pk,$periodo_pk,$docente_pk,$asignatura_pk,$seccion)
    { 
-    $this->db ->query("INSERT INTO reservas (fecha,sala_fk,periodo_fk,curso_fk) values('$fecha','$sala_pk','$periodo_pk',(select pk FROM cursos WHERE asignatura_fk='$asignatura_pk' and docente_fk='$docente_pk' and seccion='$seccion'));");
+    $this->db ->query("INSERT INTO reservas (fecha,sala_fk,periodo_fk,curso_fk) values('$fecha','$sala_pk','$periodo_pk',(select pk FROM cursos WHERE asignatura_fk='$asignatura_pk' and docente_fk='$docente_pk' and seccion='$seccion' limit 1));");
      return true; 
    }
      
@@ -129,7 +131,7 @@
       $query=$this->db->query("SELECT r.*,s.sala,s.pk AS pksala,p.periodo,d.pk AS pkdocente,d.nombres AS nombredocente,"
               . "d.apellidos AS apellidodocente,a.pk AS pkasignatura,a.nombre AS nombreasignatura "
               . "FROM reservas as r,salas as s,periodos as p,docentes as d ,asignaturas as a "
-              . "WHERE r.curso_fk=(SELECT pk FROM cursos WHERE asignatura_fk='$asignatura_pk' "
+              . "WHERE r.curso_fk in(SELECT pk FROM cursos WHERE asignatura_fk='$asignatura_pk' "
               . "AND docente_fk='$docente_pk' AND seccion='$seccion') "
               . "AND s.pk=r.sala_fk "
               . "AND p.pk=r.periodo_fk "

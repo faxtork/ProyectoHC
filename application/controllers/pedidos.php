@@ -23,8 +23,8 @@ class Pedidos extends CI_Controller {
 
 
                   //******************BOOOOOORRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR*********************
-    $_SESSION['usuarioProfesor']="6.438.095-8";
-    $_SESSION['bnv'] = 'Docente 1';
+    //$_SESSION['usuarioProfesor']="7.760.554-1";
+    //$_SESSION['bnv'] = 'Docente 1';
     //*******************************************************
 
 

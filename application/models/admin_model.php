@@ -279,12 +279,14 @@
          return $query->row();
      }
       
+
      public function getSeccionDeAsignaturaDocente($pkDocente,$pkAsignatura) {
+                   date_default_timezone_set("America/Santiago");
+          $anio=date("Y");//solo muestra los datos de aqui en adelante
          $query=$this->db
-                 ->query("SELECT seccion FROM cursos WHERE docente_fk=$pkDocente AND asignatura_fk=$pkAsignatura group by seccion;");
+                 ->query("SELECT seccion FROM cursos WHERE docente_fk=$pkDocente AND asignatura_fk=$pkAsignatura AND anio='$anio' group by seccion;");
          return $query->result();
      }
-
     public function getFacultad(){
         $query=$this->db
             ->select('*')
